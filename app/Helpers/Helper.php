@@ -33,6 +33,7 @@ use App\Orders;
 use App\OrderItems;
 use App\SavedApartments;
 use App\ApartmentPreferences;
+use App\Permissions;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -2373,6 +2374,88 @@ function createSocial($data)
 			   $ret = false;
 			   $sapt = SavedApartments::where(['user_id' => $xf,'apartment_id' => $axf])->first();
 			   if($sapt != null) $ret = true;
+			   
+			   return $ret;
+		   }
+
+		   function createPermission($dt)
+		   {
+			   $ret = Permissions::create(['user_id' => $dt['user_id'], 
+                                             'ptag' => $dt['ptag'],
+                                             'granted_by' => $dt['granted_by'],
+                                            ]);
+                                                      
+                return $ret;
+		   }
+		   
+		   function getPermission($id)
+		   {
+			   $ret = [];
+			   $p = Permissions::where('id',$id)->first();
+			   
+			   if($p != null)
+               {
+				  $temp = [];
+				  $temp['id'] = $p->id;
+				  $temp['user_id'] = $p->user_id;
+				  $temp['ptag'] = $p->ptag;
+				  $temp['granted_by'] = $p->granted_by;
+				  $temp['date'] = $p->created_at->format("jS F, Y");
+     			  $ret = $temp;
+               }
+
+               return $ret;			   
+		   }
+		   
+		   function getPermissions($user)
+           {
+           	$ret = [];
+			$ps = Permissions::where('user_id',$user->id)->get();
+			  
+              if($ps != null)
+               {
+				   $ps = $ps->sortByDesc('created_at');	
+			  
+				  foreach($ps as $p)
+				  {
+					  $temp = $this->getPermission($p->id);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
+		   function removePermission($id)
+		   {
+			   $ret = [];
+			   $p = Permissions::where('id',$id)->first();
+			   
+			   if($p != null)
+               {
+				  $p->delete();
+               }	   
+		   }
+		   
+		   function hasPermission($user_id,$ps)
+		   {
+			   $ret = false;
+			   $pps = Permissions::where('user_id',$user_id)
+			                     ->whereIn('ptag',$ps)->get();
+			   
+			   $hasAllPermissions = true;
+			   
+			   if($pps != null)
+			   {   
+				 foreach($ps as $p)
+				 {
+					$contains = $pps->contains(function($value){
+                                                          return $value->ptag == $p;
+                                                      });
+                    $hasAllPermissions = $hasAllPermissions && $contains;													  
+				 }
+				 if($hasAllPermissions) $ret = true;  
+			   } 
 			   
 			   return $ret;
 		   }
