@@ -48,35 +48,19 @@ class MainController extends Controller {
 	 */
 	public function getIndex(Request $request)
     {
-		$hasUnpaidOrders = null;
 		$user = null;
-		$messages = [];
+		
 		if(Auth::check())
 		{
 			$user = Auth::user();
-			$messages = $this->helpers->getMessages(['user_id' => $user->id]);
 		}
+		
 		$req = $request->all();
-		$gid = isset($_COOKIE['gid']) ? $_COOKIE['gid'] : "";
-		$cart = $this->helpers->getCart($user,$gid);
-		
-		$c = $this->helpers->getCategories();
 		$signals = $this->helpers->signals;
-		
-		$ads = $this->helpers->getAds("wide-ad");
-		$banners = $this->helpers->getBanners();
 		$plugins = $this->helpers->getPlugins();
 		#$this->helpers->populateTips();
 		
-		#dd($messages);
-		
-		$popularApartments = $this->helpers->getPopularApartments();
-		
-		shuffle($ads);
-		shuffle($banners);
-		$ad = count($ads) < 1 ? "images/inner-ad-2.png" : $ads[0]['img'];
-
-    	return view("index",compact(['user','cart','messages','c','banners','hasUnpaidOrders','popularApartments','ad','signals','plugins']));
+    	return view("index",compact(['user','signals','plugins']));
     }
 	
 	
