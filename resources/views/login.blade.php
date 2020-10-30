@@ -30,7 +30,7 @@ $blank = true;
     <!-- ============================================================== -->
     <div class="splash-container">
         <div class="card ">
-            <div class="card-header text-center"><a href="{{url('/')}}"><img class="logo-img" src="{{asset('images/logo.png')}}" alt="logo"></a><span class="splash-description">Login to continue.</span></div>
+            <div class="card-header text-center"><a href="{{url('/')}}">ETUK ADMIN</a><span class="splash-description">Login to continue.</span></div>
             <div class="card-body">
                 <form method="post" action="{{url('hello')}}" id="hello-form">
                     {!! csrf_field() !!}
