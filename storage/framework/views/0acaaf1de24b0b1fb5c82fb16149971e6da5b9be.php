@@ -36,6 +36,10 @@
 </head>
 
 <body>
+<?php
+if(!isset($blank))
+{
+?>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -133,8 +137,14 @@ John Abraham</span>is now following you
         <div class="dashboard-wrapper">
             <div class="container-fluid dashboard-content">
                 <?php echo $__env->yieldContent('page-header'); ?>
-                
+<?php
+}
+?>	 
 				<?php echo $__env->yieldContent('content'); ?>
+<?php
+if(!isset($blank))
+{
+?>
             </div>
              <!-- ============================================================== -->
             <!-- footer -->
@@ -176,8 +186,11 @@ John Abraham</span>is now following you
     <!-- morris js -->
     <script src="<?php echo e(asset('vendor/charts/morris-bundle/raphael.min.js')); ?>"></script>
     <script src="<?php echo e(asset('vendor/charts/morris-bundle/morris.js')); ?>"></script>
-    
+<?php
+}
+?>    
 
 </body>
  
-</html><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/layout.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/layout.blade.php ENDPATH**/ ?>

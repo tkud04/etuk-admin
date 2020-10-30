@@ -57,7 +57,10 @@ class LoginController extends Controller {
 			return redirect()->intended('dashboard');
 		}
 		
-		return redirect()->intended("/");
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$cart = [];
+         return view('login', compact(['cart','user','signals','plugins']));
     }
 
   

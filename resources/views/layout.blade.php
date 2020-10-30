@@ -36,6 +36,10 @@
 </head>
 
 <body>
+<?php
+if(!isset($blank))
+{
+?>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -133,8 +137,14 @@ John Abraham</span>is now following you
         <div class="dashboard-wrapper">
             <div class="container-fluid dashboard-content">
                 @yield('page-header')
-                
+<?php
+}
+?>	 
 				@yield('content')
+<?php
+if(!isset($blank))
+{
+?>
             </div>
              <!-- ============================================================== -->
             <!-- footer -->
@@ -176,7 +186,9 @@ John Abraham</span>is now following you
     <!-- morris js -->
     <script src="{{asset('vendor/charts/morris-bundle/raphael.min.js')}}"></script>
     <script src="{{asset('vendor/charts/morris-bundle/morris.js')}}"></script>
-    
+<?php
+}
+?>    
 
 </body>
  

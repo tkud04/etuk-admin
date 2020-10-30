@@ -22,24 +22,6 @@ class MainController extends Controller {
     	$this->helpers = $h;                      
     }
 
-	/**
-	 * Show the application home page.
-	 *
-	 * @return Response
-	 */
-	public function getTemp(Request $request)
-    {
-		$user = null;
-		
-		if(Auth::check())
-		{
-			$user = Auth::user();
-		}
-		$req = $request->all();
-		$signals = $this->helpers->signals;
-		$plugins = $this->helpers->getPlugins();
-    	return view("temp",compact(['user','signals','plugins']));
-    }
 	
 	/**
 	 * Show the application home page.
@@ -49,18 +31,36 @@ class MainController extends Controller {
 	public function getIndex(Request $request)
     {
 		$user = null;
+		$nope = false;
+		$v = "";
+		$cpt = [];
 		
-		if(Auth::check())
-		{
-			$user = Auth::user();
-		}
-		
-		$req = $request->all();
 		$signals = $this->helpers->signals;
 		$plugins = $this->helpers->getPlugins();
 		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$v = "index";
+				$req = $request->all();		      
+			}
+			else
+			{
+				$u = "http://etukng.tobi-demos.tk";
+				return redirect()->away($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
 		
-    	return view("index",compact(['user','signals','plugins']));
     }
 	
 	
