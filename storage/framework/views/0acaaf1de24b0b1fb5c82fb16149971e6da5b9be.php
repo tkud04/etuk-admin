@@ -110,16 +110,34 @@ John Abraham</span>is now following you
                         </li>
                        
                         <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="javascript:void(0)" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="../assets/images/avatar-1.jpg" alt="" class="user-avatar-md rounded-circle"></a>
+                            <a class="nav-link nav-user-img" href="javascript:void(0)" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo e(asset('images/avatar.png')); ?>" alt="" class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
-                                <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name">John Abraham</h5>
-                                    <span class="status"></span><span class="ml-2">Available</span>
+                                <?php
+								 if($user == null)
+								 {
+								?>
+								<div class="nav-user-info">
+                                    <h5 class="mb-0 text-white nav-user-name">Guest</h5>
+                                    <span class="status"></span><span class="ml-2">Sign in</span>
+                                </div>
+                                <a class="dropdown-item" href="<?php echo e(url('hello')); ?>"><i class="fas fa-key mr-2"></i>Sign in</a>
+                               <?php
+								 }
+								 else
+								 {
+									 $n = $user->fname." ".$user->lname;
+								?>
+                                 <div class="nav-user-info">
+                                    <h5 class="mb-0 text-white nav-user-name"><?php echo e($n); ?></h5>
+                                    <span class="status"></span><span class="ml-2"><?php echo e(strtoupper($user->role)); ?></span>
                                 </div>
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="<?php echo e(url('logout')); ?>"><i class="fas fa-power-off mr-2"></i>Logout</a>
-                            </div>
+                                <a class="dropdown-item" href="<?php echo e(url('bye')); ?>"><i class="fas fa-power-off mr-2"></i>Logout</a>								
+								<?php
+								 }
+							   ?>
+							</div>
                         </li>
                     </ul>
                 </div>
@@ -140,6 +158,31 @@ John Abraham</span>is now following you
 <?php
 }
 ?>	 
+
+  <!--------- Session notifications-------------->
+        	<?php
+               $pop = ""; $val = "";
+               
+               if(isset($signals))
+               {
+                  foreach($signals['okays'] as $key => $value)
+                  {
+                    if(session()->has($key))
+                    {
+                  	$pop = $key; $val = session()->get($key);
+                    }
+                 }
+              }
+              
+             ?> 
+
+                 <?php if($pop != "" && $val != ""): ?>
+                   <?php echo $__env->make('session-status',['pop' => $pop, 'val' => $val], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                 <?php endif; ?>
+        	<!--------- Input errors -------------->
+                    <?php if(count($errors) > 0): ?>
+                          <?php echo $__env->make('input-errors', ['errors'=>$errors], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                     <?php endif; ?> 
 				<?php echo $__env->yieldContent('content'); ?>
 <?php
 if(!isset($blank))

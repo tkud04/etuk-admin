@@ -30,9 +30,9 @@ $blank = true;
     <!-- ============================================================== -->
     <div class="splash-container">
         <div class="card ">
-            <div class="card-header text-center"><a href="{{url('/')}}">ETUK ADMIN</a><span class="splash-description">Login to continue.</span></div>
+            <div class="card-header text-center"><a href="{{url('/')}}"><h3>ETUK ADMIN</h3></a><span class="splash-description">Login to continue.</span></div>
             <div class="card-body">
-                <form method="post" action="{{url('hello')}}" id="hello-form">
+                <form method="post" action="{{url('hello')}}" id="l-form">
                     {!! csrf_field() !!}
 					
 					<div class="form-group">
@@ -46,14 +46,24 @@ $blank = true;
                             <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Remember Me</span>
                         </label>
                     </div>
-                    <button class="btn btn-primary btn-lg btn-block" id="hello-form-btn">Sign in</button>
+                    <button class="btn btn-primary btn-lg btn-block" id="l-form-btn">Sign in</button>
                 </form>
+				<center><h4>OR</h4></center>
+				<?php
+							$fbLogin = url('oauth')."?type=facebook";
+							$twLogin = url('oauth')."?type=twitter";
+							$gLogin = url('oauth')."?type=google";
+							?>
+							<a href="{{$fbLogin}}" class="btn btn-outline-primary">Facebook</a>
+							<a href="{{$twLogin}}" class="btn btn-outline-primary">Twitter</a>
+							<a href="{{$gLogin}}" class="btn btn-outline-danger">Google</a>
+							
             </div>
             <div class="card-footer bg-white p-0  ">
                 <div class="card-footer-item card-footer-item-bordered">
                     <a href="javascript:void(0)" class="footer-link">Create An Account</a></div>
                 <div class="card-footer-item card-footer-item-bordered">
-                    <a href="javascript:void(0)" class="footer-link">Forgot Password</a>
+                    <a href="{{url('forgot-password')}}" class="footer-link">Forgot Password</a>
                 </div>
             </div>
         </div>

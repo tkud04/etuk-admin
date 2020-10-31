@@ -68,25 +68,6 @@ const hideInputErrors = type => {
 	}
 }
 
-const selectCheckoutSide = dt => {
-	unselectCheckoutSide(dt);
-	let iicon = `${dt.type}-active-${dt.side}`;
-	$(iicon).addClass("active");
-	selectedSide = dt.side;
-}
-
-const unselectCheckoutSide = (dt) => {
-	let iicon = `${dt.type}-active-${selectedSide}`;
-	
-	$(iicon).removeClass("active");
-}
-
-const selectCheckoutSide2 = dt => {
-	let iicon = `${dt.type}-active-${dt.side}`;
-	
-	$(iicon).html(dt.content);
-}
-
 const signup = dt => {
 
      let fd = new FormData();
@@ -135,68 +116,11 @@ const signup = dt => {
 	   });
 }
 
-const login = dt => {
-
-     let fd = new FormData();
-		 fd.append("dt",JSON.stringify(dt));
-		 fd.append("_token",$('#tk-login').val());
-		 
-	//create request
-	let url = "hello";
-	const req = new Request(url,{method: 'POST', body: fd});
-	
-	//fetch request
-	fetch(req)
-	   .then(response => {
-		   if(response.status === 200){
-			   //console.log(response);
-			   
-			   return response.json();
-		   }
-		   else{
-			   return {status: "error", message: "Technical error"};
-		   }
-	   })
-	   .catch(error => {
-		    alert("Failed to sign you in: " + error);			
-			hideElem('#login-loading');
-		     showElem('#login-submit');
-	   })
-	   .then(res => {
-		   console.log(res);
-			 hideElem(['#login-loading','#login-submit']); 
-             	 
-		   if(res.status == "ok"){
-              showElem('#login-finish');
-              window.location = "/"; 			   
-		   }
-		   else if(res.status == "error"){
-			   console.log(res.message);
-			 if(res.message == "auth"){
-				 $('#login-finish').html("Invalid login details, please try again");
-				 showElem('#login-finish');
-				  showElem('#login-submit');
-			 }
-			 else{
-			   alert("An unknown error has occured, please try again.");			
-			   hideElem('#login-loading');
-		       showElem('#login-submit');	 
-			 }					 
-		   }
-		   		   
-		  
-	   }).catch(error => {
-		    alert("Failed to sign you in: " + error);	
-            hideElem('#login-loading');
-		     showElem('#login-submit');		
-	   });
-}
-
 const fp = dt => {
 
      let fd = new FormData();
 		 fd.append("dt",JSON.stringify(dt));
-		 fd.append("_token",$('#tk-login').val());
+		 fd.append("_token",$('#tk-fp').val());
 		 
 	//create request
 	let url = "forgot-password";
@@ -280,7 +204,7 @@ const rp = dt => {
 			 hideElem(['#rp-loading','#rp-submit']); 
              	 
 		   if(res.status == "ok"){
-               $('#rp-finish').html(`<b>Password reset!</b><p class='text-primary'>You can now <a href="#" data-toggle="modal" data-target="#login">sign in</a>.</p>`);
+               $('#rp-finish').html(`<b>Password reset!</b><p class='text-primary'>You can now <a href="hello">sign in</a>.</p>`);
 				 showElem(['#rp-finish','#rp-submit']);			   
 		   }
 		   else if(res.status == "error"){

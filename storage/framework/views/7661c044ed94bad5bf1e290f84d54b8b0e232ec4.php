@@ -1,4 +1,5 @@
 <?php
+$user = null;
 $cart = ['data' => [],'subtotal' => 0];
 $messages = [];
 $title = "Page Not Found";
@@ -17,8 +18,7 @@ $subtitle = "We checked very hard but could not find what you were looking for";
 						<div class="col-lg-6 col-md-10">
 							<div class="text-center">
 								
-								<img src="<?php echo e(asset('img/404.png')); ?>" class="img-fluid" alt="">
-								<p><?php echo e($subtitle); ?></p>
+								<h2><?php echo e($subtitle); ?></h2>
 								<a class="btn btn-theme" href="<?php echo e(url('/')); ?>">Back To Home</a>
 								
 							</div>

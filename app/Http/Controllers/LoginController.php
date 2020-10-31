@@ -73,27 +73,16 @@ class LoginController extends Controller {
     {
 		$req = $request->all();
        #dd($req);
-	   $ret = ['status' => "error",'message' => "Nothing happened"];
-        
-		$reqValidator = Validator::make($req,[
-		                    'dt' => 'required'
-		]);
-		
-		if($reqValidator->fails())
-         {
-             $ret['message'] = "validation";
-         }
-		 else
-		 {
-			 $dt = json_decode($req['dt'],true);
-		    $validator = Validator::make($dt, [
-                             'pass' => 'required|min:6',
+	  
+			 $validator = Validator::make($req, [
+                             'password' => 'required|min:6',
                              'id' => 'required'                  
          ]);
          
          if($validator->fails())
          {
-             $ret['message'] = "validation";
+             session()->flash("validation-status-error","ok");
+			 return redirect()->back()->withInput();
          }
          
          else
@@ -101,21 +90,21 @@ class LoginController extends Controller {
 			$remember = true; 
              
          	//authenticate this login
-            if(Auth::attempt(['email' => $dt['id'],'password' => $dt['pass'],'status'=> "enabled"],$remember) || Auth::attempt(['phone' => $dt['id'],'password' => $dt['pass'],'status'=> "enabled"],$remember))
+            if(Auth::attempt(['email' => $req['id'],'password' => $req['password'],'status'=> "enabled"],$remember) || Auth::attempt(['phone' => $req['id'],'password' => $req['password'],'status'=> "enabled"],$remember))
             {
             	//Login successful               
                $user = Auth::user();   
-               $ret = ['status' => "ok",'message' => "Signup successful"];			   
+               return redirect()->intended('/');		   
             }
 			
 			else
 			{
-				 $ret['message'] = "auth";
+				 session()->flash("login-auth-status-error","ok");
+			     return redirect()->back()->withInput();
 			}			
           }	 
-		 }
+		 
 		
-        return json_encode($ret);
     }
 
 
@@ -252,6 +241,8 @@ class LoginController extends Controller {
 				{
 					//set password for new user
 					$uu = $auth['user'];
+					//set user role to admin
+					$uu->update(['role' => "admin"]);
 					return redirect()->intended("oauth-sp?xf=".$uu->email);
 				}
 			}
@@ -438,12 +429,13 @@ class LoginController extends Controller {
 			if(isset($req['code']))
             {
 				$uu = $this->helpers->verifyPasswordResetCode($req['code']);
-				#dd($user);
+				#dd($uu);
                 if($uu == null)   
                 { 
-                	return redirect()->back()->withErrors("The code is invalid or has expired. ","errors"); 
+                	session()->flash("rp-invalid-token-status-error","ok");
+                    return redirect()->intended('/');					
                 }
-                $v = ($uu->role == "user") ? 'reset' : 'admin.reset';
+                $v =  'reset';
 				return view($v,compact(['cart','user','uu','plugins']));
             }
             
