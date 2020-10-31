@@ -37,10 +37,10 @@ $blank = true;
 							 <input type="hidden" name="acsrf" value="{{$xf}}"/>
 							 
 					 <div class="form-group">
-                        <input class="form-control form-control-lg" name="password" id="osp-pass" type="password" placeholder="New password">
+                        <input class="form-control form-control-lg" name="password" id="osp-pass" name="pass" type="password" placeholder="New password">
                     </div>
 					 <div class="form-group">
-                        <input class="form-control form-control-lg" name="password2" id="osp-pass2" type="password" placeholder="Confirm password">
+                        <input class="form-control form-control-lg" name="password2" id="osp-pass2" name="pass_confirmation" type="password" placeholder="Confirm password">
                     </div>
                     <button class="btn btn-primary btn-lg btn-block" id="osp-submit">Submit</button>
 					
