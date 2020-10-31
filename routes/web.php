@@ -29,7 +29,8 @@ Route::get('{type}/oauth', 'LoginController@getOauthRedirect');
 Route::get('oauth-sp', 'LoginController@getOAuthSP');
 Route::post('oauth-sp', 'LoginController@postOAuthSP');
 
-
+//Users
+Route::get('users', 'MainController@getUsers');
 
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');

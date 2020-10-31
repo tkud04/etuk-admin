@@ -33,7 +33,6 @@ class MainController extends Controller {
 		$user = null;
 		$nope = false;
 		$v = "";
-		$cpt = [];
 		
 		$signals = $this->helpers->signals;
 		$plugins = $this->helpers->getPlugins();
@@ -62,6 +61,50 @@ class MainController extends Controller {
 		return view($v,compact($cpt));
 		
     }
+	
+	
+	/**
+	 * Show list of registered users on the platform.
+	 *
+	 * @return Response
+	 */
+	public function getUsers(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$v = "users";
+				$req = $request->all();
+                $users = $this->helpers->getUsers();
+				#dd($users);
+                array_push($cpt,'users');				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
 	
 	
 /**

@@ -306,6 +306,24 @@ $subject = $data['subject'];
        return $temp;            	   
    }
 		   
+   function getUsers()
+   {
+	   $ret = [];
+	   
+	   $users = User::where('id','>',"0")->get();
+	   $users = $users->sortByDesc('created_at');
+	   
+	   if(!is_null($users))
+	   {
+		   foreach($users as $u)
+		   {
+				$temp = $this->getUser($u->id);
+		        array_push($ret,$temp); 
+	       }
+	   }
+	   
+	   return $ret;
+   }
    
 		   
 		   function getUser($id)
