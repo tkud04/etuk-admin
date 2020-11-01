@@ -69,6 +69,7 @@ class Helper implements HelperContract
 					 "save-duplicate-apartment-status" => "You have saved this apartment already.",
 					 
 					 //ERROR NOTIFICATIONS
+					 "invalid-user-status-error" => "User not found.",
 					 "invalid-apartment-id-status-error" => "Apartment not found.",
 					 "add-review-status-error" => "Please sign in to add a review.",
 					 "duplicate-review-status-error" => "You have added a review already.",

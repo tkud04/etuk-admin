@@ -40,22 +40,48 @@ $subtitle = "View all users registered on the platform";
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Date Joined</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+										  <?php
+										   if(count($users) > 0)
+										   {
+											  foreach($users as $u)
+											   {
+												   $vu = url('user')."?xf=".$u['email'];
+												   $statusClass = "danger";
+												   $du = url('enable-user')."?xf=".$u['id'];
+												   $duText = "Enable user";
+												   $duClass = "success";
+												   
+												   if($u['status'] == "enabled")
+												   {
+													   $statusClass = "success";
+													   $du = url('disable-user')."?xf=".$u['id'];
+													   $duText = "Disable user";
+												       $duClass = "danger";
+												   }
+										  ?>
                                             <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
+                                                <td>{{ucwords($u['fname']." ".$u['lname'])}}</td>
+                                                <td>{{$u['email']}}</td>
+                                                <td>{{ucwords($u['role'])}}</td>
+                                                <td>{{$u['date']}}</td>
+                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($u['status'])}}</td>
+                                                <td>
+												 <a class="btn btn-primary btn-sm" href="{{$vu}}">View</a>
+												 <a class="btn btn-{{$duClass}} btn-sm" href="{{$du}}">{{$duText}}</a>
+												</td>
                                             </tr>
+									     <?php
+											   }
+										   }
+										 ?>
 									   </tbody>
 									</table>
 							    </div>

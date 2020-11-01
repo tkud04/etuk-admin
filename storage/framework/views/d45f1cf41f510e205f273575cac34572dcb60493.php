@@ -40,22 +40,48 @@ $subtitle = "View all users registered on the platform";
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Date Joined</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+										  <?php
+										   if(count($users) > 0)
+										   {
+											  foreach($users as $u)
+											   {
+												   $vu = url('user')."?xf=".$u['email'];
+												   $statusClass = "danger";
+												   $du = url('enable-user')."?xf=".$u['id'];
+												   $duText = "Enable user";
+												   $duClass = "success";
+												   
+												   if($u['status'] == "enabled")
+												   {
+													   $statusClass = "success";
+													   $du = url('disable-user')."?xf=".$u['id'];
+													   $duText = "Disable user";
+												       $duClass = "danger";
+												   }
+										  ?>
                                             <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
+                                                <td><?php echo e(ucwords($u['fname']." ".$u['lname'])); ?></td>
+                                                <td><?php echo e($u['email']); ?></td>
+                                                <td><?php echo e(ucwords($u['role'])); ?></td>
+                                                <td><?php echo e($u['date']); ?></td>
+                                                <td><span class="label label-<?php echo e($statusClass); ?>"><?php echo e(strtoupper($u['status'])); ?></td>
+                                                <td>
+												 <a class="btn btn-primary btn-sm" href="<?php echo e($vu); ?>">View</a>
+												 <a class="btn btn-<?php echo e($duClass); ?> btn-sm" href="<?php echo e($du); ?>"><?php echo e($duText); ?></a>
+												</td>
                                             </tr>
+									     <?php
+											   }
+										   }
+										 ?>
 									   </tbody>
 									</table>
 							    </div>

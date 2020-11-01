@@ -9,7 +9,8 @@ use Auth;
 use Session; 
 use Cookie;
 use Validator; 
-use Carbon\Carbon; 
+use Carbon\Carbon;
+use App\User; 
 //use Codedge\Fpdf\Fpdf\Fpdf;
 use PDF;
 
@@ -90,6 +91,83 @@ class MainController extends Controller {
                 $users = $this->helpers->getUsers();
 				#dd($users);
                 array_push($cpt,'users');				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Show list of registered users on the platform.
+	 *
+	 * @return Response
+	 */
+	public function getUser(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+                
+				if(isset($req['xf']))
+				{
+					$xf = $req['xf'];
+					$v = "user";
+					$uu = User::where('id',$xf)
+					          ->orWhere('email',$xf)->first();
+							  
+					if($uu == null)
+					{
+						session()->flash("invalid-user-status-error","ok");
+						return redirect()->intended('users');
+					}
+				    $u = $this->helpers->getUser($xf);
+					
+					if(count($u) < 1)
+					{
+						session()->flash("invalid-user-status-error","ok");
+						return redirect()->intended('users');
+					}
+					else
+					{
+						$users = [];
+						$apts = $this->helpers->getApartments($uu);
+					    $reviews = $this->helpers->getReviews($uu);
+				        #dd($reviews);
+                        array_push($cpt,'u');
+                        array_push($cpt,'apts');
+                        array_push($cpt,'reviews');
+                        array_push($cpt,'users');
+					}
+					
+				}
+				else
+				{
+					session()->flash("validation-status-error","ok");
+					return redirect()->intended('users');
+				}
+								
 			}
 			else
 			{

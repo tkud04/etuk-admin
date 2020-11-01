@@ -54,9 +54,11 @@ $blank = true;
 							$twLogin = url('oauth')."?type=twitter";
 							$gLogin = url('oauth')."?type=google";
 							?>
+							<div class="row">
 							<a href="{{$fbLogin}}" class="btn btn-outline-primary">Facebook</a>
 							<a href="{{$twLogin}}" class="btn btn-outline-primary">Twitter</a>
 							<a href="{{$gLogin}}" class="btn btn-outline-danger">Google</a>
+							</div>
 							
             </div>
             <div class="card-footer bg-white p-0  ">

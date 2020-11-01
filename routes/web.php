@@ -31,6 +31,10 @@ Route::post('oauth-sp', 'LoginController@postOAuthSP');
 
 //Users
 Route::get('users', 'MainController@getUsers');
+Route::get('user', 'MainController@getUser');
+Route::post('user', 'MainController@postUser');
+Route::get('enable-user', 'MainController@getEnableUser');
+Route::get('disable-user', 'MainController@getDisableUser');
 
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');

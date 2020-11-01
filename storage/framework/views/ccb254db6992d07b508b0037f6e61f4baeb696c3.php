@@ -1,17 +1,16 @@
+<?php
+$title = "Users";
+$subtitle = "View all users registered on the platform";
+?>
 
 
 
-<?php $__env->startSection('title',"Welcome"); ?>
-
-<?php $__env->startSection('page-header'); ?>
-<?php echo $__env->make('page-header',[], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php $__env->stopSection(); ?>
-
+<?php $__env->startSection('title',$title); ?>
 <?php $__env->startSection('content'); ?>
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <h3 class="text-center">Content goes here!</h3>
                     </div>
-                </div>			
+</div>			
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/index.blade.php ENDPATH**/ ?>
