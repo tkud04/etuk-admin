@@ -55,17 +55,19 @@ $subtitle = "View all users registered on the platform";
 											   {
 												   $vu = url('user')."?xf=".$u['email'];
 												   $statusClass = "danger";
-												   $du = url('enable-user')."?xf=".$u['id'];
+												   $type = "enable";
 												   $duText = "Enable user";
 												   $duClass = "success";
 												   
 												   if($u['status'] == "enabled")
 												   {
 													   $statusClass = "success";
-													   $du = url('disable-user')."?xf=".$u['id'];
+													   $type = "disable";
 													   $duText = "Disable user";
 												       $duClass = "danger";
 												   }
+												   $du = url('edu')."?xf=".$u['id']."&type=".$type;
+												   
 										  ?>
                                             <tr>
                                                 <td>{{ucwords($u['fname']." ".$u['lname'])}}</td>

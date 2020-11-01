@@ -408,6 +408,26 @@ $subject = $data['subject'];
                   return $ret;                               
            }
 
+		   function updateEDU($data)
+           {  
+              $ret = 'error'; 
+         
+              if(isset($data['xf']))
+               {
+               	$u = User::where('id', $data['xf'])->first();
+                   
+                        if($u != null)
+                        {
+							$status = $data['type'] == "enable" ? "enabled" : "disabled";
+							
+                        	$u->update(['status' => $status]);
+						                   
+                             $ret = "ok";
+                        }                                    
+               }                                 
+                  return $ret;                               
+           }
+
            function updateShippingDetails($user, $data)
            {		
 				$company = isset($data['company']) ? $data['company'] : "";

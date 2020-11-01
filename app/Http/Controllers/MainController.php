@@ -185,7 +185,7 @@ class MainController extends Controller {
 	
 	
 	/**
-	 * Handle apartment update.
+	 * Handle update user.
 	 *
 	 * @return Response
 	 */
@@ -218,6 +218,55 @@ class MainController extends Controller {
 				else
 				{
 					$ret = $this->helpers->updateUser($req);
+					$ss = "update-user-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->back();
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	/**
+	 * Handle Enable/Disable user.
+	 *
+	 * @return Response
+	 */
+	public function getEnableDisableUser(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                    'xf' => 'required|numeric',
+		                    'type' => 'required',
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$ret = $this->helpers->updateEDU($req);
 					$ss = "update-user-status";
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");

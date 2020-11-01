@@ -1,0 +1,31 @@
+features
+manage apartments
+-view apartments
+-edit apartment
+-disable apartment
+-delete apartment
+-view transactions
+
+manage transactions
+-view transactions
+-view transaction
+-create ticket
+-update ticket
+
+manage reviews
+-view reviews
+-view review
+-set review status
+-delete review
+
+manage tickets
+-view tickets
+-view ticket
+-update ticket
+
+manage banners
+-view banners
+-delete banner
+
+manage plugins
+

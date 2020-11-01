@@ -1,6 +1,6 @@
 <?php
-$title = "Users";
-$subtitle = "View all users registered on the platform";
+$title = "Dashboard";
+$subtitle = "Admin dashboard";
 ?>
 
 
