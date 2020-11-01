@@ -35,33 +35,91 @@ $subtitle = "View information about this user.";
                             <div class="card">
                                 <h5 class="card-header">Personal Information</h5>
                                 <div class="card-body">
-                                    <form action="#" id="basicform" data-parsley-validate="" novalidate="">
-                                        <div class="form-group">
-                                            <label for="inputUserName">User Name</label>
-                                            <input id="inputUserName" type="text" name="name" data-parsley-trigger="change" required="" placeholder="Enter user name" autocomplete="off" class="form-control parsley-error" data-parsley-id="14" aria-describedby="parsley-id-14"><ul class="parsley-errors-list filled" id="parsley-id-14"><li class="parsley-required">This value is required.</li></ul>
+                                    <form action="{{url('user')}}" id="user-form" method="post">
+										{!! csrf_field() !!}
+										<input type="hidden" name="xf" value="{{$u['id']}}"/>
+                                        <div class="row">
+										<div class="col-md-6">
+										<div class="form-group">
+                                            <label for="user-fname">First Name</label>
+                                            <input id="user-fname" type="text" name="fname" value="{{$user['fname']}}" placeholder="Enter first name" class="form-control">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="inputEmail">Email address</label>
-                                            <input id="inputEmail" type="email" name="email" data-parsley-trigger="change" required="" placeholder="Enter email" autocomplete="off" class="form-control parsley-error" data-parsley-id="16" aria-describedby="parsley-id-16"><ul class="parsley-errors-list filled" id="parsley-id-16"><li class="parsley-required">This value is required.</li></ul>
+										</div>
+										<div class="col-md-6">
+										<div class="form-group">
+                                            <label for="user-lname">Last Name</label>
+                                            <input id="user-lname" type="text" name="lname" value="{{$user['lname']}}" placeholder="Enter last name" class="form-control">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="inputPassword">Password</label>
-                                            <input id="inputPassword" type="password" placeholder="Password" required="" class="form-control parsley-error" data-parsley-id="18" aria-describedby="parsley-id-18"><ul class="parsley-errors-list filled" id="parsley-id-18"><li class="parsley-required">This value is required.</li></ul>
+										</div>
+										</div>
+										<div class="row">
+										<div class="col-md-6">
+										<div class="form-group">
+                                            <label for="user-email">Email address</label>
+                                            <input id="user-email" type="email" name="email" value="{{$user['email']}}" placeholder="Enter email address" class="form-control">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="inputRepeatPassword">Repeat Password</label>
-                                            <input id="inputRepeatPassword" data-parsley-equalto="#inputPassword" type="password" required="" placeholder="Password" class="form-control parsley-error" data-parsley-id="20" aria-describedby="parsley-id-20"><ul class="parsley-errors-list filled" id="parsley-id-20"><li class="parsley-required">This value is required.</li></ul>
+										</div>
+										<div class="col-md-6">
+										<div class="form-group">
+                                            <label for="user-email">Email address</label>
+                                            <input id="user-email" type="email" name="email" value="{{$user['email']}}" placeholder="Enter email address" class="form-control">
                                         </div>
+										</div>
+										</div>
+										<div class="row">
+										<div class="col-md-6">
+										<div class="form-group">
+                                            <label for="user-role">Role</label>
+											<?php
+											 $roles = ['user','admin','su'];
+											?>
+											<select id="user-role" name="role" class="form-control">
+											 <option value="none">Select role</option>
+											 <?php
+											  foreach($roles as $r)
+											  {
+												  $ss = $r == $u['role'] ? " selected='selected'" : "";
+												  $rr = $r == "su" ? "super user" : $r;
+											 ?>
+											 <option value="{{$r}}"{{$ss}}>{{ucwords($rr)}}</option>
+											  <?php
+											  }
+											  ?>
+											</select>
+                                        </div>
+										</div>
+										<div class="col-md-6">
+										<div class="form-group">
+                                            <label for="user-role">Status</label>
+											<?php
+											 $statuses = ['enabled','disabled'];
+											?>
+											<select id="user-status" name="status" class="form-control">
+											 <option value="none">Select account status</option>
+											 <?php
+											  foreach($statuses as $s)
+											  {
+												  $ss = $s == $u['status'] ? " selected='selected'" : "";
+												  $sss = $s == "enabled" ? "active" : $s;
+											 ?>
+											 <option value="{{$s}}"{{$ss}}>{{ucwords($sss)}}</option>
+											  <?php
+											  }
+											  ?>
+											</select>
+                                        </div>
+										</div>
+										</div>
+										
                                         <div class="row">
                                             <div class="col-sm-6 pb-2 pb-sm-4 pb-lg-0 pr-0">
                                                 <label class="be-checkbox custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Remember me</span>
+                                                   <span class="custom-control-label">Last updated: <em>{{$u['updated']}}</em></span>
                                                 </label>
                                             </div>
                                             <div class="col-sm-6 pl-0">
                                                 <p class="text-right">
-                                                    <button type="submit" class="btn btn-space btn-primary">Submit</button>
-                                                    <button class="btn btn-space btn-secondary">Cancel</button>
+                                                    <button class="btn btn-space btn-secondary" id="user-form-btn">Save</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -73,7 +131,7 @@ $subtitle = "View information about this user.";
 <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
                         <div class="card">
-                            <h5 class="card-header">Basic Table</h5>
+                            <h5 class="card-header">Apartments</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
@@ -130,7 +188,7 @@ $subtitle = "View information about this user.";
                     </div>
 					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
                         <div class="card">
-                            <h5 class="card-header">Basic Table</h5>
+                            <h5 class="card-header">Reviews</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">

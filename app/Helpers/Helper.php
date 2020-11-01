@@ -346,6 +346,7 @@ $subject = $data['subject'];
                        $temp['verified'] = $u->verified; 
                        $temp['id'] = $u->id; 
                        $temp['date'] = $u->created_at->format("jS F, Y"); 
+                       $temp['updated'] = $u->updated_at->format("jS F, Y h:i A"); 
                        $ret = $temp; 
                }                          
                                                       
@@ -799,7 +800,16 @@ function isDuplicateUser($data)
           	$ret = [];
           	$dt = ['cloud_name' => "etuk-ng"];
               $preset = "uwh1p75e";
-          	$rett = \Cloudinary\Uploader::unsigned_upload($path,$preset,$dt);
+			  
+			  try
+			  {
+				$rett = \Cloudinary\Uploader::unsigned_upload($path,$preset,$dt);  
+			  }
+			  catch(Throwable $e)
+			  {
+				  $rett = ['status' => "error",'message' => "network"];
+			  }
+          	
                                                       
              return $rett; 
          }

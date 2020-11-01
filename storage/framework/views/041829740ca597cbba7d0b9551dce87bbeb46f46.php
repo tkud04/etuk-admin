@@ -55,9 +55,10 @@ $blank = true;
 							$twLogin = url('oauth')."?type=twitter";
 							$gLogin = url('oauth')."?type=google";
 							?>
-							<a href="<?php echo e($fbLogin); ?>" class="btn btn-outline-primary">Facebook</a>
-							<a href="<?php echo e($twLogin); ?>" class="btn btn-outline-primary">Twitter</a>
-							<a href="<?php echo e($gLogin); ?>" class="btn btn-outline-danger">Google</a>
+							  <a href="<?php echo e($fbLogin); ?>" class="btn btn-outline-primary">Facebook</a>
+							  <a href="<?php echo e($twLogin); ?>" class="btn btn-outline-primary">Twitter</a>
+							  <a href="<?php echo e($gLogin); ?>" class="btn btn-outline-danger">Google</a>
+
 							
             </div>
             <div class="card-footer bg-white p-0  ">
