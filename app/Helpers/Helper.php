@@ -51,7 +51,7 @@ class Helper implements HelperContract
  public $signals = ['okays'=> [
                      //SUCCESS NOTIFICATIONS
 					 "login-status" => "Welcome back!",            
-                     "update-profile-status" => "Profile updated.",
+                     "update-user-status" => "User profile updated.",
                      "switch-mode-status" => "You have now switched your account mode.",
 					 "valid-mode-status-error" => "Access denied. Try switching your account mode to access the resource.",
 					 "sci-status" => "Cover image updated.",
@@ -380,7 +380,7 @@ $subject = $data['subject'];
            }
 		   
 		   
-		   function updateProfile($data)
+		   function updateUser($data)
            {  
               $ret = 'error'; 
          
@@ -394,20 +394,14 @@ $subject = $data['subject'];
 							if(isset($data['role'])) $role = $data['role'];
 							$status = $u->status;
 							if(isset($data['status'])) $status = $data['status'];
-							$avatar = isset($data['avatar']) ? $data['avatar'] : "";
+							#$avatar = isset($data['avatar']) ? $data['avatar'] : "";
 							
                         	$u->update(['fname' => $data['fname'],
                                               'lname' => $data['lname'],
-                                              'email' => $data['email'],
-                                              'phone' => $data['phone'],
                                               'role' => $role,
-                                              'avatar' => $avatar,
                                               'status' => $status,
-                                              #'verified' => $data['verified'],
                                            ]);
-										   
-							//$this->updateShippingDetails($user,$data);
-                                           
+						                   
                                            $ret = "ok";
                         }                                    
                }                                 
@@ -1358,18 +1352,33 @@ function updateApartment($data)
                 return $ret;
            }
 		   
-		   function getReviews($apartment_id)
+		   function getReviews($id,$type="apartment")
            {
            	$ret = [];
-              $reviews = Reviews::where('apartment_id',$apartment_id)
+			$reviews = null;
+			$options = [];
+			
+			 if($type == "apartment")
+			 {
+				$reviews = Reviews::where('apartment_id',$id)
+			                    ->where('status',"approved")->get();								
+			 }
+			 else if($type == "user")
+			 {
+				 $reviews = Reviews::where('user_id',$id)
 			                    ->where('status',"approved")->get();
-              $reviews = $reviews->sortByDesc('created_at');	
+				$options = ['apartment' => true];
+			 }
+              
+              	
 			  
               if($reviews != null)
                {
+				   $reviews = $reviews->sortByDesc('created_at');
+				   
 				  foreach($reviews as $r)
 				  {
-					  $temp = $this->getReview($r->id);
+					  $temp = $this->getReview($r->id,$options);
 					  array_push($ret,$temp);
 				  }
                }                         
@@ -1398,7 +1407,7 @@ function updateApartment($data)
                 return $ret;
            }
 
-		   function getReview($id)
+		   function getReview($id,$options=[])
            {
            	$ret = [];
               $r = Reviews::where('id',$id)
@@ -1410,6 +1419,7 @@ function updateApartment($data)
 				  $temp['id'] = $r->id;
 				  $temp['apartment_id'] = $r->apartment_id;
 				  $temp['user'] = $this->getUser($r->user_id);
+				  if(isset($options['apartment']) && $options['apartment']) $temp['apartment'] = $this->getApartment($r->apartment_id);
 				  $temp['stats'] = $this->getReviewStats($r->id);
      			  $temp['service'] = $r->service;
      			  $temp['location'] = $r->location;

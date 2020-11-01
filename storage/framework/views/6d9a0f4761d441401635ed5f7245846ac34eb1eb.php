@@ -43,13 +43,13 @@ $subtitle = "View information about this user.";
 										<div class="col-md-6">
 										<div class="form-group">
                                             <label for="user-fname">First Name</label>
-                                            <input id="user-fname" type="text" name="fname" value="<?php echo e($user['fname']); ?>" placeholder="Enter first name" class="form-control">
+                                            <input id="user-fname" type="text" name="fname" value="<?php echo e($u['fname']); ?>" placeholder="Enter first name" class="form-control">
                                         </div>
 										</div>
 										<div class="col-md-6">
 										<div class="form-group">
                                             <label for="user-lname">Last Name</label>
-                                            <input id="user-lname" type="text" name="lname" value="<?php echo e($user['lname']); ?>" placeholder="Enter last name" class="form-control">
+                                            <input id="user-lname" type="text" name="lname" value="<?php echo e($u['lname']); ?>" placeholder="Enter last name" class="form-control">
                                         </div>
 										</div>
 										</div>
@@ -57,13 +57,13 @@ $subtitle = "View information about this user.";
 										<div class="col-md-6">
 										<div class="form-group">
                                             <label for="user-email">Email address</label>
-                                            <input id="user-email" type="email" name="email" value="<?php echo e($user['email']); ?>" placeholder="Enter email address" class="form-control">
+                                            <input id="user-email" type="email" name="email" value="<?php echo e($u['email']); ?>" placeholder="Enter email address" class="form-control" readonly>
                                         </div>
 										</div>
 										<div class="col-md-6">
 										<div class="form-group">
-                                            <label for="user-email">Email address</label>
-                                            <input id="user-email" type="email" name="email" value="<?php echo e($user['email']); ?>" placeholder="Enter email address" class="form-control">
+                                            <label for="user-phone">Phone number</label>
+                                            <input id="user-phone" type="number" name="phone" value="<?php echo e($u['phone']); ?>" placeholder="Enter phone number" class="form-control">
                                         </div>
 										</div>
 										</div>
@@ -91,7 +91,7 @@ $subtitle = "View information about this user.";
 										</div>
 										<div class="col-md-6">
 										<div class="form-group">
-                                            <label for="user-role">Status</label>
+                                            <label for="user-status">Status</label>
 											<?php
 											 $statuses = ['enabled','disabled'];
 											?>
@@ -138,43 +138,51 @@ $subtitle = "View information about this user.";
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Date Joined</th>
+                                                <th>Apartment</th>
+                                                <th>Location</th>
+                                                <th>Rating</th>
+                                                <th>Date added</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-										  <?php
-										   if(count($users) > 0)
+										 <?php
+									    if(count($apts) > 0)
+										{
+										  foreach($apts as $a)
 										   {
-											  foreach($users as $u)
-											   {
-												   $vu = url('user')."?xf=".$u['email'];
-												   $statusClass = "danger";
-												   $du = url('enable-user')."?xf=".$u['id'];
-												   $duText = "Enable user";
-												   $duClass = "success";
-												   
-												   if($u['status'] == "enabled")
-												   {
-													   $statusClass = "success";
-													   $du = url('disable-user')."?xf=".$u['id'];
-													   $duText = "Disable user";
-												       $duClass = "danger";
-												   }
-										  ?>
+											   $statusClass = "danger";
+											   $name = $a['name'];
+											   $address = $a['address'];
+											   $reviews = $a['reviews'];
+											   $uu = url('apartment')."?xf=".$a['apartment_id'];
+											    $sss = $a['status'];
+												
+												if($a['status'] == "enabled")
+												{
+													$statusClass = "success";
+													$sss = "approved";
+												}
+											   $imgs = $a['cmedia']['images'];
+											   
+									   ?>
                                             <tr>
-                                                <td><?php echo e(ucwords($u['fname']." ".$u['lname'])); ?></td>
-                                                <td><?php echo e($u['email']); ?></td>
-                                                <td><?php echo e(ucwords($u['role'])); ?></td>
-                                                <td><?php echo e($u['date']); ?></td>
-                                                <td><span class="label label-<?php echo e($statusClass); ?>"><?php echo e(strtoupper($u['status'])); ?></td>
                                                 <td>
-												 <a class="btn btn-primary btn-sm" href="<?php echo e($vu); ?>">View</a>
-												 <a class="btn btn-<?php echo e($duClass); ?> btn-sm" href="<?php echo e($du); ?>"><?php echo e($duText); ?></a>
+												  <img class="img-fluid" onclick="window.location='<?php echo e($uu); ?>'" src="<?php echo e($imgs[0]); ?>" alt="<?php echo e($name); ?>" style="cursor: pointer; width: 100px; height: 100px;"/>
+												  <a href="<?php echo e($uu); ?>"><h4><?php echo e(ucwords($name)); ?></h4></a><br>							  
+												</td>
+                                                <td><?php echo e(ucwords($address['address'].",")); ?><br><?php echo e(ucwords($address['city'].", ".$address['state'])); ?></td>
+                                                <td>
+												<?php for($i = 0; $i < $a['rating']; $i++): ?>
+												  <i class="fas fa-star"></i>
+											    <?php endfor; ?>
+												&nbsp;(<?php echo e(count($a['reviews'])); ?> reviews)
+												</td>
+                                                <td><?php echo e($a['date']); ?></td>
+                                                <td><span class="label label-<?php echo e($statusClass); ?>"><?php echo e(strtoupper($sss)); ?></td>
+                                                <td>
+												 <a class="btn btn-primary btn-sm" href="<?php echo e($uu); ?>">View</a>
 												</td>
                                             </tr>
 									     <?php
@@ -195,44 +203,61 @@ $subtitle = "View information about this user.";
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Date Joined</th>
+                                                <th>Apartment</th>
+                                                <th>Rating</th>
+                                                <th>Comment</th>
+                                                <th>Date Added</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 										  <?php
-										   if(count($users) > 0)
+										   if(count($reviews) > 0)
 										   {
-											  foreach($users as $u)
+											  foreach($reviews as $r)
 											   {
-												   $vu = url('user')."?xf=".$u['email'];
-												   $statusClass = "danger";
-												   $du = url('enable-user')."?xf=".$u['id'];
-												   $duText = "Enable user";
-												   $duClass = "success";
+												   $a = $r['apartment'];
+						     			        $statusClass = "danger";
+											   $name = $a['name'];
+											   $uu = url('apartment')."?xf=".$a['apartment_id'];
+											    $sss = $r['status'];
+												
+												if($sss == "approved")
+												{
+													$statusClass = "success";
+												}
+											   $imgs = $a['cmedia']['images'];
+
 												   
-												   if($u['status'] == "enabled")
-												   {
-													   $statusClass = "success";
-													   $du = url('disable-user')."?xf=".$u['id'];
-													   $duText = "Disable user";
-												       $duClass = "danger";
-												   }
+												   $du = url('review')."?xf=".$r['id'];
+												   $ar = ($r['service'] + $r['location'] + $r['security'] + $r['cleanliness'] + $r['comfort']) / 5;
 										  ?>
                                             <tr>
-                                                <td><?php echo e(ucwords($u['fname']." ".$u['lname'])); ?></td>
-                                                <td><?php echo e($u['email']); ?></td>
-                                                <td><?php echo e(ucwords($u['role'])); ?></td>
-                                                <td><?php echo e($u['date']); ?></td>
-                                                <td><span class="label label-<?php echo e($statusClass); ?>"><?php echo e(strtoupper($u['status'])); ?></td>
-                                                <td>
-												 <a class="btn btn-primary btn-sm" href="<?php echo e($vu); ?>">View</a>
-												 <a class="btn btn-<?php echo e($duClass); ?> btn-sm" href="<?php echo e($du); ?>"><?php echo e($duText); ?></a>
+                                               <td>
+												  <img class="img-fluid" onclick="window.location='<?php echo e($uu); ?>'" src="<?php echo e($imgs[0]); ?>" alt="<?php echo e($name); ?>" style="cursor: pointer; width: 100px; height: 100px;"/>
+												  <a href="<?php echo e($uu); ?>"><h4><?php echo e(ucwords($name)); ?></h4></a><br>							  
 												</td>
+												<td>
+												  <h3>
+												   <?php for($i = 0; $i < $ar; $i++): ?>
+												     <i class="fas fa-star"></i>
+											       <?php endfor; ?>
+												  </h3>
+												  <ul>
+												    <li>Service: <b><?php echo e($r['service']); ?></b></li>
+												    <li>Location: <b><?php echo e($r['location']); ?></b></li>
+												    <li>Security: <b><?php echo e($r['security']); ?></b></li>
+												    <li>Cleanliness: <b><?php echo e($r['cleanliness']); ?></b></li>
+												    <li>Comfort: <b><?php echo e($r['comfort']); ?></b></li>
+												  </ul>							  
+												</td>
+                                                <td><em><?php echo e($r['comment']); ?></em></td>
+                                                <td><?php echo e($r['date']); ?></td>
+                                                <td><span class="label label-<?php echo e($statusClass); ?>"><?php echo e(strtoupper($r['status'])); ?></td>
+                                                <td>
+												 <a class="btn btn-primary btn-sm" href="<?php echo e($du); ?>">View</a>
+												 </td>
                                             </tr>
 									     <?php
 											   }

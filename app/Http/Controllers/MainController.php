@@ -153,8 +153,8 @@ class MainController extends Controller {
 					{
 						$users = [];
 						$apts = $this->helpers->getApartments($uu);
-					    $reviews = $this->helpers->getReviews($uu);
-				        #dd($reviews);
+					    $reviews = $this->helpers->getReviews($uu->id,"user");
+						#dd($reviews);
                         array_push($cpt,'u');
                         array_push($cpt,'apts');
                         array_push($cpt,'reviews');
@@ -181,6 +181,60 @@ class MainController extends Controller {
 			$v = "login";
 		}
 		return view($v,compact($cpt));
+    }
+	
+	
+	/**
+	 * Handle apartment update.
+	 *
+	 * @return Response
+	 */
+	public function postUser(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                    'fname' => 'required',
+		                    'lname' => 'required',
+		                    'phone' => 'required|numeric',
+		                    'email' => 'required|email',
+		                    'role' => 'required|not_in:none',
+		                    'status' => 'required|not_in:none'
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$ret = $this->helpers->updateUser($req);
+					$ss = "update-user-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->back();
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
     }
 	
 	

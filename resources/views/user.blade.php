@@ -42,13 +42,13 @@ $subtitle = "View information about this user.";
 										<div class="col-md-6">
 										<div class="form-group">
                                             <label for="user-fname">First Name</label>
-                                            <input id="user-fname" type="text" name="fname" value="{{$user['fname']}}" placeholder="Enter first name" class="form-control">
+                                            <input id="user-fname" type="text" name="fname" value="{{$u['fname']}}" placeholder="Enter first name" class="form-control">
                                         </div>
 										</div>
 										<div class="col-md-6">
 										<div class="form-group">
                                             <label for="user-lname">Last Name</label>
-                                            <input id="user-lname" type="text" name="lname" value="{{$user['lname']}}" placeholder="Enter last name" class="form-control">
+                                            <input id="user-lname" type="text" name="lname" value="{{$u['lname']}}" placeholder="Enter last name" class="form-control">
                                         </div>
 										</div>
 										</div>
@@ -56,13 +56,13 @@ $subtitle = "View information about this user.";
 										<div class="col-md-6">
 										<div class="form-group">
                                             <label for="user-email">Email address</label>
-                                            <input id="user-email" type="email" name="email" value="{{$user['email']}}" placeholder="Enter email address" class="form-control">
+                                            <input id="user-email" type="email" name="email" value="{{$u['email']}}" placeholder="Enter email address" class="form-control" readonly>
                                         </div>
 										</div>
 										<div class="col-md-6">
 										<div class="form-group">
-                                            <label for="user-email">Email address</label>
-                                            <input id="user-email" type="email" name="email" value="{{$user['email']}}" placeholder="Enter email address" class="form-control">
+                                            <label for="user-phone">Phone number</label>
+                                            <input id="user-phone" type="number" name="phone" value="{{$u['phone']}}" placeholder="Enter phone number" class="form-control">
                                         </div>
 										</div>
 										</div>
@@ -90,7 +90,7 @@ $subtitle = "View information about this user.";
 										</div>
 										<div class="col-md-6">
 										<div class="form-group">
-                                            <label for="user-role">Status</label>
+                                            <label for="user-status">Status</label>
 											<?php
 											 $statuses = ['enabled','disabled'];
 											?>
@@ -137,43 +137,51 @@ $subtitle = "View information about this user.";
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Date Joined</th>
+                                                <th>Apartment</th>
+                                                <th>Location</th>
+                                                <th>Rating</th>
+                                                <th>Date added</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-										  <?php
-										   if(count($users) > 0)
+										 <?php
+									    if(count($apts) > 0)
+										{
+										  foreach($apts as $a)
 										   {
-											  foreach($users as $u)
-											   {
-												   $vu = url('user')."?xf=".$u['email'];
-												   $statusClass = "danger";
-												   $du = url('enable-user')."?xf=".$u['id'];
-												   $duText = "Enable user";
-												   $duClass = "success";
-												   
-												   if($u['status'] == "enabled")
-												   {
-													   $statusClass = "success";
-													   $du = url('disable-user')."?xf=".$u['id'];
-													   $duText = "Disable user";
-												       $duClass = "danger";
-												   }
-										  ?>
+											   $statusClass = "danger";
+											   $name = $a['name'];
+											   $address = $a['address'];
+											   $reviews = $a['reviews'];
+											   $uu = url('apartment')."?xf=".$a['apartment_id'];
+											    $sss = $a['status'];
+												
+												if($a['status'] == "enabled")
+												{
+													$statusClass = "success";
+													$sss = "approved";
+												}
+											   $imgs = $a['cmedia']['images'];
+											   
+									   ?>
                                             <tr>
-                                                <td>{{ucwords($u['fname']." ".$u['lname'])}}</td>
-                                                <td>{{$u['email']}}</td>
-                                                <td>{{ucwords($u['role'])}}</td>
-                                                <td>{{$u['date']}}</td>
-                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($u['status'])}}</td>
                                                 <td>
-												 <a class="btn btn-primary btn-sm" href="{{$vu}}">View</a>
-												 <a class="btn btn-{{$duClass}} btn-sm" href="{{$du}}">{{$duText}}</a>
+												  <img class="img-fluid" onclick="window.location='{{$uu}}'" src="{{$imgs[0]}}" alt="{{$name}}" style="cursor: pointer; width: 100px; height: 100px;"/>
+												  <a href="{{$uu}}"><h4>{{ucwords($name)}}</h4></a><br>							  
+												</td>
+                                                <td>{{ucwords($address['address'].",")}}<br>{{ucwords($address['city'].", ".$address['state'])}}</td>
+                                                <td>
+												@for($i = 0; $i < $a['rating']; $i++)
+												  <i class="fas fa-star"></i>
+											    @endfor
+												&nbsp;({{count($a['reviews'])}} reviews)
+												</td>
+                                                <td>{{$a['date']}}</td>
+                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($sss)}}</td>
+                                                <td>
+												 <a class="btn btn-primary btn-sm" href="{{$uu}}">View</a>
 												</td>
                                             </tr>
 									     <?php
@@ -194,44 +202,61 @@ $subtitle = "View information about this user.";
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Date Joined</th>
+                                                <th>Apartment</th>
+                                                <th>Rating</th>
+                                                <th>Comment</th>
+                                                <th>Date Added</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 										  <?php
-										   if(count($users) > 0)
+										   if(count($reviews) > 0)
 										   {
-											  foreach($users as $u)
+											  foreach($reviews as $r)
 											   {
-												   $vu = url('user')."?xf=".$u['email'];
-												   $statusClass = "danger";
-												   $du = url('enable-user')."?xf=".$u['id'];
-												   $duText = "Enable user";
-												   $duClass = "success";
+												   $a = $r['apartment'];
+						     			        $statusClass = "danger";
+											   $name = $a['name'];
+											   $uu = url('apartment')."?xf=".$a['apartment_id'];
+											    $sss = $r['status'];
+												
+												if($sss == "approved")
+												{
+													$statusClass = "success";
+												}
+											   $imgs = $a['cmedia']['images'];
+
 												   
-												   if($u['status'] == "enabled")
-												   {
-													   $statusClass = "success";
-													   $du = url('disable-user')."?xf=".$u['id'];
-													   $duText = "Disable user";
-												       $duClass = "danger";
-												   }
+												   $du = url('review')."?xf=".$r['id'];
+												   $ar = ($r['service'] + $r['location'] + $r['security'] + $r['cleanliness'] + $r['comfort']) / 5;
 										  ?>
                                             <tr>
-                                                <td>{{ucwords($u['fname']." ".$u['lname'])}}</td>
-                                                <td>{{$u['email']}}</td>
-                                                <td>{{ucwords($u['role'])}}</td>
-                                                <td>{{$u['date']}}</td>
-                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($u['status'])}}</td>
-                                                <td>
-												 <a class="btn btn-primary btn-sm" href="{{$vu}}">View</a>
-												 <a class="btn btn-{{$duClass}} btn-sm" href="{{$du}}">{{$duText}}</a>
+                                               <td>
+												  <img class="img-fluid" onclick="window.location='{{$uu}}'" src="{{$imgs[0]}}" alt="{{$name}}" style="cursor: pointer; width: 100px; height: 100px;"/>
+												  <a href="{{$uu}}"><h4>{{ucwords($name)}}</h4></a><br>							  
 												</td>
+												<td>
+												  <h3>
+												   @for($i = 0; $i < $ar; $i++)
+												     <i class="fas fa-star"></i>
+											       @endfor
+												  </h3>
+												  <ul>
+												    <li>Service: <b>{{$r['service']}}</b></li>
+												    <li>Location: <b>{{$r['location']}}</b></li>
+												    <li>Security: <b>{{$r['security']}}</b></li>
+												    <li>Cleanliness: <b>{{$r['cleanliness']}}</b></li>
+												    <li>Comfort: <b>{{$r['comfort']}}</b></li>
+												  </ul>							  
+												</td>
+                                                <td><em>{{$r['comment']}}</em></td>
+                                                <td>{{$r['date']}}</td>
+                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($r['status'])}}</td>
+                                                <td>
+												 <a class="btn btn-primary btn-sm" href="{{$du}}">View</a>
+												 </td>
                                             </tr>
 									     <?php
 											   }
