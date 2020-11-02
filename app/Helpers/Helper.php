@@ -67,6 +67,8 @@ class Helper implements HelperContract
 					 "pay-card-status" => "Payment successful. Have a lovely stay!",
 					 "save-apartment-status" => "Apartment saved.",
 					 "save-duplicate-apartment-status" => "You have saved this apartment already.",
+					 "add-permissions-status" => "Permission(s) added.",
+					 "remove-permission-status" => "Permission(s) removed.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -82,6 +84,9 @@ class Helper implements HelperContract
 					 "rp-invalid-token-status-error" => "The code is invalid or has expired.",
 					 "pay-card-status-error" => "Your payment could not be processed, please try again.",
 					 "save-apartment-status-error" => "Apartment could not be saved, please try again.",
+					 "add-permissions-status-error" => "Permission(s) could not be added, please try again.",
+					 "remove-permission-status-error" => "Permission(s) could not be removed, please try again.",
+					 "permissions-status-error" => "Access denied.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -158,7 +163,16 @@ class Helper implements HelperContract
  ];			
 
   public $ip = "";
-    
+  
+    public $permissions = [
+	   'view_users','edit_users',
+	   'view_apartments','edit_apartments',
+	   'view_reviews','edit_reviews',
+	   'view_transactions','edit_transactions',
+	   'view_tickets','edit_tickets',
+	   'view_banners','edit_banners',
+	   'view_plugins','edit_plugins'
+	   ];
   
   public $adminEmail = "aquarius4tkud@yahoo.com";
  // public $adminEmail = "aceluxurystore@yahoo.com";
@@ -2439,12 +2453,34 @@ function createSocial($data)
 
 		   function createPermission($dt)
 		   {
-			   $ret = Permissions::create(['user_id' => $dt['user_id'], 
+			    $ret = Permissions::where('user_id',$dt['user_id'])
+				                ->where('ptag',$dt['ptag'])->first();
+				
+				if($ret == null)
+				{
+					$ret = Permissions::create(['user_id' => $dt['user_id'], 
                                              'ptag' => $dt['ptag'],
                                              'granted_by' => $dt['granted_by'],
                                             ]);
+				}
+			   
                                                       
                 return $ret;
+		   }
+		   
+		   function addPermissions($dt)
+		   {
+			   $ptags = $dt['ptags'];
+			   #dd($dt);
+			   foreach($ptags as $p)
+			   {
+				   $this->createPermission([
+				           'user_id' => $dt['xf'],
+				           'ptag' => $p,
+						   'granted_by' => $dt['granted_by']
+				   ]);
+			   }
+			   return "ok";
 		   }
 		   
 		   function getPermission($id)
@@ -2458,7 +2494,7 @@ function createSocial($data)
 				  $temp['id'] = $p->id;
 				  $temp['user_id'] = $p->user_id;
 				  $temp['ptag'] = $p->ptag;
-				  $temp['granted_by'] = $p->granted_by;
+				  $temp['granted_by'] = User::where('id',$p->granted_by)->first();
 				  $temp['date'] = $p->created_at->format("jS F, Y");
      			  $ret = $temp;
                }
@@ -2485,15 +2521,20 @@ function createSocial($data)
                 return $ret;
            }
 		   
-		   function removePermission($id)
+		   function removePermission($dt)
 		   {
-			   $ret = [];
-			   $p = Permissions::where('id',$id)->first();
+			   $ret = "error";
+			   
+			   $p = Permissions::where('user_id',$dt['xf'])
+			                   ->where('ptag',$dt['p'])->first();
 			   
 			   if($p != null)
                {
 				  $p->delete();
-               }	   
+				  $ret = "ok";
+               }
+
+               return $ret;			   
 		   }
 		   
 		   function hasPermission($user_id,$ps)
@@ -2508,7 +2549,7 @@ function createSocial($data)
 			   {   
 				 foreach($ps as $p)
 				 {
-					$contains = $pps->contains(function($value){
+					$contains = $pps->contains(function($value) use($p){
                                                           return $value->ptag == $p;
                                                       });
                     $hasAllPermissions = $hasAllPermissions && $contains;													  

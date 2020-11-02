@@ -1,6 +1,7 @@
 <?php
 $title = $u['fname']." ".$u['lname'];
 $subtitle = "View information about this user.";
+$pu = url('add-permissions')."?xf=".$u['email'];
 ?>
 
 @extends('layout')
@@ -129,6 +130,50 @@ $subtitle = "View information about this user.";
                         </div>
 </div>
 <div class="row">
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Permissions</h5>
+							<a href="{{$pu}}" class="btn btn-outline-secondary">Add permission</a>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered first etuk-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Permission</th>
+                                                <th>Granted by</th>
+                                                <th>Date granted</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+										 <?php
+									    if(count($permissions) > 0)
+										{
+										  foreach($permissions as $p)
+										   {
+											   $uu = url('remove-permission')."?xf=".$u['id']."&p=".$p['ptag'];
+											    $gname = $p['granted_by']->fname." ".$p['granted_by']->lname;
+									   ?>
+                                            <tr>
+                                                <td>{{$p['ptag']}}</td>
+                                                <td>{{ucwords($gname)}}</td>
+                                                <td>{{$p['date']}}</td>
+                                                <td>
+												 <a class="btn btn-primary btn-sm" href="{{$uu}}">Remove</a>
+												</td>
+                                            </tr>
+									     <?php
+											   }
+										   }
+										 ?>
+									   </tbody>
+									</table>
+							    </div>
+							 </div>
+						</div>
+                    </div>
+</div>
+<div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
                         <div class="card">
                             <h5 class="card-header">Apartments</h5>
@@ -154,7 +199,7 @@ $subtitle = "View information about this user.";
 											   $statusClass = "danger";
 											   $name = $a['name'];
 											   $address = $a['address'];
-											   $reviews = $a['reviews'];
+											   #$reviews = $a['reviews'];
 											   $uu = url('apartment')."?xf=".$a['apartment_id'];
 											    $sss = $a['status'];
 												

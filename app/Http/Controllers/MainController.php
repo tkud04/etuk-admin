@@ -154,11 +154,13 @@ class MainController extends Controller {
 						$users = [];
 						$apts = $this->helpers->getApartments($uu);
 					    $reviews = $this->helpers->getReviews($uu->id,"user");
-						#dd($reviews);
+					    $permissions = $this->helpers->getPermissions($uu);
+						#dd(count($reviews));
                         array_push($cpt,'u');
                         array_push($cpt,'apts');
                         array_push($cpt,'reviews');
                         array_push($cpt,'users');
+                        array_push($cpt,'permissions');
 					}
 					
 				}
@@ -271,6 +273,201 @@ class MainController extends Controller {
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");
 			        return redirect()->back();
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	/**
+	 * Show the Add Permission view.
+	 *
+	 * @return Response
+	 */
+	public function getAddPermission(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$permissions = $this->helpers->permissions;
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+                
+				if(isset($req['xf']))
+				{
+					$xf = $req['xf'];
+					$v = "add-permissions";
+					$uu = User::where('id',$xf)
+					          ->orWhere('email',$xf)->first();
+							  
+					if($uu == null)
+					{
+						session()->flash("invalid-user-status-error","ok");
+						return redirect()->intended('users');
+					}
+				    $u = $this->helpers->getUser($xf);
+					
+					if(count($u) < 1)
+					{
+						session()->flash("invalid-user-status-error","ok");
+						return redirect()->intended('users');
+					}
+					else
+					{
+						array_push($cpt,'u');                       
+						array_push($cpt,'permissions');                       
+					}
+					
+				}
+				else
+				{
+					session()->flash("validation-status-error","ok");
+					return redirect()->intended('users');
+				}
+								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Handle add permission.
+	 *
+	 * @return Response
+	 */
+	public function postAddPermission(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                    'xf' => 'required',
+		                    'pp' => 'required'
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$pp = json_decode($req['pp']);
+					$ptags = [];
+					
+					foreach($pp as $p)
+					{
+						if($p->selected) array_push($ptags,$p->ptag);
+					}
+					
+					$dt = [
+					     'xf' => $req['xf'],
+					     'ptags' => $ptags,
+					     'granted_by' => $user->id
+					   ];
+					   
+					$ret = $this->helpers->addPermissions($dt);
+					$ss = "add-permissions-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->intended("user?xf=".$req['xf']);
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	/**
+	 * Handle remove permission.
+	 *
+	 * @return Response
+	 */
+	public function getRemovePermission(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+			   	    #dd($req);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				    $validator = Validator::make($req,[
+		                    'xf' => 'required',
+		                    'p' => 'required',
+		                   ]);
+						
+				    if($validator->fails())
+                    {
+                      session()->flash("validation-status-error","ok");
+			          return redirect()->back()->withInput();
+                    }
+				    else
+				    {   
+					  $ret = $this->helpers->removePermission($req);
+					  $ss = "remove-permission-status";
+					  if($ret == "error") $ss .= "-error";
+					  session()->flash($ss,"ok");
+			          return redirect()->intended("user?xf=".$req['xf']);
+				    }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+			        return redirect()->intended("user?xf=".$req['xf']);
 				}
 			}
 			else

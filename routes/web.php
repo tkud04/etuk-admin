@@ -35,6 +35,11 @@ Route::get('user', 'MainController@getUser');
 Route::post('user', 'MainController@postUser');
 Route::get('edu', 'MainController@getEnableDisableUser');
 
+//Permissions
+Route::get('add-permissions', 'MainController@getAddPermission');
+Route::post('add-permissions', 'MainController@postAddPermission');
+Route::get('remove-permission', 'MainController@getRemovePermission');
+
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');
 

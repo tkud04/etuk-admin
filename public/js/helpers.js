@@ -1156,6 +1156,18 @@ const getAnalytics = dt => {
 			$(`#host-${dt.type}-loading`).hide();			
 	   });	
 }
+
+const togglePP = dt => {
+	 // console.log(`selecting facility ${dt}`);
+	  ret = {ptag: dt, selected: false};
+
+		   let pp = apTags.find(p => p.ptag == dt);
+
+		  if(pp){
+			pp.selected = !pp.selected;  
+		  }
+		  
+}
 /**********************************************************************************************************************
                                                      OLD METHODS
 /**********************************************************************************************************************/

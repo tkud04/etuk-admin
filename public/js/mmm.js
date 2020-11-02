@@ -134,4 +134,32 @@ $(document).ready(function() {
 	   }
     });
 	
+	//ADD PERMISSIONS
+	$("#ap-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let apSelected = false;
+	   
+	   for(let i = 0; i < apTags.length; i++){
+		   apSelected = apSelected || apTags[i].selected;
+	   }
+	    console.log(apSelected);
+	   let side1_validation = !apSelected;	  
+	 
+       
+	   if(side1_validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Select a permission"
+           })
+	   }
+	   else{
+		   $('#ap-pp').val(JSON.stringify(apTags));
+		  $('#ap-form').submit();		  
+	   }
+	   
+	   
+    });
+	
 });
