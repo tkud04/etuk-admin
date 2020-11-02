@@ -252,7 +252,6 @@ $pu = url('add-permissions')."?xf=".$u['email'];
                                                 <th>Comment</th>
                                                 <th>Date Added</th>
                                                 <th>Status</th>
-                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -274,7 +273,6 @@ $pu = url('add-permissions')."?xf=".$u['email'];
 											   $imgs = $a['cmedia']['images'];
 
 												   
-												   $du = url('review')."?xf=".$r['id'];
 												   $ar = ($r['service'] + $r['location'] + $r['security'] + $r['cleanliness'] + $r['comfort']) / 5;
 										  ?>
                                             <tr>
@@ -299,9 +297,7 @@ $pu = url('add-permissions')."?xf=".$u['email'];
                                                 <td><em>{{$r['comment']}}</em></td>
                                                 <td>{{$r['date']}}</td>
                                                 <td><span class="label label-{{$statusClass}}">{{strtoupper($r['status'])}}</td>
-                                                <td>
-												 <a class="btn btn-primary btn-sm" href="{{$du}}">View</a>
-												 </td>
+                                                
                                             </tr>
 									     <?php
 											   }

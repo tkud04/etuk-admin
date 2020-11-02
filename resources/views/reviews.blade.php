@@ -1,6 +1,6 @@
 <?php
-$title = "Users";
-$subtitle = "View all users registered on the platform";
+$title = "Reviews";
+$subtitle = "View all user reviews";
 ?>
 
 @extends('layout')
@@ -33,52 +33,73 @@ $subtitle = "View all users registered on the platform";
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
-                            <h5 class="card-header">Users</h5>
+                            <h5 class="card-header">Reviews</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Date Joined</th>
+                                                <th>Apartment</th>
+                                                <th>Rating</th>
+                                                <th>Comment</th>
+                                                <th>Date Added</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 										  <?php
-										   if(count($users) > 0)
+										   if(count($reviews) > 0)
 										   {
-											  foreach($users as $u)
+											  foreach($reviews as $r)
 											   {
-												   $vu = url('user')."?xf=".$u['email'];
-												   $statusClass = "danger";
-												   $type = "enable";
-												   $duText = "Enable user";
-												   $duClass = "success";
-												   
-												   if($u['status'] == "enabled")
-												   {
-													   $statusClass = "success";
-													   $type = "disable";
-													   $duText = "Disable user";
-												       $duClass = "danger";
-												   }
-												   $du = url('edu')."?xf=".$u['id']."&type=".$type;
-												   
+												   $a = $r['apartment'];
+						     			        $statusClass = "danger";
+												$arrClass = "success";
+												$arrText = "Approve";
+;
+											   $name = $a['name'];
+											   $uu = url('apartment')."?xf=".$a['apartment_id'];
+											    $sss = $r['status'];
+												
+												if($sss == "approved")
+												{
+													$statusClass = "success";
+													$arrClass = "warning";
+													$arrText = "Reject";
+												}
+											   $imgs = $a['cmedia']['images'];
+
+												   $arr = url('arr')."?xf=".$r['id']."&type=".strtolower($arrText);
+												   $dr = url('remove-review')."?xf=".$r['id'];
+												   $ar = ($r['service'] + $r['location'] + $r['security'] + $r['cleanliness'] + $r['comfort']) / 5;
 										  ?>
                                             <tr>
-                                                <td>{{ucwords($u['fname']." ".$u['lname'])}}</td>
-                                                <td>{{$u['email']}}</td>
-                                                <td>{{ucwords($u['role'])}}</td>
-                                                <td>{{$u['date']}}</td>
-                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($u['status'])}}</td>
-                                                <td>
-												 <a class="btn btn-primary btn-sm" href="{{$vu}}">View</a>
-												 <a class="btn btn-{{$duClass}} btn-sm" href="{{$du}}">{{$duText}}</a>
+                                               <td>
+												  <img class="img-fluid" onclick="window.location='{{$uu}}'" src="{{$imgs[0]}}" alt="{{$name}}" style="cursor: pointer; width: 100px; height: 100px;"/>
+												  <a href="{{$uu}}"><h4>{{ucwords($name)}}</h4></a><br>							  
 												</td>
+												<td>
+												  <h3>
+												   @for($i = 0; $i < $ar; $i++)
+												     <i class="fas fa-star"></i>
+											       @endfor
+												  </h3>
+												  <ul>
+												    <li>Service: <b>{{$r['service']}}</b></li>
+												    <li>Location: <b>{{$r['location']}}</b></li>
+												    <li>Security: <b>{{$r['security']}}</b></li>
+												    <li>Cleanliness: <b>{{$r['cleanliness']}}</b></li>
+												    <li>Comfort: <b>{{$r['comfort']}}</b></li>
+												  </ul>							  
+												</td>
+                                                <td><em>{{$r['comment']}}</em></td>
+                                                <td>{{$r['date']}}</td>
+                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($r['status'])}}</td>
+                                                <td>
+												 <a class="btn btn-{{$arrClass}} btn-sm" href="{{$arr}}">{{$arrText}}</a>
+												 <a class="btn btn-danger btn-sm" href="{{$dr}}">Remove</a>
+												 </td>
                                             </tr>
 									     <?php
 											   }

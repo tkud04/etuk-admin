@@ -1431,6 +1431,7 @@ function updateApartment($data)
 			  
               if($reviews != null)
                {
+				   $options = ['apartment' => true];
 				   $reviews = $reviews->sortByDesc('created_at');
 				   
 				  foreach($reviews as $r)
