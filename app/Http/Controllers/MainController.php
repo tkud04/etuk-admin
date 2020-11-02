@@ -253,9 +253,12 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
 				$req = $request->all();
-				#dd($req);
 				
+				if($hasPermission)
+				{
 				$validator = Validator::make($req,[
 		                    'xf' => 'required|numeric',
 		                    'type' => 'required',
@@ -273,6 +276,12 @@ class MainController extends Controller {
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");
 			        return redirect()->back();
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('users');
 				}
 			}
 			else
@@ -311,7 +320,12 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
 				$req = $request->all();
+				
+				if($hasPermission)
+				{
                 
 				if(isset($req['xf']))
 				{
@@ -344,6 +358,12 @@ class MainController extends Controller {
 					session()->flash("validation-status-error","ok");
 					return redirect()->intended('users');
 				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('users');
+				}
 								
 			}
 			else
@@ -374,7 +394,13 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
 				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				
 				#dd($req);
 				
 				$validator = Validator::make($req,[
@@ -408,6 +434,12 @@ class MainController extends Controller {
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");
 			        return redirect()->intended("user?xf=".$req['xf']);
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("user?xf=".$req['xf']);
 				}
 			}
 			else
