@@ -12,12 +12,6 @@ manage transactions
 -create ticket
 -update ticket
 
-manage reviews
--view reviews
--view review
--set review status
--delete review
-
 manage tickets
 -view tickets
 -view ticket

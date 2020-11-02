@@ -550,7 +550,7 @@ class MainController extends Controller {
 	
 	
 	/**
-	 * Show list of registered users on the platform.
+	 * Show list of reviews.
 	 *
 	 * @return Response
 	 */
@@ -602,6 +602,127 @@ class MainController extends Controller {
 			$v = "login";
 		}
 		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Handle approve/reject review.
+	 *
+	 * @return Response
+	 */
+	public function getApproveRejectReview(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+			   	    #dd($req);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_reviews','edit_reviews']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				    $validator = Validator::make($req,[
+		                    'xf' => 'required',
+		                    'type' => 'required',
+		                   ]);
+						
+				    if($validator->fails())
+                    {
+                      session()->flash("validation-status-error","ok");
+			          return redirect()->back()->withInput();
+                    }
+				    else
+				    {   
+					  $dt = ['id' => $req['xf'],'status' => ""];
+					  $dt['status'] = $req['type'] == "approve" ? "approved" : "rejected";
+					  $ret = $this->helpers->updateReviewStatus($dt);
+					  $ss = "update-review-status";
+					  if($ret == "error") $ss .= "-error";
+					  session()->flash($ss,"ok");
+			          return redirect()->intended("reviews");
+				    }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+			        return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	/**
+	 * Handle remove review.
+	 *
+	 * @return Response
+	 */
+	public function getRemoveReview(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+			   	    #dd($req);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_reviews','edit_reviews']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				    $validator = Validator::make($req,[
+		                    'xf' => 'required'
+		                   ]);
+						
+				    if($validator->fails())
+                    {
+                      session()->flash("validation-status-error","ok");
+			          return redirect()->back()->withInput();
+                    }
+				    else
+				    {   
+					  $ret = $this->helpers->removeReview($req);
+					  $ss = "remove-review-status";
+					  if($ret == "error") $ss .= "-error";
+					  session()->flash($ss,"ok");
+			          return redirect()->intended("reviews");
+				    }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+			        return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
     }
 	
 	

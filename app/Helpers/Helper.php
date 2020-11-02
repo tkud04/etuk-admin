@@ -69,6 +69,8 @@ class Helper implements HelperContract
 					 "save-duplicate-apartment-status" => "You have saved this apartment already.",
 					 "add-permissions-status" => "Permission(s) added.",
 					 "remove-permission-status" => "Permission(s) removed.",
+					 "update-review-status" => "Review updated.",
+					 "remove-review-status" => "Review removed.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -86,6 +88,8 @@ class Helper implements HelperContract
 					 "save-apartment-status-error" => "Apartment could not be saved, please try again.",
 					 "add-permissions-status-error" => "Permission(s) could not be added, please try again.",
 					 "remove-permission-status-error" => "Permission(s) could not be removed, please try again.",
+					 "update-review-status-error" => "Review could not be updated, please try again.",
+					 "remove-review-status-error" => "Review could not be removed, please try again.",
 					 "permissions-status-error" => "Access denied.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
@@ -1501,6 +1505,20 @@ function updateApartment($data)
 			   if($r != null)
 			   {
 				   $r->update(['status' => $dt['status']]);
+				   $ret = "ok";
+			   }
+			   
+			   return $ret;
+		   }
+		   
+		   function removeReview($dt)
+		   {
+			   $r = Reviews::where('id',$dt['xf'])->first();
+			   $ret = "error";
+			   
+			   if($r != null)
+			   {
+				   $r->delete();
 				   $ret = "ok";
 			   }
 			   

@@ -71,7 +71,7 @@ $subtitle = "View all user reviews";
 											   $imgs = $a['cmedia']['images'];
 
 												   $arr = url('arr')."?xf=".$r['id']."&type=".strtolower($arrText);
-												   $dr = url('remove-review')."?xf=".$r['id'];
+												   $dr = url('dr')."?xf=".$r['id'];
 												   $ar = ($r['service'] + $r['location'] + $r['security'] + $r['cleanliness'] + $r['comfort']) / 5;
 										  ?>
                                             <tr>

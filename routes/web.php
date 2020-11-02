@@ -38,7 +38,7 @@ Route::get('edu', 'MainController@getEnableDisableUser');
 //Reviews
 Route::get('reviews', 'MainController@getReviews');
 Route::get('arr', 'MainController@getApproveRejectReview');
-Route::get('dr', 'MainController@getDeleteReview');
+Route::get('dr', 'MainController@getRemoveReview');
 
 //Permissions
 Route::get('add-permissions', 'MainController@getAddPermission');
