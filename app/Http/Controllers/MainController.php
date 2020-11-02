@@ -82,15 +82,28 @@ class MainController extends Controller {
 				
 		if(Auth::check())
 		{
+			
 			$user = Auth::user();
 			
 			if($this->helpers->isAdmin($user))
 			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
 				$v = "users";
 				$req = $request->all();
                 $users = $this->helpers->getUsers();
 				#dd($users);
-                array_push($cpt,'users');				
+                array_push($cpt,'users');
+                }
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
 			}
 			else
 			{
@@ -128,8 +141,12 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
 				$req = $request->all();
-                
+				
+				if($hasPermission)
+				{
 				if(isset($req['xf']))
 				{
 					$xf = $req['xf'];
@@ -169,6 +186,12 @@ class MainController extends Controller {
 					session()->flash("validation-status-error","ok");
 					return redirect()->intended('users');
 				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
 								
 			}
 			else
@@ -200,8 +223,12 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
 				$req = $request->all();
-				#dd($req);
+				
+				if($hasPermission)
+				{
 				
 				$validator = Validator::make($req,[
 		                    'fname' => 'required',
@@ -224,6 +251,12 @@ class MainController extends Controller {
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");
 			        return redirect()->back();
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
 				}
 			}
 			else
@@ -281,7 +314,7 @@ class MainController extends Controller {
 				else
 				{
 					session()->flash("permissions-status-error","ok");
-					return redirect()->intended('users');
+					return redirect()->intended('/');
 				}
 			}
 			else
@@ -362,7 +395,7 @@ class MainController extends Controller {
 				else
 				{
 					session()->flash("permissions-status-error","ok");
-					return redirect()->intended('users');
+					return redirect()->intended('/');
 				}
 								
 			}
@@ -439,7 +472,7 @@ class MainController extends Controller {
 				else
 				{
 					session()->flash("permissions-status-error","ok");
-					return redirect()->intended("user?xf=".$req['xf']);
+					return redirect()->intended("/");
 				}
 			}
 			else
@@ -499,7 +532,7 @@ class MainController extends Controller {
 				else
 				{
 					session()->flash("permissions-status-error","ok");
-			        return redirect()->intended("user?xf=".$req['xf']);
+			        return redirect()->intended("/");
 				}
 			}
 			else
