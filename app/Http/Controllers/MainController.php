@@ -87,7 +87,7 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users']);
 				#dd($hasPermission);
 				$req = $request->all();
 				
@@ -141,7 +141,7 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users']);
 				#dd($hasPermission);
 				$req = $request->all();
 				
@@ -546,6 +546,62 @@ class MainController extends Controller {
 		{
 			return redirect()->intended('/');
 		}
+    }
+	
+	
+	/**
+	 * Show list of registered users on the platform.
+	 *
+	 * @return Response
+	 */
+	public function getReviews(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_reviews']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				$v = "reviews";
+				$req = $request->all();
+                $reviews = $this->helpers->getReviews();
+				dd($reviews);
+                array_push($cpt,'reviews');
+                }
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
     }
 	
 	

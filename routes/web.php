@@ -35,6 +35,11 @@ Route::get('user', 'MainController@getUser');
 Route::post('user', 'MainController@postUser');
 Route::get('edu', 'MainController@getEnableDisableUser');
 
+//Reviews
+Route::get('reviews', 'MainController@getReviews');
+Route::get('arr', 'MainController@getApproveRejectReview');
+Route::get('dr', 'MainController@getDeleteReview');
+
 //Permissions
 Route::get('add-permissions', 'MainController@getAddPermission');
 Route::post('add-permissions', 'MainController@postAddPermission');

@@ -1420,6 +1420,29 @@ function updateApartment($data)
                 return $ret;
            }
 		   
+		   function getAllReviews()
+           {
+           	$ret = [];
+			$reviews = null;
+			
+				$reviews = Reviews::where('id',">","0")->get();								
+              
+              	
+			  
+              if($reviews != null)
+               {
+				   $reviews = $reviews->sortByDesc('created_at');
+				   
+				  foreach($reviews as $r)
+				  {
+					  $temp = $this->getReview($r->id,$options);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
 		   function getReviewStats($id)
            {
            	$ret = [];
@@ -1468,6 +1491,20 @@ function updateApartment($data)
                                                       
                 return $ret;
            }
+		   
+		   function updateReviewStatus($dt)
+		   {
+			   $r = Reviews::where('id',$dt['id'])->first();
+			   $ret = "error";
+			   
+			   if($r != null)
+			   {
+				   $r->update(['status' => $dt['status']]);
+				   $ret = "ok";
+			   }
+			   
+			   return $ret;
+		   }
 		   
 		   function hasReview($dt)
 		   {
