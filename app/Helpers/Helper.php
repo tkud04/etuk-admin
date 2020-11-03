@@ -2416,7 +2416,27 @@ function createSocial($data)
 			  return $ret;
 		   }
 		   
-		    function getOrders($user)
+		   function getAllOrders()
+           {
+           	$ret = [];
+
+			  $orders = Orders::where('id','>',"0")->get();
+			  
+			  #dd($uu);
+              if($orders != null)
+               {
+				   $orders = $orders->sortByDesc('created_at');
+               	  foreach($orders as $o) 
+                    {
+                    	$temp = $this->getOrder($o->reference);
+                        array_push($ret, $temp); 
+                    }
+               }                                 
+              	#dd($ret);
+                return $ret;
+           }
+		   
+		   function getOrders($user)
            {
            	$ret = [];
 

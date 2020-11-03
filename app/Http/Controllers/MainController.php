@@ -47,7 +47,9 @@ class MainController extends Controller {
 			if($this->helpers->isAdmin($user))
 			{
 				$v = "index";
-				$req = $request->all();		      
+				$orders = $this->helpers->getAllOrders();
+				$req = $request->all();
+                array_push($cpt,'orders');				
 			}
 			else
 			{

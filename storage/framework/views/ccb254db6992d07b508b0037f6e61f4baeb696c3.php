@@ -91,71 +91,125 @@ $subtitle = "Admin dashboard";
                                                 <thead class="bg-light">
                                                     <tr class="border-0">
                                                         <th class="border-0">#</th>
-                                                        <th class="border-0">Image</th>
-                                                        <th class="border-0">Product Name</th>
-                                                        <th class="border-0">Product Id</th>
-                                                        <th class="border-0">Quantity</th>
-                                                        <th class="border-0">Price</th>
-                                                        <th class="border-0">Order Time</th>
-                                                        <th class="border-0">Customer</th>
+                                                        <th class="border-0">Reference</th>
+                                                        <th class="border-0">Details</th>
                                                         <th class="border-0">Status</th>
+                                                        
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+												<?php
+									   if(count($orders) > 0)
+									   {
+										   $ordersLength = count($orders) > 5 ? 5 : count($orders);
+									    for($ctr = 0; $ctr < $ordersLength; $ctr++)
+										{
+											$o = $orders[$ctr];
+										  $ref = $o['reference'];
+										  $ru = url('receipt')."?xf=".$ref;
+										  $cu = "javascript:void(0)";
+										  $s = ""; $liClass = ""; $ps = "";
+										  
+										  if($o['status'] == "paid")
+										  {
+											  $liClass = "approved-booking";
+											  $s = "Active";									
+										  }
+										  else if($o['status'] == "expired")
+										  {
+											  $liClass = "pending-booking";
+											  $s = "Expired";
+											  $ps = " pending";
+										  }
+										  else if($o['status'] == "cancelled")
+										  {
+											  $liClass = "canceled-booking";
+											  $s = "Cancelled";
+										  }
+										  
+										  $items = $o['items'];
+										  $ii = $items['data'];
+										  $subtotal = $items['subtotal'];
+										  $bookingDetails = [];
+										  
+										  foreach($ii as $i)
+										  {
+											            $temp = [];
+														 $apartment = $i['apartment'];
+														 $temp['au'] = $apartment['url'];
+														 $temp['name'] = $apartment['name'];
+														 $cmedia = $apartment['cmedia'];
+														 $temp['imgs'] = $cmedia['images'];
+														 $adata = $apartment['data'];
+														 $temp['terms'] = $apartment['terms'];
+														 $host = $apartment['host'];
+														 $temp['hostName'] = $host['fname']." ".substr($host['lname'],0,1).".";
+														 $temp['amount'] = $adata['amount'];
+														 $address = $apartment['address'];
+														 $temp['location'] = $address['city'].", ".$address['state'];
+														 $temp['checkin'] = $i['checkin'];
+														 $temp['checkout'] = $i['checkout'];
+														 $temp['guests'] = $i['guests'];
+														 $temp['kids'] = $i['kids'];
+														 array_push($bookingDetails,$temp);
+										  }			 
+											  
+									   ?>
                                                     <tr>
-                                                        <td>1</td>
+                                                        <td><?php echo e($ctr); ?></td>
+                                                        <td><?php echo e($ref); ?></td>
                                                         <td>
+														   <div class="card" style="overflow-y: scroll;">
+                                <h5 class="card-header">Items</h5>
+                                <div class="card-body">
+                                    <div class="list-group">
+									   <?php
+									    for($iiCtr = 0; $iiCtr < count($ii); $iiCtr++)
+										{
+											$i = $bookingDetails[$iiCtr];
+											$ll = ""; $sm = " class='text-muted'"; $tc = "";
+											$iiu = "javascript:void(0)";
+											
+											if($iiCtr == 0)
+											{
+												$ll = " active";
+											    $sm = "";
+											    $tc = " text-white";
+											}
+											
+											$imgs = $i['imgs'];
+											
+									   ?>
+                                        <a href="<?php echo e($iiu); ?>" class="list-group-item list-group-item-action flex-column align-items-start<?php echo e($ll); ?>">
+                                            <div class="d-flex w-100 justify-content-between">
+											<img class="rounded-circle mr-3 mb-3" src="<?php echo e($imgs[0]); ?>" alt="<?php echo e($i['name']); ?>" style="width: 100px; height: 100px;"/>
+											  <div>
+                                                <h5 class="mb-1<?php echo e($tc); ?>"><?php echo e($i['name']); ?></h5>
+                                                <small<?php echo e($sm); ?>><?php echo e($i['checkin']." - ".$i['checkout']); ?></small>
+												
+												<p class="mb-1">Adults: <?php echo e($i['guests']); ?> | Children: <?php echo e($i['kids']); ?></p>
+                                            <small<?php echo e($sm); ?>>Price per night: &#8358;<?php echo e(number_format($i['amount'])); ?></small>
+											  </div>
+                                            </div>
+                                            
+                                        </a>
+										<?php
+										}
+										?>
+                                    </div>
+                                </div>
+                            </div>
                                                             <div class="m-r-10"><img src="assets/images/product-pic.jpg" alt="user" class="rounded" width="45"></div>
                                                         </td>
-                                                        <td>Product #1 </td>
-                                                        <td>id000001 </td>
-                                                        <td>20</td>
-                                                        <td>$80.00</td>
-                                                        <td>27-08-2018 01:22:12</td>
-                                                        <td>Patricia J. King </td>
-                                                        <td><span class="badge-dot badge-brand mr-1"></span>InTransit </td>
+                                                        <td><span class="badge-dot badge-success mr-1"></span>Active </td>
                                                     </tr>
+                                        <?php
+										 
+										}
+										}
+										?>       
                                                     <tr>
-                                                        <td>2</td>
-                                                        <td>
-                                                            <div class="m-r-10"><img src="assets/images/product-pic-2.jpg" alt="user" class="rounded" width="45"></div>
-                                                        </td>
-                                                        <td>Product #2 </td>
-                                                        <td>id000002 </td>
-                                                        <td>12</td>
-                                                        <td>$180.00</td>
-                                                        <td>25-08-2018 21:12:56</td>
-                                                        <td>Rachel J. Wicker </td>
-                                                        <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>
-                                                            <div class="m-r-10"><img src="assets/images/product-pic-3.jpg" alt="user" class="rounded" width="45"></div>
-                                                        </td>
-                                                        <td>Product #3 </td>
-                                                        <td>id000003 </td>
-                                                        <td>23</td>
-                                                        <td>$820.00</td>
-                                                        <td>24-08-2018 14:12:77</td>
-                                                        <td>Michael K. Ledford </td>
-                                                        <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>4</td>
-                                                        <td>
-                                                            <div class="m-r-10"><img src="assets/images/product-pic-4.jpg" alt="user" class="rounded" width="45"></div>
-                                                        </td>
-                                                        <td>Product #4 </td>
-                                                        <td>id000004 </td>
-                                                        <td>34</td>
-                                                        <td>$340.00</td>
-                                                        <td>23-08-2018 09:12:35</td>
-                                                        <td>Michael K. Ledford </td>
-                                                        <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="9"><a href="#" class="btn btn-outline-light float-right">View Details</a></td>
+                                                        <td colspan="9"><a href="<?php echo e(url('orders')); ?>" class="btn btn-outline-light float-right">View more</a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
