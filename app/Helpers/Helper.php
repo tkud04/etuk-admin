@@ -2688,6 +2688,26 @@ function createSocial($data)
 			   return $ret;
 		   }
 		   
+		   function getSiteStats()
+		   {
+			   $ret = [
+			     'revenue' => 10000,
+			     'former_revenue' => 12000,
+			     'refunds' => 0,
+			     'former_refunds' => 0,
+			     'avg_revenue' => 0,
+			     'former_avg_revenue' => 0
+			   ];
+			   
+			   return $ret;
+		   }
+		   
+		   function getTopPerformingApartments()
+		   {
+			   $ret = [];
+			   
+			   return $ret;
+		   }
 		   
 		   
 		   

@@ -48,8 +48,12 @@ class MainController extends Controller {
 			{
 				$v = "index";
 				$orders = $this->helpers->getAllOrders();
+				$stats = $this->helpers->getSiteStats();
+				$tpa = $this->helpers->getTopPerformingApartments();
 				$req = $request->all();
                 array_push($cpt,'orders');				
+                array_push($cpt,'stats');				
+                array_push($cpt,'tpa');				
 			}
 			else
 			{
