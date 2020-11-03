@@ -21,5 +21,3 @@ manage banners
 -view banners
 -delete banner
 
-manage plugins
-
