@@ -71,6 +71,9 @@ class Helper implements HelperContract
 					 "remove-permission-status" => "Permission(s) removed.",
 					 "update-review-status" => "Review updated.",
 					 "remove-review-status" => "Review removed.",
+					 "add-plugin-status" => "Plugin installed.",
+					 "update-plugin-status" => "Plugin updated.",
+					 "remove-plugin-status" => "Plugin removed.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -90,6 +93,8 @@ class Helper implements HelperContract
 					 "remove-permission-status-error" => "Permission(s) could not be removed, please try again.",
 					 "update-review-status-error" => "Review could not be updated, please try again.",
 					 "remove-review-status-error" => "Review could not be removed, please try again.",
+					 "update-plugin-status-error" => "Plugin could not be updated, please try again.",
+					 "remove-plugin-status-error" => "Plugin could not be removed, please try again.",
 					 "permissions-status-error" => "Access denied.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
@@ -581,6 +586,19 @@ function isDuplicateUser($data)
 			   return $ret;
 		   }
 		   
+		   function createPlugin($data)
+           {
+			   #dd($data);
+			 $ret = null;
+			 
+			 
+				 $ret = Plugins::create(['name' => $data['name'], 
+                                                      'value' => $data['value'], 
+                                                      'status' => $data['status'], 
+                                                      ]);
+			  return $ret;
+           }
+		   
 		    function getPlugins()
    {
 	   $ret = [];
@@ -591,11 +609,10 @@ function isDuplicateUser($data)
 	   {
 		   foreach($plugins as $p)
 		   {
-			 if($p->status == "enabled")
-			 {
+			 
 				$temp = $this->getPlugin($p->id);
 		        array_push($ret,$temp); 
-			 }
+			 
 	       }
 	   }
 	   
@@ -619,6 +636,41 @@ function isDuplicateUser($data)
                }                          
                                                       
                 return $ret;
+           }
+		   
+		    function updatePlugin($data,$user=null)
+           {
+			   #dd($data);
+			 $ret = "error";
+			  $p = Plugins::where('id',$data['xf'])->first();
+			 
+			 
+			 if(!is_null($p))
+			 {
+				 $p->update(['name' => $data['name'], 
+                                                      'value' => $data['value'], 
+                                                      'status' => $data['status']
+                                                      ]);
+			   $ret = "ok";
+			 }
+           	
+                                                      
+                return $ret;
+           }
+
+		   function removePlugin($xf,$user=null)
+           {
+			   #dd($data);
+			 $ret = "error";
+			 $p = Plugins::where('id',$xf)->first();
+
+			 
+			 if(!is_null($p))
+			 {
+				 $p->delete();
+			   $ret = "ok";
+			 }
+           
            }
 		   
 		    function isAdmin($user)

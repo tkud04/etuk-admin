@@ -45,6 +45,14 @@ Route::get('add-permissions', 'MainController@getAddPermission');
 Route::post('add-permissions', 'MainController@postAddPermission');
 Route::get('remove-permission', 'MainController@getRemovePermission');
 
+//Plugins
+Route::get('plugins', 'MainController@getPlugins');
+Route::get('add-plugin', 'MainController@getAddPlugin');
+Route::post('add-plugin', 'MainController@postAddPlugin');
+Route::get('plugin', 'MainController@getPlugin');
+Route::post('plugin', 'MainController@postPlugin');
+Route::get('remove-plugin', 'MainController@getRemovePlugin');
+
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');
 

@@ -1,6 +1,6 @@
 <?php
-$title = "Users";
-$subtitle = "View all users registered on the platform";
+$title = "Plugins";
+$subtitle = "View all installed plugins";
 ?>
 
 
@@ -32,53 +32,42 @@ $subtitle = "View all users registered on the platform";
 <?php $__env->startSection('content'); ?>
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<a href="<?php echo e(url('add-plugin')); ?>" class="btn btn-outline-secondary">Add plugin</a>
                         <div class="card">
-                            <h5 class="card-header">Users</h5>
+                            <h5 class="card-header">Plugins</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Date Joined</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
+                                                 <th>Name</th>
+                                                 <th>Code snippet</th>
+                                                 <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 										  <?php
-										   if(count($users) > 0)
+										   if(count($plugins) > 0)
 										   {
-											  foreach($users as $u)
+											  foreach($plugins as $p)
 											   {
-												   $vu = url('user')."?xf=".$u['email'];
-												   $statusClass = "danger";
-												   $type = "enable";
-												   $duText = "Enable user";
-												   $duClass = "success";
-												   
-												   if($u['status'] == "enabled")
-												   {
-													   $statusClass = "success";
-													   $type = "disable";
-													   $duText = "Disable user";
-												       $duClass = "danger";
-												   }
-												   $du = url('edu')."?xf=".$u['id']."&type=".$type;
-												   
+												    $name = $p['name'];
+							                        $value = $p['value'];
+							                        $vu = url('plugin')."?s=".$p['id'];
+							                        $ru = url('remove-plugin')."?s=".$p['id'];
+							
+							                        $ss = $p['status'] == "enabled" ? "bg-primary" : "bg-danger";
 										  ?>
                                             <tr>
-                                                <td><?php echo e(ucwords($u['fname']." ".$u['lname'])); ?></td>
-                                                <td><?php echo e($u['email']); ?></td>
-                                                <td><?php echo e(ucwords($u['role'])); ?></td>
-                                                <td><?php echo e($u['date']); ?></td>
-                                                <td><span class="label label-<?php echo e($statusClass); ?>"><?php echo e(strtoupper($u['status'])); ?></td>
-                                                <td>
-												 <a class="btn btn-primary btn-sm" href="<?php echo e($vu); ?>">View</a>
-												 <a class="btn btn-<?php echo e($duClass); ?> btn-sm" href="<?php echo e($du); ?>"><?php echo e($duText); ?></a>
-												</td>
+                                                <td><?php echo e($name); ?></td>
+					                            <td><code><?php echo e($value); ?></code></td>
+					                            <td>				   
+					                             <h3 class="<?php echo e($ss); ?>"><?php echo e(strtoupper($p['status'])); ?></h3>
+					                            </td>
+					                            <td>
+						                          <a class="btn btn-default btn-block btn-clean" href="<?php echo e($vu); ?>">View</a>
+						                          <a class="btn btn-default btn-block btn-clean" href="<?php echo e($ru); ?>">Remove</a>
+                                                </td>
                                             </tr>
 									     <?php
 											   }
@@ -92,4 +81,4 @@ $subtitle = "View all users registered on the platform";
                     </div>
                 </div>			
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/users.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/plugins.blade.php ENDPATH**/ ?>

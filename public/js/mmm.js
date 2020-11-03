@@ -162,4 +162,27 @@ $(document).ready(function() {
 	   
     });
 	
+	//ADD PLUGIN
+	$("#apl-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let aplName = $('#apl-name').val(), aplValue = $('#apl-value').val(), aplStatus = $('#apl-status').val(),
+	       validation = (aplName == "" || aplValue == "" || aplStatus == "none");
+	   
+	   
+       
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
+	   }
+	   else{
+		  $('#apl-form').submit();		  
+	   }
+	   
+	   
+    });
+	
 });
