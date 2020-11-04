@@ -2428,7 +2428,7 @@ function createSocial($data)
 				   $orders = $orders->sortByDesc('created_at');
                	  foreach($orders as $o) 
                     {
-                    	$temp = $this->getOrder($o->reference);
+                    	$temp = $this->getOrder($o->reference,['guest' => true]);
                         array_push($ret, $temp); 
                     }
                }                                 
@@ -2456,7 +2456,7 @@ function createSocial($data)
                 return $ret;
            }
 		   
-		   function getOrder($ref)
+		   function getOrder($ref,$options=[])
            {
            	$ret = [];
 
@@ -2468,6 +2468,7 @@ function createSocial($data)
 				  $temp = [];
                   $temp['id'] = $o->id;
                   $temp['user_id'] = $o->user_id;
+				  if(isset($options['guest']) && $options['guest']) $temp['guest'] = $this->getUser($o->user_id);
                   $temp['reference'] = $o->reference;
                   $temp['amount'] = $o->amount;
                   $temp['type'] = $o->type;

@@ -133,7 +133,7 @@ $subtitle = "Admin dashboard";
                                                 <thead class="bg-light">
                                                     <tr class="border-0">
                                                         <th class="border-0">#</th>
-                                                        <th class="border-0">Reference</th>
+                                                        <th class="border-0">Guest</th>
                                                         <th class="border-0">Details</th>
                                                         <th class="border-0">Status</th>
                                                         
@@ -148,6 +148,10 @@ $subtitle = "Admin dashboard";
 										{
 											$o = $orders[$ctr];
 										  $ref = $o['reference'];
+										  $guest = $o['guest'];
+										  $avatar = $guest['avatar'];
+										  $gname = $guest['fname']." ".$guest['lname'];
+										  
 										  $ru = url('receipt')."?xf=".$ref;
 										  $cu = "javascript:void(0)";
 										  $s = ""; $liClass = ""; $ps = "";
@@ -198,8 +202,11 @@ $subtitle = "Admin dashboard";
 											  
 									   ?>
                                                     <tr>
-                                                        <td>{{$ctr}}</td>
-                                                        <td>{{$ref}}</td>
+                                                        <td>{{$ctr + 1}}</td>
+                                                        <td>
+														  <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$gname}}" style="width: 100px; height: 100px;"/><br>
+														  {{$gname}} <br> Reference #: <a href="javascript:void(0)">{{$ref}}</a>
+														</td>
                                                         <td>
 														   <div class="card" style="overflow-y: scroll;">
                                 <h5 class="card-header">Items</h5>
@@ -241,7 +248,6 @@ $subtitle = "Admin dashboard";
                                     </div>
                                 </div>
                             </div>
-                                                            <div class="m-r-10"><img src="assets/images/product-pic.jpg" alt="user" class="rounded" width="45"></div>
                                                         </td>
                                                         <td><span class="badge-dot badge-success mr-1"></span>Active </td>
                                                     </tr>
