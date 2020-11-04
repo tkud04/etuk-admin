@@ -1870,7 +1870,10 @@ function createSocial($data)
 					      $ret = [
 						          'status' => "ok",
 					              'message' => "existing-user"
-							     ];  
+							     ]; 
+							     
+							        //update avatar 
+					  if($u->avatar == "") $u->update(['avatar' => $dt['img'],'avatar_type' => "social"]);
 					   }
 				   }
 				   else
