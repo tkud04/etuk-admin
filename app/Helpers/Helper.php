@@ -2432,7 +2432,7 @@ function createSocial($data)
                         array_push($ret, $temp); 
                     }
                }                                 
-              	dd($ret);
+              	#dd($ret);
                 return $ret;
            }
 		   
