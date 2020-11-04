@@ -31,6 +31,7 @@ use App\Messages;
 use App\SavedPayments;
 use App\Orders;
 use App\OrderItems;
+use App\Transactions;
 use App\SavedApartments;
 use App\ApartmentPreferences;
 use App\Permissions;
@@ -2485,7 +2486,7 @@ function createSocial($data)
                 return $ret;
            }
 		   
-		   function getOrderItems($id)
+		  function getOrderItems($id)
            {
            	$ret = ['data' => [],'subtotal' => 0];
 
@@ -2495,26 +2496,117 @@ function createSocial($data)
                {
                	  	foreach($items as $i) 
                     {
-                    	$temp = []; 
-               	     $temp['id'] = $i->id; 
-               	     $temp['order_id'] = $i->order_id; 
-               	     $temp['apartment_id'] = $i->apartment_id; 
-                        $apt = $this->getApartment($i->apartment_id,['host' => true]); 
-                        $temp['apartment'] = $apt;
-                        $adata = $apt['data'];						
-						$ret['subtotal'] += $adata['amount'];
-						$checkin = Carbon::parse($i->checkin);
-						$checkout = Carbon::parse($i->checkout);
-                        $temp['checkin'] = $checkin->format("jS F, Y");
-                        $temp['checkout'] = $checkout->format("jS F, Y"); 
-                        $temp['guests'] = $i->guests; 
-                        $temp['kids'] = $i->kids; 
+                    	$temp = $this->getOrderItem($i->id);
                         array_push($ret['data'], $temp); 
+						$ret['subtotal'] += $temp['amount'];						
                    }
                }			   
               			  
                 return $ret;
            }
+		   
+		   function getOrderItem($id)
+		   {
+			   $temp = [];
+			    $i = OrderItems::where('id',$id)->first();
+				
+				if($i != null)
+				{
+					$temp['id'] = $i->id; 
+                    $o = Orders::where('id',$i->order_id)->first();					 
+                     $temp['order_id'] = $o->reference;
+               	     $temp['apartment_id'] = $i->apartment_id; 
+                        $apt = $this->getApartment($i->apartment_id,['host' => true]); 
+                        $temp['apartment'] = $apt;
+                        $adata = $apt['data'];	
+                        $checkin = Carbon::parse($i->checkin);
+						$checkout = Carbon::parse($i->checkout);
+                        $temp['checkin'] = $checkin->format("jS F, Y");
+                        $temp['checkout'] = $checkout->format("jS F, Y");
+                        $c1 = new \DateTime($temp['checkin']);
+						$c2 = new \DateTime($temp['checkout']);
+						$cdiff = $c1->diff($c2);
+						$duration = $cdiff->format("%r%a");						
+                        $temp['amount'] = $adata['amount'] * $duration;
+						$temp['guests'] = $i->guests; 
+                        $temp['kids'] = $i->kids;
+				}
+			    
+				return $temp;
+		   }
+		   
+		   function createTransaction($dt)
+		   {
+			   $ret = Transactions::create(['user_id' => $dt['user_id'], 
+                                             'apartment_id' => $dt['apartment_id'],
+                                             'item_id' => $dt['item_id'],
+                                            ]);
+                                                      
+                return $ret;
+		   }
+		   
+		   function getTransaction($id)
+		   {
+			   $ret = [];
+			   $t = Transactions::where('id',$id)->first();
+			   
+			   if($t != null)
+               {
+				  $temp = [];
+				  $temp['id'] = $t->id;
+				  $temp['user_id'] = $t->user_id;
+				  $temp['apartment_id'] = $t->apartment_id;
+				  $temp['item'] = $this->getOrderItem($t->item_id);
+				  $temp['date'] = $t->created_at->format("m/d/Y h:i A");
+     			  $ret = $temp;
+               }
+
+               return $ret;			   
+		   }
+		   
+		   function getTransactions($user)
+           {
+           	$ret = [];
+			$transactions = Transactions::where('user_id',$user->id)->get();
+			  
+              if($transactions != null)
+               {
+				   $transactions = $transactions->sortByDesc('created_at');	
+			  
+				  foreach($transactions as $t)
+				  {
+					  $temp = $this->getTransaction($t->id);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
+		   function getTransactionData($user,$dt=[])
+           {
+			 $month = isset($dt['month']) ? $dt['month'] : date("m");
+			 $year = isset($dt['year']) ? $dt['year'] : date("Y");
+			 $ret = [];
+			 #dd([$month,$year]);
+			
+			 $transactions = Transactions::whereMonth('created_at',$month)
+			                             ->whereYear('created_at',$year)->get();
+										 
+              if($transactions != null)
+               {   
+				   $transactions = $transactions->sortByDesc('created_at');	
+			  
+				  foreach($transactions as $t)
+				  {
+					  $temp = $this->getTransaction($t->id);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
 		   
 		   function createSavedApartment($dt)
 		   {
@@ -2706,10 +2798,56 @@ function createSocial($data)
 			   return $ret;
 		   }
 		   
-		   function getTopPerformingApartments()
+		   function getTopPerformingHosts()
 		   {
 			   $ret = [];
+			   $hosts = [];
 			   
+			   $transactions =  Transactions::where('id','>',"0")->get();
+			   
+			   if($transactions != null)
+			   {
+				   $temp = [];
+				   foreach($transactions as $transaction)
+				   {
+					   
+					 $t = $this->getTransaction($transaction->id);
+                     $i = $t['item'];
+                     $a = $i['apartment'];
+					 $amount = $i['amount'];
+                     $h = $a['host'];
+					 $em = $h['email'];
+					 
+					 if(isset($temp[$em]))
+					 {
+						 $temp[$em] += $amount;
+					 }
+					 else
+					 {
+						 $temp[$em] = $amount;
+					 }
+					 #$temp['name'] = $h['fname']." ".$h['lname'];
+					 
+					 
+				   }
+				   
+				   foreach($temp as $h => $r)
+				   {
+					   $uu = User::where('email',$h)->first();
+					   $aptCount = Apartments::where('user_id',$uu->id)->count();
+					   array_push($hosts,[
+					                       'email' => $h,
+					                       'name' => ($uu->fname." ".$uu->lname),
+										   'revenue' => $r,
+										   'apartments' => $aptCount
+										  ]);
+				   }
+				   $hosts = collect($hosts);
+				   $hosts = $hosts->sortByDesc('revenue');
+				   $hosts = $hosts->values();
+				   #dd($hosts);
+				   $ret = $hosts;
+			   }
 			   return $ret;
 		   }
 		   

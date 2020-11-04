@@ -150,6 +150,7 @@ $subtitle = "Admin dashboard";
 										  $ref = $o['reference'];
 										  $guest = $o['guest'];
 										  $avatar = $guest['avatar'];
+                                                                                  if($avatar == "") $avatar = [asset("images/avatar.png")];
 										  $gname = $guest['fname']." ".$guest['lname'];
 										  
 										  $ru = url('receipt')."?xf=".$ref;
@@ -273,51 +274,39 @@ $subtitle = "Admin dashboard";
                                 <!-- top perfomimg  -->
                                 <!-- ============================================================== -->
                                 <div class="card">
-                                    <h5 class="card-header">Top Performing Apartments</h5>
+                                    <h5 class="card-header">Top Performing Hosts</h5>
                                     <div class="card-body p-0">
                                         <div class="table-responsive">
                                             <table class="table no-wrap p-table">
                                                 <thead class="bg-light">
                                                     <tr class="border-0">
-                                                        <th class="border-0">Apartment</th>
-                                                        <th class="border-0">Visits</th>
+                                                        <th class="border-0">Host</th>
+                                                        <th class="border-0">Apartments</th>
                                                         <th class="border-0">Revenue</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+												<?php
+												if(count($tph) > 0)
+												{
+													$tphLength = count($tph) > 5 ? 5 : count($tph);
+													for($i = 0; $i < $tphLength; $i++)
+													{
+														$t = $tph[$i];
+													
+												?>
                                                     <tr>
-                                                        <td>Campaign#1</td>
-                                                        <td>98,789 </td>
-                                                        <td>$4563</td>
+                                                        <td><?php echo e($t['name']); ?></td>
+                                                        <td><?php echo e($t['apartments']); ?></td>
+                                                        <td>&#8358;<?php echo e(number_format($t['revenue'],2)); ?></td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>Campaign#2</td>
-                                                        <td>2,789 </td>
-                                                        <td>$325</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Campaign#3</td>
-                                                        <td>1,459 </td>
-                                                        <td>$225</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Campaign#4</td>
-                                                        <td>5,035 </td>
-                                                        <td>$856</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Campaign#5</td>
-                                                        <td>10,000 </td>
-                                                        <td>$1000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Campaign#5</td>
-                                                        <td>10,000 </td>
-                                                        <td>$1000</td>
-                                                    </tr>
+												<?php
+													}
+												}
+												?>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <a href="#" class="btn btn-outline-light float-right">Details</a>
+                                                            <a href="<?php echo e(url('tph')); ?>" class="btn btn-outline-light float-right">View more</a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -369,4 +358,5 @@ $subtitle = "Admin dashboard";
 							</div>
 							
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/index.blade.php ENDPATH**/ ?>

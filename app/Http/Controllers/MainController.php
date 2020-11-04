@@ -49,11 +49,11 @@ class MainController extends Controller {
 				$v = "index";
 				$orders = $this->helpers->getAllOrders();
 				$stats = $this->helpers->getSiteStats();
-				$tpa = $this->helpers->getTopPerformingApartments();
+				$tph = $this->helpers->getTopPerformingHosts();
 				$req = $request->all();
                 array_push($cpt,'orders');				
                 array_push($cpt,'stats');				
-                array_push($cpt,'tpa');				
+                array_push($cpt,'tph');				
 			}
 			else
 			{
