@@ -150,6 +150,7 @@ $subtitle = "Admin dashboard";
 										  $ref = $o['reference'];
 										  $guest = $o['guest'];
 										  $avatar = $guest['avatar'];
+                                                                                  if($avatar == "") $avatar = [asset("images/avatar.png")];
 										  $gname = $guest['fname']." ".$guest['lname'];
 										  
 										  $ru = url('receipt')."?xf=".$ref;
