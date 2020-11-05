@@ -60,6 +60,8 @@ Route::get('remove-plugin', 'MainController@getRemovePlugin');
 //Tickets
 Route::get('tickets', 'MainController@getTickets');
 Route::get('ticket', 'MainController@getTicket');
+Route::get('add-ticket', 'MainController@getAddTicket');
+Route::post('add-ticket', 'MainController@postAddTicket');
 Route::get('update-ticket', 'MainController@getUpdateTicket');
 Route::post('update-ticket', 'MainController@postUpdateTicket');
 Route::get('remove-ticket', 'MainController@getRemoveTicket');
