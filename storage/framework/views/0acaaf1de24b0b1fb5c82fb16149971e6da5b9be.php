@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="<?php echo e(asset('libs/css/style.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('vendor/fonts/fontawesome/css/fontawesome-all.css')); ?>">
     
+	<!-- custom css -->
+	  <link rel="stylesheet" href="<?php echo e(asset('css/custom.css')); ?>">
+	  
     <!-- jquery 3.3.1 -->
     <script src="<?php echo e(asset('vendor/jquery/jquery-3.3.1.min.js')); ?>"></script>
 	 <!-- bootstrap bundle js -->

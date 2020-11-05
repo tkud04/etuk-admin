@@ -67,81 +67,76 @@ $subtitle = "View information about this transaction.";
 										
 										<div class="col-md-4 row">
 										 <div class="col-md-6">
+										 <a href="javascript:void(0)">
 										  <div class="form-group">
                                              <label>Guest</label>
-                                             <div class="form-control">
+                                             <div class="form-control hover">
 										       <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$gname}}" style="width: 100px; height: 100px;"/><br>
 											   {{$gname}} 
 										     </div>
                                            </div>
+										   </a>
 										 </div>
 										 <div class="col-md-6">
+										  <a href="javascript:void(0)">
 										   <div class="form-group">
                                                <label>Apartment</label>
-                                               <div class="form-control">
+                                               <div class="form-control hover">
 										         <img class="rounded-circle mr-3 mb-3" src="{{$temp['imgs'][0]}}" alt="{{$temp['name']}}" style="width: 100px; height: 100px;"/><br>
 												 {{$temp['name']}}
 										       </div>
                                             </div>
+										    </a>
 										 </div>
 										</div>
-										<div class="col-md-8"></div>
+										<div class="col-md-8">
+										  <div class="row">
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label for="user-email">Email address</label>
+                                                  <input type="text" value="" placeholder="Enter email address" class="form-control" readonly>
+                                                </div>
+										     </div>
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label for="user-phone">Phone number</label>
+                                                  <input type="text" value="" placeholder="Enter phone number" class="form-control" readonly>
+                                                </div>
+										     </div>
+										  </div>
+										  <div class="row">
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label for="user-email">Email address</label>
+                                                  <input type="text" value="" placeholder="Enter email address" class="form-control" readonly>
+                                                </div>
+										     </div>
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label for="user-phone">Phone number</label>
+                                                  <input type="text" value="" placeholder="Enter phone number" class="form-control" readonly>
+                                                </div>
+										     </div>
+										  </div>
+										  <div class="row">
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label for="user-email">Email address</label>
+                                                  <input type="text" value="" placeholder="Enter email address" class="form-control" readonly>
+                                                </div>
+										     </div>
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label for="user-phone">Phone number</label>
+                                                  <input type="text" value="" placeholder="Enter phone number" class="form-control" readonly>
+                                                </div>
+										     </div>
+										  </div>
 										</div>
-										<div class="row">
-										<div class="col-md-6">
-										<div class="form-group">
-                                            <label for="user-email">Email address</label>
-                                            <input id="user-email" type="email" name="email" value="" placeholder="Enter email address" class="form-control" readonly>
-                                        </div>
+										
 										</div>
-										<div class="col-md-6">
-										<div class="form-group">
-                                            <label for="user-phone">Phone number</label>
-                                            <input id="user-phone" type="number" name="phone" value="" placeholder="Enter phone number" class="form-control">
-                                        </div>
-										</div>
-										</div>
-										<div class="row">
-										<div class="col-md-6">
-										<div class="form-group">
-                                            <label for="user-role">Role</label>
-											<?php
-											 $roles = ['user','admin','su'];
-											?>
-											<select id="user-role" name="role" class="form-control">
-											 <option value="none">Select role</option>
-											 <?php
-											  foreach($roles as $r)
-											  {
-											 ?>
-											 <option value="{{$r}}">{{ucwords($r)}}</option>
-											  <?php
-											  }
-											  ?>
-											</select>
-                                        </div>
-										</div>
-										<div class="col-md-6">
-										<div class="form-group">
-                                            <label for="user-status">Status</label>
-											<?php
-											 $statuses = ['enabled','disabled'];
-											?>
-											<select id="user-status" name="status" class="form-control">
-											 <option value="none">Select account status</option>
-											 <?php
-											  foreach($statuses as $s)
-											  {
-												  $sss = $s == "enabled" ? "active" : $s;
-											 ?>
-											 <option value="{{$s}}">{{ucwords($sss)}}</option>
-											  <?php
-											  }
-											  ?>
-											</select>
-                                        </div>
-										</div>
-										</div>
+										
+										
 
                                     </form>
                                 </div>
