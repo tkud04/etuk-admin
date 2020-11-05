@@ -126,7 +126,7 @@ class MainController extends Controller {
     }
 	
 	/**
-	 * Show list of registered users on the platform.
+	 * Show details of a registered user on the platform.
 	 *
 	 * @return Response
 	 */
@@ -1092,6 +1092,62 @@ class MainController extends Controller {
 		{
 			return redirect()->intended('/');
 		}
+    }
+	
+	
+	/**
+	 * Show list of transactions on the platform.
+	 *
+	 * @return Response
+	 */
+	public function getTransactions(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_transactions']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				$v = "transactions";
+				$req = $request->all();
+                $transactions = $this->helpers->getAllTransactions();
+				#dd($transactions);
+                array_push($cpt,'transactions');
+                }
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
     }
 	
 	

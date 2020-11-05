@@ -2545,7 +2545,7 @@ function createSocial($data)
                 return $ret;
 		   }
 		   
-		   function getTransaction($id)
+		   function getTransaction($id,$options=[])
 		   {
 			   $ret = [];
 			   $t = Transactions::where('id',$id)->first();
@@ -2556,13 +2556,35 @@ function createSocial($data)
 				  $temp['id'] = $t->id;
 				  $temp['user_id'] = $t->user_id;
 				  $temp['apartment_id'] = $t->apartment_id;
-				  $temp['item'] = $this->getOrderItem($t->item_id);
+				  $i = $this->getOrderItem($t->item_id);
+				  $o = $this->getOrder($i['order_id']);
+				  $temp['item'] = $i;
+				  if(isset($options['guest']) && $options['guest']) $temp['guest'] = $this->getUser($o['user_id']);
 				  $temp['date'] = $t->created_at->format("m/d/Y h:i A");
      			  $ret = $temp;
                }
 
                return $ret;			   
 		   }
+		   
+		   function getAllTransactions()
+           {
+           	$ret = [];
+			$transactions = Transactions::where('id',">","0")->get();
+			  
+              if($transactions != null)
+               {
+				   $transactions = $transactions->sortByDesc('created_at');	
+			  
+				  foreach($transactions as $t)
+				  {
+					  $temp = $this->getTransaction($t->id,['guest' => true]);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
 		   
 		   function getTransactions($user)
            {
