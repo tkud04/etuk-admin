@@ -57,6 +57,13 @@ Route::get('plugin', 'MainController@getPlugin');
 Route::post('plugin', 'MainController@postPlugin');
 Route::get('remove-plugin', 'MainController@getRemovePlugin');
 
+//Tickets
+Route::get('tickets', 'MainController@getTickets');
+Route::get('ticket', 'MainController@getTicket');
+Route::get('update-ticket', 'MainController@getUpdateTicket');
+Route::post('update-ticket', 'MainController@postUpdateTicket');
+Route::get('remove-ticket', 'MainController@getRemoveTicket');
+
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');
 

@@ -2891,6 +2891,7 @@ function createSocial($data)
 					$tid = "TKT_".$this->getRandomString(7);
 					$ret = Tickets::create(['user_id' => $dt['user_id'], 
                                              'ticket_id' => $tid,
+                                             'subject' => $dt['subject'],
                                              'apartment_id' => $dt['apartment_id'],
                                              'status' => "unresolved",
                                             ]);
@@ -2922,6 +2923,7 @@ function createSocial($data)
 				  $temp['user_id'] = $t->user_id;
 				  $temp['user'] = $this->getUser($t->user_id);
 				  $temp['ticket_id'] = $t->ticket_id;
+				  $temp['subject'] = $t->subject;
 				  $temp['items'] = $this->getTicketItems($t->ticket_id);
 				  $temp['apartment_id'] = $t->apartment_id;
 				  $temp['status'] = $t->status;
