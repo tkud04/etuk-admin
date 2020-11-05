@@ -26,7 +26,7 @@ $subtitle = "View information about this transaction.";
 @stop
 
 @section('page-header')
-@include('page-header',['title' => "Users",'subtitle' => $title])
+@include('page-header',['title' => "Transactions",'subtitle' => "View Transaction"])
 @stop
 
 @section('content')
@@ -39,12 +39,13 @@ $subtitle = "View information about this transaction.";
                                          
 										 if($avatar == "") $avatar = [asset("images/avatar.png")];
 										  $gname = $guest['fname']." ".$guest['lname'];
-										
+										  $uu = url('user')."?xf=".$guest['email'];
 										  $i = $t['item'];
 										  $ref = $i['order_id'];
 											            $temp = [];
 														 $apartment = $i['apartment'];
 														 $temp['au'] = $apartment['url'];
+														 $au = url('apartment')."?xf=".$apartment['apartment_id'];
 														 $temp['name'] = $apartment['name'];
 														 $cmedia = $apartment['cmedia'];
 														 $temp['imgs'] = $cmedia['images'];
@@ -57,6 +58,11 @@ $subtitle = "View information about this transaction.";
 														 $temp['location'] = $address['city'].", ".$address['state'];
 														 $temp['checkin'] = $i['checkin'];
 														 $temp['checkout'] = $i['checkout'];
+														 $c1 = new DateTime($temp['checkin']);
+														 $c2 = new DateTime($temp['checkout']);
+														 $cdiff = $c1->diff($c2);
+														 $duration = $cdiff->format("%r%a");
+														 $dtt = $duration == 1 ? "night" : "nights";
 														 $temp['guests'] = $i['guests'];
 														 $temp['kids'] = $i['kids'];
 							?>
@@ -67,7 +73,7 @@ $subtitle = "View information about this transaction.";
 										
 										<div class="col-md-4 row">
 										 <div class="col-md-6">
-										 <a href="javascript:void(0)">
+										 <a href="{{$uu}}">
 										  <div class="form-group">
                                              <label>Guest</label>
                                              <div class="form-control hover">
@@ -78,7 +84,7 @@ $subtitle = "View information about this transaction.";
 										   </a>
 										 </div>
 										 <div class="col-md-6">
-										  <a href="javascript:void(0)">
+										  <a href="{{$au}}">
 										   <div class="form-group">
                                                <label>Apartment</label>
                                                <div class="form-control hover">
@@ -90,48 +96,49 @@ $subtitle = "View information about this transaction.";
 										 </div>
 										</div>
 										<div class="col-md-8">
-										  <div class="row">
+										  <div class="row mb-3">
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label for="user-email">Email address</label>
-                                                  <input type="text" value="" placeholder="Enter email address" class="form-control" readonly>
+                                                  <label>Booking dates</label>
+                                                  <p class="form-control-plaintext">{{$temp['checkin']}} - {{$temp['checkout']}}</p>
                                                 </div>
 										     </div>
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label for="user-phone">Phone number</label>
-                                                  <input type="text" value="" placeholder="Enter phone number" class="form-control" readonly>
+                                                  <label>Duration</label>
+                                                  <p class="form-control-plaintext">{{$duration." ".$dtt}}</p>
+                                                </div>
+										     </div>
+										  </div>
+										  <div class="row mb-3">
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label>Guests</label>
+                                                  <p class="form-control-plaintext">{{$temp['guests']}} adults | {{$temp['kids']}} children</p>
+                                                </div>
+										     </div>
+										     <div class="col-md-6">
+										        <div class="form-group">
+                                                  <label>Total charged</label>
+                                                  <p class="form-control-plaintext">&#8358;{{number_format($temp['amount'],2)}}</p>
                                                 </div>
 										     </div>
 										  </div>
 										  <div class="row">
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label for="user-email">Email address</label>
-                                                  <input type="text" value="" placeholder="Enter email address" class="form-control" readonly>
+                                                  <label>Order reference #</label>
+                                                  <p class="form-control-plaintext">{{$ref}}</p>
                                                 </div>
 										     </div>
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label for="user-phone">Phone number</label>
-                                                  <input type="text" value="" placeholder="Enter phone number" class="form-control" readonly>
+                                                  <label>Order status</label>
+                                                  <p class="form-control-plaintext"><span class="label label-primary">PAID</span></p>
                                                 </div>
 										     </div>
 										  </div>
-										  <div class="row">
-										     <div class="col-md-6">
-										        <div class="form-group">
-                                                  <label for="user-email">Email address</label>
-                                                  <input type="text" value="" placeholder="Enter email address" class="form-control" readonly>
-                                                </div>
-										     </div>
-										     <div class="col-md-6">
-										        <div class="form-group">
-                                                  <label for="user-phone">Phone number</label>
-                                                  <input type="text" value="" placeholder="Enter phone number" class="form-control" readonly>
-                                                </div>
-										     </div>
-										  </div>
+										 
 										</div>
 										
 										</div>
