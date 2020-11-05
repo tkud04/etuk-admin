@@ -47,7 +47,7 @@ Route::get('remove-permission', 'MainController@getRemovePermission');
 
 //Transactions
 Route::get('transactions', 'MainController@getTransactions');
-Route::post('transaction', 'MainController@getTransaction');
+Route::get('transaction', 'MainController@getTransaction');
 
 //Plugins
 Route::get('plugins', 'MainController@getPlugins');
