@@ -92,8 +92,10 @@ $subtitle = "View all transactions on the platform";
                                             <tr>
                                                 <td><?php echo e($ref); ?></td>
                                                 <td>
+												<center>
 												   <img class="rounded-circle mr-3 mb-3" src="<?php echo e($avatar[0]); ?>" alt="<?php echo e($gname); ?>" style="width: 100px; height: 100px;"/><br>
 														  <?php echo e($gname); ?> 
+												</center>
 												</td>
                                                 <td>
 												  <div class="d-flex w-100 ">

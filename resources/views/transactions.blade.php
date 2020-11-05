@@ -92,8 +92,10 @@ $subtitle = "View all transactions on the platform";
                                             <tr>
                                                 <td>{{$ref}}</td>
                                                 <td>
+												<center>
 												   <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$gname}}" style="width: 100px; height: 100px;"/><br>
 														  {{$gname}} 
+												</center>
 												</td>
                                                 <td>
 												  <div class="d-flex w-100 ">
