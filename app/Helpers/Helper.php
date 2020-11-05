@@ -35,6 +35,8 @@ use App\Transactions;
 use App\SavedApartments;
 use App\ApartmentPreferences;
 use App\Permissions;
+use App\Tickets;
+use App\TicketItems;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -75,6 +77,8 @@ class Helper implements HelperContract
 					 "add-plugin-status" => "Plugin installed.",
 					 "update-plugin-status" => "Plugin updated.",
 					 "remove-plugin-status" => "Plugin removed.",
+					 "add-ticket-status" => "Ticket created.",
+					 "update-ticket-status" => "Ticket updated.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -97,6 +101,8 @@ class Helper implements HelperContract
 					 "update-plugin-status-error" => "Plugin could not be updated, please try again.",
 					 "remove-plugin-status-error" => "Plugin could not be removed, please try again.",
 					 "permissions-status-error" => "Access denied.",
+					 "add-ticket-status-error" => "Ticket could not be created, please try again",
+					 "update-ticket-status-error" => "Ticket could not be updated, please try again.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -2872,6 +2878,138 @@ function createSocial($data)
 			   }
 			   return $ret;
 		   }
+		   
+		   
+		   function createTicket($dt)
+		   {
+			    $ret = Tickets::where('user_id',$dt['user_id'])
+				                ->where('apartment_id',$dt['apartment_id'])
+								->where('status',"unresolved")->first();
+				
+				if($ret == null)
+				{
+					$tid = "TKT_".$this->getRandomString(7);
+					$ret = Tickets::create(['user_id' => $dt['user_id'], 
+                                             'ticket_id' => $tid,
+                                             'apartment_id' => $dt['apartment_id'],
+                                             'status' => "unresolved",
+                                            ]);
+				}
+			   
+                                                      
+                return $ret;
+		   }
+		   
+		   function createTicketItem($dt)
+		   {
+					$ret = TicketItems::create(['ticket_id' => $tid,
+                                             'msg' => $dt['msg'],
+                                             'added_by' => $dt['added_by']
+                                            ]);
+			          
+                return $ret;
+		   }
+		   		   
+		   function getTicket($id)
+		   {
+			   $ret = [];
+			   $t = Tickets::where('id',$id)->first();
+			   
+			   if($t != null)
+               {
+				  $temp = [];
+				  $temp['id'] = $t->id;
+				  $temp['user_id'] = $t->user_id;
+				  $temp['user'] = $this->getUser($t->user_id);
+				  $temp['ticket_id'] = $t->ticket_id;
+				  $temp['items'] = $this->getTicketItems($t->ticket_id);
+				  $temp['apartment_id'] = $t->apartment_id;
+				  $temp['status'] = $t->status;
+				  $temp['apartment'] = $this->getApartment($t->apartment_id);
+				  $temp['date'] = $t->created_at->format("jS F, Y");
+     			  $ret = $temp;
+               }
+
+               return $ret;			   
+		   }
+		   
+		   function getTicketItem($id)
+		   {
+			   $ret = [];
+			   $ti = TicketItems::where('id',$id)->first();
+			   
+			   if($ti != null)
+               {
+				  $temp = [];
+				  $temp['id'] = $ti->id;
+				  $temp['ticket_id'] = $ti->ticket_id;
+				  $temp['msg'] = $ti->msg;
+				  $temp['added_by'] = $ti->added_by;
+				  $temp['admin'] = $this->getUser($ti->added_by);
+				  $temp['date'] = $ti->created_at->format("jS F, Y");
+     			  $ret = $temp;
+               }
+
+               return $ret;			   
+		   }
+		   
+		   function getTicketItems($tid)
+           {
+           	$ret = [];
+			$tis = TicketItems::where('ticket_id',$tid)->get();
+			  
+              if($tis != null)
+               {
+				   $tis = $tis->sortByDesc('created_at');	
+			  
+				  foreach($tis as $ti)
+				  {
+					  $temp = $this->getTicketItem($ti->id);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
+		   function getTickets($user)
+           {
+           	$ret = [];
+			$ts = Tickets::where('user_id',$user->id)->get();
+			  
+              if($ts != null)
+               {
+				   $ts = $ts->sortByDesc('created_at');	
+			  
+				  foreach($ts as $t)
+				  {
+					  $temp = $this->getTicket($t->id);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
+
+		   function getAllTickets()
+           {
+           	$ret = [];
+			$ts = Tickets::where('id','>',"0")->get();
+			  
+              if($ts != null)
+               {
+				   $ts = $ts->sortByDesc('created_at');	
+			  
+				  foreach($ts as $t)
+				  {
+					  $temp = $this->getTicket($t->id);
+					  array_push($ret,$temp);
+				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
 		   
 		   
 		   
