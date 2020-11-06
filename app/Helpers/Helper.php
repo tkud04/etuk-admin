@@ -2950,7 +2950,8 @@ function createSocial($data)
 		   function getTicket($id)
 		   {
 			   $ret = [];
-			   $t = Tickets::where('id',$id)->first();
+			   $t = Tickets::where('id',$id)
+			               ->orWhere('ticket_id',$id)->first();
 			   
 			   if($t != null)
                {
@@ -2977,9 +2978,10 @@ function createSocial($data)
 				    {
 					  $temp['resource'] = [];  
 				    }
+					$temp['date'] = $t->created_at->format("jS F, Y");
 				  }
 				  
-				  $temp['date'] = $t->created_at->format("jS F, Y");
+				  
      			  $ret = $temp;               
 
                return $ret;			   
