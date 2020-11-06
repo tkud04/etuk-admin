@@ -109,7 +109,7 @@ $pu = url('add-ticket');
 												 ?>
 												</td>
                                                 <td>
-												 <a class="btn btn-primary btn-sm" href="<?php echo e($uu); ?>">View</a>
+												 <a class="btn btn-primary btn-sm" href="<?php echo e($vu); ?>">View</a>
 												 <a class="btn btn-danger btn-sm" href="<?php echo e($ru); ?>">Remove</a>
 												</td>
                                             </tr>

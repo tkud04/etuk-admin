@@ -1394,6 +1394,205 @@ class MainController extends Controller {
 		}
     }
 	
+	/**
+	 * Show the View Ticket view.
+	 *
+	 * @return Response
+	 */
+	public function getTicket(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$permissions = $this->helpers->permissions;
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_tickets','edit_tickets']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+                
+				if(isset($req['xf']))
+				{
+					$v = "ticket";
+					$t = $this->helpers->getTicket($req['xf']);
+					#dd($t);
+					if(count($t) < 1)
+					{
+						session()->flash("validation-status-error","ok");
+						return redirect()->intended('tickets');
+					}
+					else
+					{
+						array_push($cpt,'t');                                 
+					}
+					
+				}
+				else
+				{
+					session()->flash("validation-status-error","ok");
+					return redirect()->intended('transactions');
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
+								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	
+	/**
+	 * Handle update ticket.
+	 *
+	 * @return Response
+	 */
+	public function postUpdateTicket(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_tickets','edit_tickets']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				
+				dd($req);
+				
+				$validator = Validator::make($req,[
+		                    'type' => 'required|not_in:none',
+                             'email' => 'required|email',
+                             'subject' => 'required',
+                             'msg' => 'required'
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$req['added_by'] = $user->id;
+					$ret = $this->helpers->addTicket($req);
+					$ss = "add-ticket-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->intended("tickets");
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
+	/**
+	 * Handle remove ticket.
+	 *
+	 * @return Response
+	 */
+	public function getRemoveTicket(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+			   	    #dd($req);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				    $validator = Validator::make($req,[
+		                    'xf' => 'required'
+		                   ]);
+						
+				    if($validator->fails())
+                    {
+                      session()->flash("validation-status-error","ok");
+			          return redirect()->back()->withInput();
+                    }
+				    else
+				    {   
+					  $ret = $this->helpers->removeTicket($req['xf']);
+					  $ss = "remove-ticket-status";
+					  if($ret == "error") $ss .= "-error";
+					  session()->flash($ss,"ok");
+			          return redirect()->intended("tickets");
+				    }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+			        return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
 	
 	
 	

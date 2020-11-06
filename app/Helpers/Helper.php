@@ -77,6 +77,7 @@ class Helper implements HelperContract
 					 "add-plugin-status" => "Plugin installed.",
 					 "update-plugin-status" => "Plugin updated.",
 					 "remove-plugin-status" => "Plugin removed.",
+					 "remove-ticket-status" => "Ticket removed.",
 					 "add-ticket-status" => "Ticket created.",
 					 "update-ticket-status" => "Ticket updated.",
 					 
@@ -100,6 +101,7 @@ class Helper implements HelperContract
 					 "remove-review-status-error" => "Review could not be removed, please try again.",
 					 "update-plugin-status-error" => "Plugin could not be updated, please try again.",
 					 "remove-plugin-status-error" => "Plugin could not be removed, please try again.",
+					 "remove-ticket-status-error" => "Ticket could not be removed, please try again.",
 					 "permissions-status-error" => "Access denied.",
 					 "add-ticket-status-error" => "Ticket could not be created, please try again",
 					 "update-ticket-status-error" => "Ticket could not be updated, please try again.",
@@ -3055,6 +3057,27 @@ function createSocial($data)
 					  $temp = $this->getTicket($t->id);
 					  array_push($ret,$temp);
 				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
+		   function removeTicket($id)
+           {
+           	$ret = [];
+			$t = Tickets::where('ticket_id',$id)->first();
+			  
+              if($t != null)
+               {
+				   $tis = TicketItems::where('ticket_id',$id)->get();			  
+                    if($tis != null)
+					{
+						foreach($tis as $ti)
+				        {
+					      $ti->delete();
+					    }
+					}
+				   $t->delete(); 
                }                         
                                   
                 return $ret;

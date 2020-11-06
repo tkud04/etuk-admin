@@ -108,7 +108,7 @@ $pu = url('add-ticket');
 												 ?>
 												</td>
                                                 <td>
-												 <a class="btn btn-primary btn-sm" href="{{$uu}}">View</a>
+												 <a class="btn btn-primary btn-sm" href="{{$vu}}">View</a>
 												 <a class="btn btn-danger btn-sm" href="{{$ru}}">Remove</a>
 												</td>
                                             </tr>
