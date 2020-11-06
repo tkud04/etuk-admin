@@ -1351,12 +1351,13 @@ class MainController extends Controller {
 				if($hasPermission)
 				{
 				
-				dd($req);
+				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                    'status' => 'required|not_in:none',
-                             'name' => 'required',
-                             'value' => 'required'
+		                    'type' => 'required|not_in:none',
+                             'email' => 'required|email',
+                             'subject' => 'required',
+                             'msg' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -1366,11 +1367,12 @@ class MainController extends Controller {
                 }
 				else
 				{
-					$ret = $this->helpers->createPlugin($req);
-					$ss = "add-plugin-status";
+					$req['added_by'] = $user->id;
+					$ret = $this->helpers->addTicket($req);
+					$ss = "add-ticket-status";
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");
-			        return redirect()->intended("plugins");
+			        return redirect()->intended("tickets");
 				}
 				}
 				else

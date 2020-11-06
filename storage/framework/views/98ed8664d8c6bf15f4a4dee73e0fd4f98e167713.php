@@ -44,7 +44,8 @@ $pu = url('add-ticket');
                                                 <th>Ticket ID</th>
                                                 <th>Raised by</th>
                                                 <th>Subject</th>
-                                                <th>Apartment</th>
+                                                <th>Type</th>
+                                                <th>Resource</th>
                                                 <th>Date raised</th>
                                                 <th>Status</th>
                                             </tr>
@@ -65,12 +66,7 @@ $pu = url('add-ticket');
 										        $gname = $guest['fname']." ".$guest['lname'];
 										        $uu = url('user')."?xf=".$guest['email'];
 												
-												$temp = [];
-														 $apartment = $t['apartment'];
-														 $au = url('apartment')."?xf=".$apartment['apartment_id'];
-														 $temp['name'] = $apartment['name'];
-														 $cmedia = $apartment['cmedia'];
-														 $temp['imgs'] = $cmedia['images'];
+												
 									   ?>
                                             <tr>
                                                 <td><?php echo e($t['ticket_id']); ?></td>
@@ -83,14 +79,34 @@ $pu = url('add-ticket');
 												  </a>
 												</td>
                                                 <td><?php echo e($t['subject']); ?></td>
+                                                <td><span class="label label-success"><?php echo e(strtoupper($t['type'])); ?></span></td>
 												<td>
+												<?php
+												 if(count($t['resource']) < 1)
+												 {
+												?>
+												<a href="javascript:void(0)">None specified</a>
+												<?php
+												 }
+												 else if($t['type'] == "apartment")
+												 {
+													 
+														 $apartment = $t['resource'];
+														 $au = url('apartment')."?xf=".$apartment['apartment_id'];
+														 $name = $apartment['name'];
+														 $cmedia = $apartment['cmedia'];
+														 $imgs = $cmedia['images'];
+												?>
 												 <a href="<?php echo e($au); ?>">
 												   <div class="form-control hover">
-										             <img class="rounded-circle mr-3 mb-3" src="<?php echo e($temp['imgs'][0]); ?>" alt="<?php echo e($temp['name']); ?>" style="width: 100px; height: 100px;"/><br>
-												     <?php echo e($temp['name']); ?>
+										             <img class="rounded-circle mr-3 mb-3" src="<?php echo e($imgs[0]); ?>" alt="<?php echo e($name); ?>" style="width: 100px; height: 100px;"/><br>
+												     <?php echo e($name); ?>
 
 										           </div>
 												 </a>
+												 <?php
+												 }
+												 ?>
 												</td>
                                                 <td>
 												 <a class="btn btn-primary btn-sm" href="<?php echo e($uu); ?>">View</a>
@@ -98,6 +114,7 @@ $pu = url('add-ticket');
 												</td>
                                             </tr>
 									     <?php
+												 
 											   }
 										   }
 										 ?>

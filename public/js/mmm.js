@@ -185,4 +185,28 @@ $(document).ready(function() {
 	   
     });
 	
+	//ADD TICKET
+	$("#add-ticket-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let atEmail = $('#add-ticket-email').val(), atSubject = $('#add-ticket-subject').val(), atType = $('#add-ticket-type').val(),
+           atApt = $('#add-ticket-apt').val(), atMsg = $('#add-ticket-msg').val(),
+		   validation = (atEmail == "" || atSubject == "" || atType == "none" || atMsg == "");
+	   
+	   
+       
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
+	   }
+	   else{
+		  $('#add-ticket-form').submit();		  
+	   }
+	   
+	   
+    });
+	
 });

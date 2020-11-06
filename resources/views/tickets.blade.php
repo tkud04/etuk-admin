@@ -44,7 +44,8 @@ $pu = url('add-ticket');
                                                 <th>Ticket ID</th>
                                                 <th>Raised by</th>
                                                 <th>Subject</th>
-                                                <th>Apartment</th>
+                                                <th>Type</th>
+                                                <th>Resource</th>
                                                 <th>Date raised</th>
                                                 <th>Status</th>
                                             </tr>
@@ -65,12 +66,7 @@ $pu = url('add-ticket');
 										        $gname = $guest['fname']." ".$guest['lname'];
 										        $uu = url('user')."?xf=".$guest['email'];
 												
-												$temp = [];
-														 $apartment = $t['apartment'];
-														 $au = url('apartment')."?xf=".$apartment['apartment_id'];
-														 $temp['name'] = $apartment['name'];
-														 $cmedia = $apartment['cmedia'];
-														 $temp['imgs'] = $cmedia['images'];
+												
 									   ?>
                                             <tr>
                                                 <td>{{$t['ticket_id']}}</td>
@@ -83,13 +79,33 @@ $pu = url('add-ticket');
 												  </a>
 												</td>
                                                 <td>{{$t['subject']}}</td>
+                                                <td><span class="label label-success">{{strtoupper($t['type'])}}</span></td>
 												<td>
+												<?php
+												 if(count($t['resource']) < 1)
+												 {
+												?>
+												<a href="javascript:void(0)">None specified</a>
+												<?php
+												 }
+												 else if($t['type'] == "apartment")
+												 {
+													 
+														 $apartment = $t['resource'];
+														 $au = url('apartment')."?xf=".$apartment['apartment_id'];
+														 $name = $apartment['name'];
+														 $cmedia = $apartment['cmedia'];
+														 $imgs = $cmedia['images'];
+												?>
 												 <a href="{{$au}}">
 												   <div class="form-control hover">
-										             <img class="rounded-circle mr-3 mb-3" src="{{$temp['imgs'][0]}}" alt="{{$temp['name']}}" style="width: 100px; height: 100px;"/><br>
-												     {{$temp['name']}}
+										             <img class="rounded-circle mr-3 mb-3" src="{{$imgs[0]}}" alt="{{$name}}" style="width: 100px; height: 100px;"/><br>
+												     {{$name}}
 										           </div>
 												 </a>
+												 <?php
+												 }
+												 ?>
 												</td>
                                                 <td>
 												 <a class="btn btn-primary btn-sm" href="{{$uu}}">View</a>
@@ -97,6 +113,7 @@ $pu = url('add-ticket');
 												</td>
                                             </tr>
 									     <?php
+												 
 											   }
 										   }
 										 ?>

@@ -13,7 +13,7 @@ class Tickets extends Model
      * @var array
      */
     protected $fillable = [
-         'user_id', 'ticket_id', 'subject', 'apartment_id', 'status'
+         'user_id', 'ticket_id', 'subject', 'type', 'resource_id', 'status'
     ];
     
 }
