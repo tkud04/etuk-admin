@@ -1443,6 +1443,79 @@ class MainController extends Controller {
 				else
 				{
 					session()->flash("validation-status-error","ok");
+					return redirect()->intended('tickets');
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
+								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Show the Update Ticket view.
+	 *
+	 * @return Response
+	 */
+	public function getUpdateTicket(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$permissions = $this->helpers->permissions;
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_tickets','edit_tickets']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+                
+				if(isset($req['xf']))
+				{
+					$v = "update-ticket";
+					$t = $this->helpers->getTicket($req['xf']);
+					#dd($t);
+					if(count($t) < 1)
+					{
+						session()->flash("validation-status-error","ok");
+						return redirect()->intended('tickets');
+					}
+					else
+					{
+						array_push($cpt,'t');                                 
+					}
+					
+				}
+				else
+				{
+					session()->flash("validation-status-error","ok");
 					return redirect()->intended('transactions');
 				}
 				}

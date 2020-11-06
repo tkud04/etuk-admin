@@ -2999,7 +2999,7 @@ function createSocial($data)
 				  $temp['ticket_id'] = $ti->ticket_id;
 				  $temp['msg'] = $ti->msg;
 				  $temp['added_by'] = $ti->added_by;
-				  $temp['admin'] = $this->getUser($ti->added_by);
+				  $temp['author'] = $this->getUser($ti->added_by);
 				  $temp['date'] = $ti->created_at->format("jS F, Y");
      			  $ret = $temp;
                }

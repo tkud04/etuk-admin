@@ -34,6 +34,13 @@ $subtitle = "View ticket trail.";
 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
 							<?php
+							$subject = $t['subject'];
+							$type = $t['type'];
+							$status = $t['status'];
+							$items = $t['items'];
+							$date = $t['date'];
+							$utu = url('update-ticket')."?xf=".$t['ticket_id'];
+							
 							  $guest = $t['user'];
 										  $avatar = $guest['avatar'];
                                          
@@ -125,6 +132,44 @@ $subtitle = "View ticket trail.";
                                 </div>
                             </div>
                         </div>
-</div>			
+</div>	
+
+<div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Ticket Trail <a class="btn btn-outline-success ml-3" href="<?php echo e($utu); ?>">Update</a></h5>
+                            <div class="card-body">
+							  <?php
+							    for($i = 0; $i < count($items); $i++)
+								{
+								  $ti = $items[$i];
+								  $author = $ti['author'];
+								  $img = $avatar;
+								  $name = $gname;
+								  
+								  if($t['user_id'] != $guest['id'])
+								  {
+									  $img = $author['avatar'];
+									  if($img == "") $img = [asset("images/avatar.png")];
+								  }
+								  
+								  $subjj = $i == 0 ? $subject : "Re: ".$subject;
+							  ?>
+                                <div class="media">
+								<img class="mr-3 user-avatar-lg rounded" src="<?php echo e($img[0]); ?>" alt="<?php echo e($name); ?>">
+                                    <div class="media-body">
+                                        <h5><?php echo e($subjj); ?></h5>
+                                        <p><?php echo e($ti['msg']); ?></p>
+                                    </div>
+									<p class="pull-right"><em><?php echo e($ti['date']); ?></em></p>
+                                </div>
+								<hr>
+							  <?php
+								}
+							  ?>
+                            </div>
+                        </div>
+                    </div>
+</div>		
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/ticket.blade.php ENDPATH**/ ?>

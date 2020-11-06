@@ -209,4 +209,26 @@ $(document).ready(function() {
 	   
     });
 	
+	//UPDATE TICKET
+	$("#ut-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let utMsg = $('#ut-msg').val(), validation = (utMsg == "");
+	   
+	   
+       
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
+	   }
+	   else{
+		  $('#ut-form').submit();		  
+	   }
+	   
+	   
+    });
+	
 });
