@@ -1516,7 +1516,7 @@ class MainController extends Controller {
 				else
 				{
 					session()->flash("validation-status-error","ok");
-					return redirect()->intended('transactions');
+					return redirect()->intended('tickets');
 				}
 				}
 				else
@@ -1562,12 +1562,10 @@ class MainController extends Controller {
 				if($hasPermission)
 				{
 				
-				dd($req);
+				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                    'type' => 'required|not_in:none',
-                             'email' => 'required|email',
-                             'subject' => 'required',
+		                    'xf' => 'required',
                              'msg' => 'required'
 		                   ]);
 						
@@ -1579,11 +1577,12 @@ class MainController extends Controller {
 				else
 				{
 					$req['added_by'] = $user->id;
-					$ret = $this->helpers->addTicket($req);
-					$ss = "add-ticket-status";
+					$ret = $this->helpers->updateTicket($req);
+					$ss = "update-ticket-status";
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");
-			        return redirect()->intended("tickets");
+					$uu = "ticket?xf=".$req['xf'];
+			        return redirect()->intended($uu);
 				}
 				}
 				else

@@ -48,6 +48,7 @@ $subtitle = "View ticket trail.";
 										  $gname = $guest['fname']." ".$guest['lname'];
 										  $uu = url('user')."?xf=".$guest['email'];
 										 
+							$statusClass = $status == "resolved" ? "label-primary" : "label-danger"; 
 							?>
                                 <h5 class="card-header">Transaction Details</h5>
                                 <div class="card-body">
@@ -69,10 +70,18 @@ $subtitle = "View ticket trail.";
 										 <div class="col-md-6">
 										  <a href="javascript:void(0)">
 										   <div class="form-group">
-                                               <label>Resource Type</label>
+                                               <label>Last response from</label>
+											   <?php
+											   $lastTI = $items[0];
+								  $lastAuthor = $lastTI['author'];
+								  $la_img = $lastAuthor['avatar'];
+								  if($la_img == "") $la_img = [asset("images/avatar.png")];
+								  $la_name = $lastAuthor['fname']." ".$lastAuthor['lname'];
+											   ?>
                                                <div class="form-control hover">
-										         <img class="rounded-circle mr-3 mb-3" src="<?php echo e(asset('images/avatar.png')); ?>" alt="default text" style="width: 100px; height: 100px;"/><br>
-												 Resource
+										         <img class="rounded-circle mr-3 mb-3" src="<?php echo e($la_img[0]); ?>" alt="<?php echo e(ucwords($la_name)); ?>" style="width: 100px; height: 100px;"/><br>
+													 <?php echo e(ucwords($la_name)); ?>
+
 										       </div>
                                             </div>
 										    </a>
@@ -82,42 +91,28 @@ $subtitle = "View ticket trail.";
 										  <div class="row mb-3">
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label>Booking dates</label>
-                                                  <p class="form-control-plaintext">default text</p>
+                                                  <label>Subject</label>
+                                                  <p class="form-control-plaintext"><?php echo e($t['subject']); ?></p>
                                                 </div>
 										     </div>
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label>Duration</label>
-                                                  <p class="form-control-plaintext">default text</p>
+                                                  <label>Date created</label>
+                                                  <p class="form-control-plaintext"><?php echo e($t['date']); ?></p>
                                                 </div>
 										     </div>
 										  </div>
 										  <div class="row mb-3">
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label>Guests</label>
-                                                  <p class="form-control-plaintext">default text</p>
+                                                  <label>Last updated</label>
+                                                  <p class="form-control-plaintext"><?php echo e($lastTI['date']); ?></p>
                                                 </div>
 										     </div>
 										     <div class="col-md-6">
 										        <div class="form-group">
-                                                  <label>Total charged</label>
-                                                  <p class="form-control-plaintext">default text</p>
-                                                </div>
-										     </div>
-										  </div>
-										  <div class="row">
-										     <div class="col-md-6">
-										        <div class="form-group">
-                                                  <label>Order reference #</label>
-                                                  <p class="form-control-plaintext">default text</p>
-                                                </div>
-										     </div>
-										     <div class="col-md-6">
-										        <div class="form-group">
-                                                  <label>Order status</label>
-                                                  <p class="form-control-plaintext"><span class="label label-primary">PAID</span></p>
+                                                  <label>Status</label>
+                                                  <p class="form-control-plaintext"><span class="label <?php echo e($statusClass); ?>"><?php echo e(strtoupper($status)); ?></span></p>
                                                 </div>
 										     </div>
 										  </div>
@@ -144,14 +139,10 @@ $subtitle = "View ticket trail.";
 								{
 								  $ti = $items[$i];
 								  $author = $ti['author'];
-								  $img = $avatar;
-								  $name = $gname;
+								  $img = $author['avatar'];
+								  if($img == "") $img = [asset("images/avatar.png")];
+								  $name = $author['fname']." ".$author['lname'];
 								  
-								  if($t['user_id'] != $guest['id'])
-								  {
-									  $img = $author['avatar'];
-									  if($img == "") $img = [asset("images/avatar.png")];
-								  }
 								  
 								  $subjj = $i == 0 ? $subject : "Re: ".$subject;
 							  ?>

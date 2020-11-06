@@ -2978,7 +2978,7 @@ function createSocial($data)
 				    {
 					  $temp['resource'] = [];  
 				    }
-					$temp['date'] = $t->created_at->format("jS F, Y");
+					$temp['date'] = $t->created_at->format("jS F, Y h:i A");
 				  }
 				  
 				  
@@ -3000,7 +3000,7 @@ function createSocial($data)
 				  $temp['msg'] = $ti->msg;
 				  $temp['added_by'] = $ti->added_by;
 				  $temp['author'] = $this->getUser($ti->added_by);
-				  $temp['date'] = $ti->created_at->format("jS F, Y");
+				  $temp['date'] = $ti->created_at->format("jS F, Y h:i A");
      			  $ret = $temp;
                }
 
@@ -3059,6 +3059,25 @@ function createSocial($data)
 					  $temp = $this->getTicket($t->id);
 					  array_push($ret,$temp);
 				  }
+               }                         
+                                  
+                return $ret;
+           }
+		   
+		   function updateTicket($dt)
+           {
+           	$ret = "error";
+			$t = Tickets::where('ticket_id',$dt['xf'])->first();
+			  
+              if($t != null)
+               {
+				   $temp = [
+					     'ticket_id' => $t->ticket_id,
+						 'msg' => $dt['msg'],
+						 'added_by' => $dt['added_by']
+					   ];
+					   $ti = $this->createTicketItem($temp);
+					   $ret = "ok";
                }                         
                                   
                 return $ret;

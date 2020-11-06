@@ -63,9 +63,6 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{url('tickets')}}">View tickets</a>
                                         </li>
-										<li class="nav-item">
-                                            <a class="nav-link" href="{{url('update-ticket')}}">Update ticket</a>
-                                        </li>
                                     </ul>
                                 </div>
                             </li>

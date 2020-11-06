@@ -4,15 +4,7 @@ manage apartments
 -edit apartment
 -disable apartment
 -delete apartment
--view transactions
 
-manage transactions
--view transaction
-
-manage tickets
--view tickets
--view ticket
--update ticket
 
 manage banners
 -view banners

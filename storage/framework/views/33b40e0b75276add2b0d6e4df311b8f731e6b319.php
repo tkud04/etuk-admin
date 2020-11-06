@@ -27,7 +27,7 @@ $subtitle = "Update the ticket trail of a complaint/issue.";
 										  <div class="col-md-12">
 										     <div class="form-group">
                                                <label>Your message</label>
-                                               <textarea class="form-control" name="value" id="ut-msg"></textarea>
+                                               <textarea class="form-control" name="msg" id="ut-msg"></textarea>
                                               </div>
 										   </div>
 										</div>

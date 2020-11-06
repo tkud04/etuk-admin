@@ -63,9 +63,6 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="<?php echo e(url('tickets')); ?>">View tickets</a>
                                         </li>
-										<li class="nav-item">
-                                            <a class="nav-link" href="<?php echo e(url('update-ticket')); ?>">Update ticket</a>
-                                        </li>
                                     </ul>
                                 </div>
                             </li>
