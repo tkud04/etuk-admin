@@ -57,6 +57,12 @@ Route::get('plugin', 'MainController@getPlugin');
 Route::post('plugin', 'MainController@postPlugin');
 Route::get('remove-plugin', 'MainController@getRemovePlugin');
 
+//Banners
+Route::get('banners', 'MainController@getBanners');
+Route::get('add-banner', 'MainController@getAddPlugin');
+Route::get('banner', 'MainController@getUpdateBanner');
+Route::get('remove-banner', 'MainController@getRemoveBanner');
+
 //Tickets
 Route::get('tickets', 'MainController@getTickets');
 Route::get('ticket', 'MainController@getTicket');
