@@ -174,7 +174,7 @@ $pu = url('add-permissions')."?xf=".$u['email'];
                     </div>
 </div>
 <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-6">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                         <div class="card">
                             <h5 class="card-header">Apartments</h5>
                             <div class="card-body">
@@ -239,7 +239,7 @@ $pu = url('add-permissions')."?xf=".$u['email'];
 							 </div>
 						</div>
                     </div>
-					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-6">
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                         <div class="card">
                             <h5 class="card-header">Reviews</h5>
                             <div class="card-body">
