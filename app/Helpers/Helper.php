@@ -3104,6 +3104,46 @@ function createSocial($data)
                 return $ret;
            }
 		   
+		   function createBanners($dt)
+		   {
+					$ret = Banners::create(['img' => $dt['ird'],
+                                             'type' => $dt['type'],
+                                             'cover' => $dt['cover'],
+                                             'status' => $dt['status'],
+                                             'added_by' => $dt['added_by']
+                                            ]);
+			          
+                return $ret;
+		   }
+		   
+		   function getBanners()
+		   {
+			   $ret = [];
+			   $banners = Banners::where('id',">",'0')
+			                     ->where('status',"enabled")->get();
+			   #dd($ads);
+			   if(!is_null($banners))
+			   {
+				   foreach($banners as $b)
+				   {
+					   $temp = [];
+					   $temp['id'] = $b->id;
+					   $img = $b->img;
+					   $temp['img'] = $this->getCloudinaryImage($img);
+					   $temp['added_by'] = $b->added_by;
+					   $temp['author'] = $this->getUser($b->added_by);
+					   $temp['type'] = $b->type;
+					   $temp['cover'] = $b->cover;
+					   $temp['copy'] = $b->copy;
+					   $temp['status'] = $b->status;
+					   $temp['date'] = $b->created_at->format("jS F, Y h:i A");
+					   array_push($ret,$temp);
+				   }
+			   }
+			   
+			   return $ret;
+		   }
+		   
 		   
 		   
 		   
@@ -3356,30 +3396,7 @@ function createSocial($data)
 		       return json_encode($s);
 		   }	
 
-             function getBanners()
-		   {
-			   $ret = [];
-			   $banners = Banners::where('id',">",'0')
-			                     ->where('status',"enabled")->get();
-			   #dd($ads);
-			   if(!is_null($banners))
-			   {
-				   foreach($banners as $b)
-				   {
-					   $temp = [];
-					   $temp['id'] = $b->id;
-					   $img = $b->img;
-					   $temp['img'] = $this->getCloudinaryImage($img);
-					   $temp['title'] = $b->title;
-					   $temp['subtitle'] = $b->subtitle;
-					   $temp['copy'] = $b->copy;
-					   $temp['status'] = $b->status;
-					   array_push($ret,$temp);
-				   }
-			   }
-			   
-			   return $ret;
-		   }
+           
 
            
 		   

@@ -1665,6 +1665,297 @@ class MainController extends Controller {
     }
 	
 	
+	/**
+	 * Show list of banners.
+	 *
+	 * @return Response
+	 */
+	public function getBanners(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_banners']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				 $v = "banners";
+				 $banners = $this->helpers->getBanners();
+				 array_push($cpt,'banners');
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	
+	/**
+	 * Show the Add Banner view.
+	 *
+	 * @return Response
+	 */
+	public function getAddBanner(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+					$v = "add-plugin";
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
+								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Handle add banner.
+	 *
+	 * @return Response
+	 */
+	public function postAddBanner(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                    'status' => 'required|not_in:none',
+                             'name' => 'required',
+                             'value' => 'required'
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$ret = $this->helpers->createPlugin($req);
+					$ss = "add-plugin-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->intended("plugins");
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	/**
+	 * Handle update banner.
+	 *
+	 * @return Response
+	 */
+	public function getUpdateBanner(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                    'status' => 'required|not_in:none',
+                             'xf' => 'required|numeric',
+                             'name' => 'required',
+                             'value' => 'required'
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$ret = $this->helpers->updatePlugin($req);
+					$ss = "update-plugin-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->intended("plugins");
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
+	/**
+	 * Handle remove banner.
+	 *
+	 * @return Response
+	 */
+	public function getRemoveBanner(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+			   	    #dd($req);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				    $validator = Validator::make($req,[
+		                    's' => 'required'
+		                   ]);
+						
+				    if($validator->fails())
+                    {
+                      session()->flash("validation-status-error","ok");
+			          return redirect()->back()->withInput();
+                    }
+				    else
+				    {   
+					  $ret = $this->helpers->removePlugin($req['s']);
+					  $ss = "remove-plugin-status";
+					  if($ret == "error") $ss .= "-error";
+					  session()->flash($ss,"ok");
+			          return redirect()->intended("plugins");
+				    }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+			        return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
 	
 	
 	
