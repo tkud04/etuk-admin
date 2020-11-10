@@ -1785,7 +1785,7 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_banners','edit_banners']);
 				#dd($hasPermission);
 				$req = $request->all();
 				
@@ -1881,7 +1881,7 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_banners','edit_banners']);
 				#dd($hasPermission);
 				$req = $request->all();
 				
@@ -1891,10 +1891,8 @@ class MainController extends Controller {
 				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                    'status' => 'required|not_in:none',
-                             'xf' => 'required|numeric',
-                             'name' => 'required',
-                             'value' => 'required'
+		                    'xf' => 'required|numeric',
+                             'type' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -1904,11 +1902,11 @@ class MainController extends Controller {
                 }
 				else
 				{
-					$ret = $this->helpers->updatePlugin($req);
-					$ss = "update-plugin-status";
+					$ret = $this->helpers->updateBanner($req);
+					$ss = "update-banner-status";
 					if($ret == "error") $ss .= "-error";
 					session()->flash($ss,"ok");
-			        return redirect()->intended("plugins");
+			        return redirect()->intended("banners");
 				}
 				}
 				else
@@ -1947,14 +1945,14 @@ class MainController extends Controller {
 			{
 				$req = $request->all();
 			   	    #dd($req);
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_banners','edit_banners']);
 				#dd($hasPermission);
 				
 				if($hasPermission)
 				{
 				
 				    $validator = Validator::make($req,[
-		                    's' => 'required'
+		                    'xf' => 'required|numeric'
 		                   ]);
 						
 				    if($validator->fails())
@@ -1964,11 +1962,11 @@ class MainController extends Controller {
                     }
 				    else
 				    {   
-					  $ret = $this->helpers->removePlugin($req['s']);
-					  $ss = "remove-plugin-status";
+					  $ret = $this->helpers->removeBanner($req['xf']);
+					  $ss = "remove-banner-status";
 					  if($ret == "error") $ss .= "-error";
 					  session()->flash($ss,"ok");
-			          return redirect()->intended("plugins");
+			          return redirect()->intended("banners");
 				    }
 				}
 				else

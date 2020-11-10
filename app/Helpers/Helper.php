@@ -40,6 +40,7 @@ use App\TicketItems;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
+use \Cloudinary;
 use \Cloudinary\Api;
 use \Cloudinary\Api\Response;
 use GuzzleHttp\Client;
@@ -811,10 +812,39 @@ function isDuplicateUser($data)
                 return $ret;
            }
 		   
-		   function deleteCloudImage($imgId)
+		   function signCloudinaryRequest($params_to_sign)
+		   {
+			    $params = array();
+				 $apiSecret = Cloudinary::config_get("api_secret");
+				   $apiKey = Cloudinary::config_get("api_key");
+				   
+        foreach ($params_to_sign as $param => $value) {
+            if (isset($value) && $value !== "") {
+                if (!is_array($value)) {
+                    $params[$param] = $value;
+                } else {
+                    if (count($value) > 0) {
+                        $params[$param] = implode(",", $value);
+                    }
+                }
+            }
+        }
+        ksort($params);
+        $join_pair = function ($key, $value) {
+            return $key . "=" . $value;
+        };
+        $to_sign = implode("&", array_map($join_pair, array_keys($params), array_values($params)));
+		#dd($to_sign);
+		return hash("sha1", $to_sign . $apiSecret);
+		   }
+		   
+		   function deleteCloudImage($imgId,$type="")
           {
 			  $ret = [];
-			  $img = ApartmentMedia::where('id',$imgId)->first();
+			  $img = null;
+			  
+			  if($type == "") $img = ApartmentMedia::where('id',$imgId)->first();
+			  else if($type == "banner") $img = Banners::where('id',$imgId)->first();
           	  # dd($img);
 			 //https://api.cloudinary.com/v1_1/demo/delete_by_token -X POST --data 'token=delete_token'
 
@@ -824,6 +854,18 @@ function isDuplicateUser($data)
 			   }
 			   else
 			    {  
+			       //sign request
+				   $ts = time() - ( 3 * 60 * 60);
+				   
+				   $params_to_sign = [
+				     'timestamp' => $ts,
+				     'public_id' => substr($img->url,8),
+				     'delete_token' => $img->delete_token
+				   ];
+				   
+			       $sig = $this->signCloudinaryRequest($params_to_sign);
+				   #dd($sig);
+				   
 			       $url = "https://api.cloudinary.com/v1_1/etuk-ng/delete_by_token";
 			   
 			     $client = new Client([
@@ -848,6 +890,14 @@ function isDuplicateUser($data)
 					   [
 					      'name' => 'token',
 						  'contents' => $img->delete_token
+					   ],
+					   [
+					      'name' => 'timestamp',
+						  'contents' => $ts
+					   ],
+					   [
+					      'name' => 'signature',
+						  'contents' => $sig
 					   ]
 					]
 				 ];
@@ -3166,6 +3216,46 @@ function createSocial($data)
 			   
 			   return $ret;
 		   }
+		   
+		   function updateBanner($dt)
+           {
+           	$ret = "error";
+			$b = Banners::where(['id' => $dt['xf'],'type' => $dt['type']])->first();
+			  
+              if($b != null)
+               {
+				   if(isset($dt['sci']))
+				   {
+					   $sci = $dt['sci'];
+					   
+					   if($sci == "yes")
+					   {
+						   $bsci = Banners::where(['type' => $dt['type'],'cover' => "yes"])->first();
+						   if($bsci != null) $bsci->update(['cover' => "no"]);
+					   }
+					   $b->update(['cover' => $sci]);
+				   }
+				   
+					   $ret = "ok";
+               }                         
+                                  
+                return $ret;
+           }
+		   
+		   function removeBanner($id)
+           {
+           	$ret = "error";
+			$b = Banners::where(['id' => $id])->first();
+			  
+              if($b != null)
+               {   
+		           #$this->deleteCloudImage($b->id,"banner");
+				   $b->delete(); 
+				   $ret = "ok";
+               }                         
+                                  
+                return $ret;
+           }
 		   
 		   
 		   

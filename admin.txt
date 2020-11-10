@@ -5,8 +5,3 @@ manage apartments
 -disable apartment
 -delete apartment
 
-
-manage banners
--view banners
--delete banner
-
