@@ -80,6 +80,9 @@ class Helper implements HelperContract
 					 "remove-ticket-status" => "Ticket removed.",
 					 "add-ticket-status" => "Ticket created.",
 					 "update-ticket-status" => "Ticket updated.",
+					 "add-banner-status" => "Banner image uploaded.",
+					 "update-banner-status" => "Banner info updated.",
+					 "remove-banner-status" => "Banner image removed.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -105,6 +108,10 @@ class Helper implements HelperContract
 					 "permissions-status-error" => "Access denied.",
 					 "add-ticket-status-error" => "Ticket could not be created, please try again",
 					 "update-ticket-status-error" => "Ticket could not be updated, please try again.",
+					 "network-status-error" => "Network error occured, please check your Internet connection and try again.",
+					 "add-banner-status-error" => "Banner could not be created, please try again",
+					 "update-banner-status-error" => "Banner could not be updated, please try again",
+					 "remove-banner-status-error" => "Banner could not be removed, please try again",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -3104,16 +3111,42 @@ function createSocial($data)
                 return $ret;
            }
 		   
-		   function createBanners($dt)
+		   function createBanner($dt)
 		   {
-					$ret = Banners::create(['img' => $dt['ird'],
+					$ret = Banners::create(['url' => $dt['ird'],
                                              'type' => $dt['type'],
                                              'cover' => $dt['cover'],
                                              'status' => $dt['status'],
-                                             'added_by' => $dt['added_by']
+                                             'added_by' => $dt['added_by'],
+                                             'deleted' => $dt['deleted'],
+                                             'delete_token' => $dt['delete_token'],
                                             ]);
 			          
                 return $ret;
+		   }
+		   
+		   function getBanner($id)
+		   {
+			   $b = Banners::where('id',$id)->first();
+			   $temp = [];
+			   
+			   if($b != null)
+			   {
+				   $temp['id'] = $b->id;
+					   $img = $b->url;
+					   $temp['url'] = $this->getCloudinaryImage($img);
+					   $temp['added_by'] = $b->added_by;
+					   $temp['author'] = $this->getUser($b->added_by);
+					   $temp['type'] = $b->type;
+					   $temp['cover'] = $b->cover;
+					   $temp['copy'] = $b->copy;
+					   $temp['status'] = $b->status;
+					   $temp['deleted'] = $b->deleted;
+					   $temp['delete_token'] = $b->delete_token;
+					   $temp['date'] = $b->created_at->format("jS F, Y h:i A");
+			   }
+			   
+			   return $temp;
 		   }
 		   
 		   function getBanners()
@@ -3126,17 +3159,7 @@ function createSocial($data)
 			   {
 				   foreach($banners as $b)
 				   {
-					   $temp = [];
-					   $temp['id'] = $b->id;
-					   $img = $b->img;
-					   $temp['img'] = $this->getCloudinaryImage($img);
-					   $temp['added_by'] = $b->added_by;
-					   $temp['author'] = $this->getUser($b->added_by);
-					   $temp['type'] = $b->type;
-					   $temp['cover'] = $b->cover;
-					   $temp['copy'] = $b->copy;
-					   $temp['status'] = $b->status;
-					   $temp['date'] = $b->created_at->format("jS F, Y h:i A");
+					   $temp = $this->getBanner($b->id);
 					   array_push($ret,$temp);
 				   }
 			   }

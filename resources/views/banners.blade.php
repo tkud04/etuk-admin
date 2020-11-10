@@ -1,6 +1,6 @@
 <?php
-$title = "Plugins";
-$subtitle = "View all installed plugins";
+$title = "Banners";
+$subtitle = "View all uploaded banner images";
 ?>
 
 @extends('layout')
@@ -32,41 +32,57 @@ $subtitle = "View all installed plugins";
 @section('content')
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					<a href="{{url('add-plugin')}}" class="btn btn-outline-secondary">Add plugin</a>
+					
                         <div class="card">
-                            <h5 class="card-header">Plugins</h5>
+                            <h5 class="card-header">Banners</h5>
+							<a href="{{url('add-banner')}}" class="btn btn-outline-secondary">Add banner</a>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                 <th>Name</th>
-                                                 <th>Code snippet</th>
-                                                 <th>Status</th>
+                                                 <th>Image</th>
+                                                 <th>Type</th>
+                                                 <th>Cover Image</th>
+                                                 <th>Added by</th>
+                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 										  <?php
-										   if(count($plugins) > 0)
+										   if(count($banners) > 0)
 										   {
-											  foreach($plugins as $p)
+											  foreach($banners as $b)
 											   {
-												    $name = $p['name'];
-							                        $value = $p['value'];
-							                        $vu = url('plugin')."?s=".$p['id'];
-							                        $ru = url('remove-plugin')."?s=".$p['id'];
-							
-							                        $ss = $p['status'] == "enabled" ? "bg-primary" : "bg-danger";
+												    $img = $b['url'];
+							                        $author = $b['author'];
+										            $avatar = $author['avatar'];
+                                                    if($avatar == "") $avatar = [asset("images/avatar.png")];
+										            $aname = $author['fname']." ".$author['lname'];
+													$ru = url('remove-banner')."?xf=".$b['id'];
+													$ss = $b['cover'] == "yes" ? "badge-primary" : "badge-warning";
+													
+													$sci = url('update-banner')."?xf=".$b['id']."&type=".$b['type']."&sci=yes";
+													$sciText = "Set as first image";
+													
+													if($b['cover'] == "yes")
+													{
+														$sci = url('update-banner')."?xf=".$b['id']."&type=".$b['type']."&sci=no";
+													    $sciText = "Remove as first image";
+													}
 										  ?>
                                             <tr>
-                                                <td>{{ $name }}</td>
-					                            <td><code>{{ $value }}</code></td>
-					                            <td>				   
-					                             <h3 class="{{$ss}}">{{strtoupper($p['status'])}}</h3>
-					                            </td>
+                                                <td><img class="mr-3 mb-3" src="{{$img}}" alt="Banner" style="width: 192px; height: 100px;"/><br></td>
+                                                <td>{{ ucwords($b['type']) }}</td>
+                                                <td><span class="badge {{$ss}}">{{ ucwords($b['cover']) }}</span></td>
+												<td>
+												  <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$aname}}" style="width: 100px; height: 100px;"/>
+												  <br>{{ $aname }}
+												</td>
+					                            
 					                            <td>
-						                          <a class="btn btn-default btn-block btn-clean" href="{{$vu}}">View</a>
-						                          <a class="btn btn-default btn-block btn-clean" href="{{$ru}}">Remove</a>
+						                          <a class="btn btn-outline-primary" href="{{$sci}}">{{$sciText}}</a>
+						                          <a class="btn btn-outline-danger" href="{{$ru}}">Remove</a>
                                                 </td>
                                             </tr>
 									     <?php

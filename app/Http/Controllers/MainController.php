@@ -1697,6 +1697,7 @@ class MainController extends Controller {
 				{
 				 $v = "banners";
 				 $banners = $this->helpers->getBanners();
+				 #dd($banners);
 				 array_push($cpt,'banners');
 				}
 				else
@@ -1741,13 +1742,13 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_plugins','edit_plugins']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_banners','edit_banners']);
 				#dd($hasPermission);
 				$req = $request->all();
 				
 				if($hasPermission)
 				{
-					$v = "add-plugin";
+					$v = "add-banner";
 				}
 				else
 				{
@@ -1794,9 +1795,8 @@ class MainController extends Controller {
 				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                    'status' => 'required|not_in:none',
-                             'name' => 'required',
-                             'value' => 'required'
+		                     'ab-images' => 'required',
+                             'type' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -1806,11 +1806,46 @@ class MainController extends Controller {
                 }
 				else
 				{
-					$ret = $this->helpers->createPlugin($req);
-					$ss = "add-plugin-status";
-					if($ret == "error") $ss .= "-error";
-					session()->flash($ss,"ok");
-			        return redirect()->intended("plugins");
+					$ird = [];
+                    $networkError = false;
+				
+                    for($i = 0; $i < count($req['ab-images']); $i++)
+                    {
+            		  $img = $req['ab-images'][$i];
+					  $imgg = $this->helpers->uploadCloudImage($img->getRealPath());
+						
+					  if(isset($imgg['status']) && $imgg['status'] == "error")
+					  {
+						  $networkError = true;
+						  break;
+					  }
+					  else
+					  {
+						 $req['cover'] = "no";
+					     $req['ird'] = $imgg['public_id'];
+					     $req['delete_token'] = $imgg['delete_token'];
+					     $req['deleted'] = "no";
+					  }
+             	        								
+					}
+					
+					if($networkError)
+					{
+						session()->flash("network-status-error","ok");
+			            return redirect()->back()->withInput();
+					}
+					else
+					{
+						$req['status'] = "enabled";
+					    $req['added_by'] = $user->id;
+					   
+			            $ret = $this->helpers->createBanner($req);
+			            $ss = "add-banner-status";
+					    if($ret == "error") $ss .= "-error";
+					    session()->flash($ss,"ok");
+			            return redirect()->intended("banners");
+					}
+					
 				}
 				}
 				else

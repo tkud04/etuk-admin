@@ -175,7 +175,7 @@ $pu = url('add-permissions')."?xf=".$u['email'];
                     </div>
 </div>
 <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                         <div class="card">
                             <h5 class="card-header">Apartments</h5>
                             <div class="card-body">
@@ -240,7 +240,7 @@ $pu = url('add-permissions')."?xf=".$u['email'];
 							 </div>
 						</div>
                     </div>
-					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                         <div class="card">
                             <h5 class="card-header">Reviews</h5>
                             <div class="card-body">
@@ -312,4 +312,5 @@ $pu = url('add-permissions')."?xf=".$u['email'];
                     </div>
                 </div>			
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/user.blade.php ENDPATH**/ ?>

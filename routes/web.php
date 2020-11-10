@@ -59,8 +59,9 @@ Route::get('remove-plugin', 'MainController@getRemovePlugin');
 
 //Banners
 Route::get('banners', 'MainController@getBanners');
-Route::get('add-banner', 'MainController@getAddPlugin');
-Route::get('banner', 'MainController@getUpdateBanner');
+Route::get('add-banner', 'MainController@getAddBanner');
+Route::post('add-banner', 'MainController@postAddBanner');
+Route::get('update-banner', 'MainController@getUpdateBanner');
 Route::get('remove-banner', 'MainController@getRemoveBanner');
 
 //Tickets

@@ -231,4 +231,35 @@ $(document).ready(function() {
 	   
     });
 	
+	//ADD BANNER
+	$("#ab-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let abType = $('#ab-type').val(), validation = (abType == "none"),
+	        abImages = $(`#ab-images input[type=file]`), emptyImage = false;
+			
+	     for(let i = 0; i < abImages.length; i++){
+			   if(abImages[i].files.length < 1) emptyImage = true;
+		   }
+	        
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
+	   }
+	   else if(emptyImage){
+		   Swal.fire({
+			 icon: 'error',
+             title: "You have an empty image field."
+           })
+	   }
+	   else{	 
+		 $('#ab-form').submit();
+	   }
+	   
+	   
+    });
+	
 });
