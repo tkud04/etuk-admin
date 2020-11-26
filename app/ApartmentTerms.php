@@ -13,6 +13,6 @@ class ApartmentTerms extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'apartment_id', 'checkin', 'checkout', 'id_required', 'children', 'pets', 'payment_type'
-    ];
+        'id', 'apartment_id', 'max_adults', 'max_children', 'children', 'pets', 'payment_type'
+	];
 }
