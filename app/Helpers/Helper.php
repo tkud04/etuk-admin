@@ -2588,6 +2588,7 @@ function createSocial($data)
                      $temp['order_id'] = $o->reference;
                	     $temp['apartment_id'] = $i->apartment_id; 
                         $apt = $this->getApartment($i->apartment_id,['host' => true]); 
+			dd($apt);
                         $temp['apartment'] = $apt;
                         $adata = $apt['data'];	
                         $checkin = Carbon::parse($i->checkin);
