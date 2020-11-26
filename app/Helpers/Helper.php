@@ -78,6 +78,9 @@ class Helper implements HelperContract
 					 "add-plugin-status" => "Plugin installed.",
 					 "update-plugin-status" => "Plugin updated.",
 					 "remove-plugin-status" => "Plugin removed.",
+	                                 "add-sender-status" => "Sender added",
+                                         "remove-sender-status" => "Sender removed",
+                                         "mark-sender-status" => "Sender updated",
 					 "remove-ticket-status" => "Ticket removed.",
 					 "add-ticket-status" => "Ticket created.",
 					 "update-ticket-status" => "Ticket updated.",
@@ -161,6 +164,19 @@ class Helper implements HelperContract
 			];  
 
 
+public $smtpp = [
+       'gmail' => [
+       'ss' => "smtp.gmail.com",
+       'sp' => "587",
+       'sec' => "tls",
+       ],
+       'yahoo' => [
+       'ss' => "smtp.mail.yahoo.com",
+       'sp' => "587",
+       'sec' => "ssl",
+       ],
+  ];
+	
  public $banks = [
       'access' => "Access Bank", 
       'citibank' => "Citibank", 
@@ -197,7 +213,8 @@ class Helper implements HelperContract
 	   'view_transactions','edit_transactions',
 	   'view_tickets','edit_tickets',
 	   'view_banners','edit_banners',
-	   'view_plugins','edit_plugins'
+	   'view_plugins','edit_plugins',
+	    'view_senders','edit_senders'
 	   ];
   
   public $adminEmail = "aquarius4tkud@yahoo.com";
@@ -3779,6 +3796,160 @@ function createSocial($data)
 		]);
 		return $ret;
 	}
+	
+	function createSender($data)
+           {
+			   #dd($data);
+			 $ret = null;
+			 
+			 
+				 $ret = Senders::create(['ss' => $data['ss'], 
+                                                      'type' => $data['type'], 
+                                                      'sp' => $data['sp'], 
+                                                      'sec' => $data['sec'], 
+                                                      'sa' => $data['sa'], 
+                                                      'su' => $data['su'], 
+                                                      'current' => $data['current'], 
+                                                      'spp' => $data['spp'], 
+                                                      'sn' => $data['sn'], 
+                                                      'se' => $data['se'], 
+                                                      'status' => "enabled", 
+                                                      ]);
+			  return $ret;
+           }
+
+   function getSenders()
+   {
+	   $ret = [];
+	   
+	   $senders = Senders::where('id','>',"0")->get();
+	   
+	   if(!is_null($senders))
+	   {
+		   foreach($senders as $s)
+		   {
+		     $temp = $this->getSender($s->id);
+		     array_push($ret,$temp);
+	       }
+	   }
+	   
+	   return $ret;
+   }
+   
+   function getSender($id)
+           {
+           	$ret = [];
+               $s = Senders::where('id',$id)->first();
+ 
+              if($s != null)
+               {
+                   	$temp['ss'] = $s->ss; 
+                       $temp['sp'] = $s->sp; 
+                       $temp['se'] = $s->se;
+                       $temp['sec'] = $s->sec; 
+                       $temp['sa'] = $s->sa; 
+                       $temp['su'] = $s->su; 
+                       $temp['current'] = $s->current; 
+                       $temp['spp'] = $s->spp; 
+					   $temp['type'] = $s->type;
+                       $sn = $s->sn;
+                       $temp['sn'] = $sn;
+                        $snn = explode(" ",$sn);					   
+                       $temp['snf'] = $snn[0]; 
+                       $temp['snl'] = count($snn) > 0 ? $snn[1] : ""; 
+					   
+                       $temp['status'] = $s->status; 
+                       $temp['id'] = $s->id; 
+                       $temp['date'] = $s->created_at->format("jS F, Y"); 
+                       $ret = $temp; 
+               }                          
+                                                      
+                return $ret;
+           }
+		   
+		   
+		  function updateSender($data,$user=null)
+           {
+			   #dd($data);
+			 $ret = "error";
+			 if($user == null)
+			 {
+				 $s = Senders::where('id',$data['xf'])->first();
+			 }
+			 else
+			 {
+				$s = Senders::where('id',$data['xf'])
+			             ->where('user_id',$user->id)->first(); 
+			 }
+			 
+			 
+			 if(!is_null($s))
+			 {
+				 $s->update(['ss' => $data['ss'], 
+                                                      'type' => $data['type'], 
+                                                      'sp' => $data['sp'], 
+                                                      'sec' => $data['sec'], 
+                                                      'sa' => $data['sa'], 
+                                                      'su' => $data['su'], 
+                                                      'spp' => $data['spp'], 
+                                                      'sn' => $data['sn'], 
+                                                      'se' => $data['se'], 
+                                                      'status' => "enabled", 
+                                                      ]);
+			   $ret = "ok";
+			 }
+           	
+                                                      
+                return $ret;
+           }
+
+		   function removeSender($xf,$user=null)
+           {
+			   #dd($data);
+			 $ret = "error";
+			 if($user == null)
+			 {
+				 $s = Senders::where('id',$xf)->first();
+			 }
+			 else
+			 {
+				$s = Senders::where('id',$xf)
+			             ->where('user_id',$user->id)->first(); 
+			 }
+			 
+			 
+			 if(!is_null($s))
+			 {
+				 $s->delete();
+			   $ret = "ok";
+			 }
+           
+           }
+		   
+		   function setAsCurrentSender($id)
+		   {
+			   $s = Senders::where('id',$id)->first();
+			   
+			   if($s != null)
+			   {
+				   $prev = Senders::where('current',"yes")->first();
+				   if($prev != null) $prev->update(['current' => "no"]);
+				   $s->update(['current' => "yes"]);
+			   }
+		   }
+		   
+		   function getCurrentSender()
+		   {
+			   $ret = [];
+			   $s = Senders::where('current',"yes")->first();
+			   
+			   if($s != null)
+			   {
+				   $ret = $this->getSender($s['id']);
+			   }
+			   
+			   return $ret;
+		   }
    
 }
 ?>
