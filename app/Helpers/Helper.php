@@ -3836,36 +3836,7 @@ function createSocial($data)
 	   return $ret;
    }
    
-   function getSender($id)
-           {
-           	$ret = [];
-               $s = Senders::where('id',$id)->first();
- 
-              if($s != null)
-               {
-                   	$temp['ss'] = $s->ss; 
-                       $temp['sp'] = $s->sp; 
-                       $temp['se'] = $s->se;
-                       $temp['sec'] = $s->sec; 
-                       $temp['sa'] = $s->sa; 
-                       $temp['su'] = $s->su; 
-                       $temp['current'] = $s->current; 
-                       $temp['spp'] = $s->spp; 
-					   $temp['type'] = $s->type;
-                       $sn = $s->sn;
-                       $temp['sn'] = $sn;
-                        $snn = explode(" ",$sn);					   
-                       $temp['snf'] = $snn[0]; 
-                       $temp['snl'] = count($snn) > 0 ? $snn[1] : ""; 
-					   
-                       $temp['status'] = $s->status; 
-                       $temp['id'] = $s->id; 
-                       $temp['date'] = $s->created_at->format("jS F, Y"); 
-                       $ret = $temp; 
-               }                          
-                                                      
-                return $ret;
-           }
+  
 		   
 		   
 		  function updateSender($data,$user=null)
@@ -3938,18 +3909,7 @@ function createSocial($data)
 			   }
 		   }
 		   
-		   function getCurrentSender()
-		   {
-			   $ret = [];
-			   $s = Senders::where('current',"yes")->first();
-			   
-			   if($s != null)
-			   {
-				   $ret = $this->getSender($s['id']);
-			   }
-			   
-			   return $ret;
-		   }
+
    
 }
 ?>
