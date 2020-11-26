@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App;
@@ -13,6 +14,6 @@ class ApartmentMedia extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'apartment_id', 'cover', 'type', 'url', 'deleted', 'delete_token'
+        'id', 'apartment_id', 'cover', 'type', 'src_type', 'url', 'deleted', 'delete_token'
     ];
 }
