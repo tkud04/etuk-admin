@@ -757,6 +757,7 @@ function isDuplicateUser($data)
            	$ret = ApartmentAddresses::create(['apartment_id' => $data['apartment_id'], 
                                                       'address' => $data['address'],                                                       
                                                       'city' => $data['city'],                                                       
+                                                      'lga' => $data['lga'],                                                       
                                                       'state' => $data['state']
                                                       ]);
                               
@@ -766,9 +767,13 @@ function isDuplicateUser($data)
 		   function createApartmentData($data)
            {
            	$ret = ApartmentData::create(['apartment_id' => $data['apartment_id'], 
-                                                      'description' => $data['description'],                                                       
-                                                      'max_adults' => $data['max_adults'],                                                       
-                                                      'max_children' => $data['max_children'],                                                       
+                                                      'description' => $data['description'],													  
+                                                      'category' => $data['category'],                                                       
+                                                      'property_type' => $data['property_type'],                                                       
+                                                      'rooms' => $data['rooms'],                                                       
+                                                      'units' => $data['units'],                                                       
+                                                      'bathrooms' => $data['bathrooms'],                                                       
+                                                      'bedrooms' => $data['bedrooms'],                                                
                                                       'amount' => $data['amount']                                                       
                                                       ]);
                               
@@ -788,9 +793,8 @@ function isDuplicateUser($data)
 		   function createApartmentTerms($data)
            {
            	$ret = ApartmentTerms::create(['apartment_id' => $data['apartment_id'], 
-                                                      'checkin' => $data['checkin'],                                                       
-                                                      'checkout' => $data['checkout'],                                                      
-                                                      'id_required' => $data['id_required'],                                                      
+                                                      'max_adults' => $data['max_adults'],                                                       
+                                                      'max_children' => $data['max_children'],                                                      
                                                       'children' => $data['children'],                                                      
                                                       'pets' => $data['pets'],                                                      
                                                       'payment_type' => $data['payment_type']                                                      
@@ -805,6 +809,7 @@ function isDuplicateUser($data)
                                                       'url' => $data['url'],                                                       
                                                       'cover' => $data['cover'],                                                    
                                                       'type' => $data['type'],                                                      
+                                                      'src_type' => $data['src_type'],                                                      
                                                       'delete_token' => $data['delete_token'],                                                 
                                                       'deleted' => $data['deleted']                                                      
                                                       ]);
@@ -951,42 +956,20 @@ function isDuplicateUser($data)
           	$dt = ['cloud_name' => "etuk-ng"];
               $preset = "uwh1p75e";
 			  
-			  try
+          	try
 			  {
 				$rett = \Cloudinary\Uploader::unsigned_upload($path,$preset,$dt);  
 			  }
 			  catch(Throwable $e)
 			  {
 				  $rett = ['status' => "error",'message' => "network"];
-			  }
-          	
-                                                      
+			  }   
+			  
              return $rett; 
          }
 		 
 		 
-		   
-		   
-
-     function getPopularApartments()
-           {
-           	$ret = [];
-              $apartments = Apartments::where('id',">","0")
-			                       ->where('status',"enabled")->get();
-								   
-				$apartments = $apartments->sortByDesc('created_at');				   
- 
-              if($apartments != null)
-               {
-				  foreach($apartments as $a)
-				  {
-					     $aa = $this->getApartment($a->id);
-					     array_push($ret,$aa); 
-				  }
-               }                         
-                                                      
-                return $ret;
-           }
+		 
 	 
 	 function getApartments($user)
            {
@@ -1085,9 +1068,13 @@ function isDuplicateUser($data)
 				  $temp['id'] = $adt->id;
 				  $temp['apartment_id'] = $adt->apartment_id;
      			  $temp['description'] = $adt->description;
-     			  $temp['max_adults'] = $adt->max_adults;
-     			  $temp['max_children'] = $adt->max_children;
-				  $temp['amount'] = $adt->amount;
+				  $temp['category'] = $adt->category;
+     			  $temp['property_type'] = $adt->property_type;
+     			  $temp['rooms'] = $adt->rooms;
+     			  $temp['units'] = $adt->units;
+     			  $temp['bathrooms'] = $adt->bathrooms;
+     			  $temp['bedrooms'] = $adt->bedrooms;
+     			  $temp['amount'] = $adt->amount;
 				  $temp['landmarks'] = $adt->landmarks;
 				  $ret = $temp;
                }                         
@@ -1108,6 +1095,7 @@ function isDuplicateUser($data)
 				  $temp['apartment_id'] = $aa->apartment_id;
      			  $temp['address'] = $aa->address;
 				  $temp['city'] = $aa->city;
+				  $temp['lga'] = $aa->lga;
 				  $temp['state'] = $aa->state;
 				  $ret = $temp;
                }                         
@@ -1126,11 +1114,10 @@ function isDuplicateUser($data)
 				  $temp = [];
 				  $temp['id'] = $at->id;
 				  $temp['apartment_id'] = $at->apartment_id;
-     			  $temp['checkin'] = $at->checkin;
-     			  $temp['checkout'] = $at->checkout;
+     			  $temp['max_adults'] = $at->max_adults;
+     			  $temp['max_children'] = $at->max_children;
      			  $temp['children'] = $at->children;
      			  $temp['pets'] = $at->pets;
-     			  $temp['id_required'] = $at->id_required;
      			  $temp['payment_type'] = $at->payment_type;
 				  $ret = $temp;
                }                         
@@ -1197,6 +1184,7 @@ function isDuplicateUser($data)
 				    $temp['apartment_id'] = $am->apartment_id;
 					$temp['cover'] = $am->cover;
 					$temp['type'] = $am->type;
+					$temp['src_type'] = $am->src_type;
 				    $temp['url'] = $am->url;
 				    $temp['deleted'] = $am->deleted;
 				    $temp['delete_token'] = $am->delete_token;
@@ -1275,9 +1263,9 @@ function isDuplicateUser($data)
 							 $ix = $dt[$x];
 							 $ird = $ix['url'];
 							 
-							 $type = $ix['type'];
+							 $st = $ix['src_type'];
 							 #dd($type);
-                            if($type == "cloudinary" || $type == "" || $type == "image" || $type == "video")
+                            if($st == "cloudinary")
 							{
 								$imgg = "https://res.cloudinary.com/etuk-ng/image/upload/v1585236664/".$ird;
 							}
@@ -1366,6 +1354,7 @@ function updateApartment($data)
            	       $aa->update([
                                                       'address' => $data['address'],                                                       
                                                       'city' => $data['city'],                                                       
+                                                      'lga' => $data['lga'],                                                       
                                                       'state' => $data['state']
                                                       ]);
 			   }               
@@ -1378,11 +1367,19 @@ function updateApartment($data)
 			
 			   if($adt != null)
 			   {
+				   $mc = isset($data['max_children']) ? $data['max_children'] : "";
+				   $landmarks = isset($data['landmarks']) ? $data['landmarks'] : "";
+				   
            	       $adt->update([
-                                                     'description' => $data['description'],                                                       
-                                                      'max_adults' => $data['max_adults'],                                                       
-                                                      'max_children' => $data['max_children'],                                                       
-                                                      'amount' => $data['amount']                                                       
+                                                     'description' => $data['description'], 
+                                                     'category' => $data['category'], 
+                                                     'property_type' => $data['property_type'], 
+                                                     'rooms' => $data['rooms'], 
+                                                     'units' => $data['units'], 
+                                                     'bathrooms' => $data['bathrooms'], 
+                                                     'bedrooms' => $data['bedrooms'],                                                      
+                                                      'amount' => $data['amount'],                                                      
+                                                      'landmarks' => $landmarks,                                                      
                                                        ]);
 			   }
            }
@@ -1396,9 +1393,8 @@ function updateApartment($data)
            	if($at != null)
 			   {
            	       $at->update([
-                                                      'checkin' => $data['checkin'],                                                       
-                                                      'checkout' => $data['checkout'],                                                      
-                                                      'id_required' => $data['id_required'],                                                      
+                                                      'max_adults' => $data['max_adults'],                                                       
+                                                      'max_children' => $data['max_children'],  
                                                       'children' => $data['children'],                                                      
                                                       'pets' => $data['pets'],                                                      
                                                       'payment_type' => $data['payment_type']                                                      
@@ -2440,7 +2436,16 @@ function createSocial($data)
                         $temp['guests'] = $c['guests']; 
                         $temp['kids'] = $c['kids']; 
                        $temp['order_id'] = $order->id;
-				    $oi = $this->createOrderItems($temp);                    
+				    $oi = $this->createOrderItems($temp);
+					
+					//create host transaction
+                    $host = $c['apartment']['host']; 
+                    $this->createTransaction([
+					  'user_id' => $host['id'],
+					  'item_id' => $oi->id,
+					  'apartment_id' => $c['apartment_id']
+					]);
+                    					
                }
 
                #send transaction email to admin
@@ -2485,27 +2490,7 @@ function createSocial($data)
 			  return $ret;
 		   }
 		   
-		   function getAllOrders()
-           {
-           	$ret = [];
-
-			  $orders = Orders::where('id','>',"0")->get();
-			  
-			  #dd($uu);
-              if($orders != null)
-               {
-				   $orders = $orders->sortByDesc('created_at');
-               	  foreach($orders as $o) 
-                    {
-                    	$temp = $this->getOrder($o->reference,['guest' => true]);
-                        array_push($ret, $temp); 
-                    }
-               }                                 
-              	#dd($ret);
-                return $ret;
-           }
-		   
-		   function getOrders($user)
+		    function getOrders($user)
            {
            	$ret = [];
 
@@ -2525,7 +2510,9 @@ function createSocial($data)
                 return $ret;
            }
 		   
-		   function getOrder($ref,$options=[])
+		   
+		   
+		   function getOrder($ref)
            {
            	$ret = [];
 
@@ -2537,7 +2524,6 @@ function createSocial($data)
 				  $temp = [];
                   $temp['id'] = $o->id;
                   $temp['user_id'] = $o->user_id;
-				  if(isset($options['guest']) && $options['guest']) $temp['guest'] = $this->getUser($o->user_id);
                   $temp['reference'] = $o->reference;
                   $temp['amount'] = $o->amount;
                   $temp['type'] = $o->type;
@@ -2551,7 +2537,7 @@ function createSocial($data)
                 return $ret;
            }
 		   
-		  function getOrderItems($id)
+		   function getOrderItems($id)
            {
            	$ret = ['data' => [],'subtotal' => 0];
 
@@ -2599,6 +2585,7 @@ function createSocial($data)
 			    
 				return $temp;
 		   }
+		   
 		   
 		   function createTransaction($dt)
 		   {
