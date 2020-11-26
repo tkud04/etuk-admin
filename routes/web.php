@@ -73,6 +73,14 @@ Route::get('update-ticket', 'MainController@getUpdateTicket');
 Route::post('update-ticket', 'MainController@postUpdateTicket');
 Route::get('remove-ticket', 'MainController@getRemoveTicket');
 
+//Senders
+Route::get('add-sender', 'MainController@getAddSender');
+Route::post('add-sender', 'MainController@postAddSender');
+Route::get('sender', 'MainController@getSender');
+Route::post('sender', 'MainController@postSender');
+Route::get('remove-sender', 'MainController@getRemoveSender');
+Route::get('mark-sender', 'MainController@getMarkSender');
+
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');
 
