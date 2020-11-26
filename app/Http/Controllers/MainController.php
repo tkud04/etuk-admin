@@ -1095,6 +1095,500 @@ class MainController extends Controller {
     }
 	
 	
+  /**
+	 * Show the Add Sender view.
+	 *
+	 * @return Response
+	 */
+	public function getAddSender(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$cpt = ['user','signals','plugins'];
+       
+	   
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_senders','edit_senders']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				 $v = "add-sender";
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+		
+    }
+	
+	/**
+	 * Handle add sender.
+	 *
+	 * @return Response
+	 */
+	public function postAddSender(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_senders','edit_senders']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				
+				  #dd($req);
+				
+				  $validator = Validator::make($req,[
+                    'server' => 'required|not_in:none',
+                    'name' => 'required',
+                    'username' => 'required'
+		                   ]);
+						
+				 if($validator->fails())
+                 {
+                   session()->flash("validation-status-error","ok");
+			       return redirect()->back()->withInput();
+                 }
+				 else
+				 {
+		         	$dt = ['type' => $req['server'],'sn' => $req['name'],'su' => $req['username'],'spp' => $req['password']];
+         
+					 if($req['server'] == "other")
+					 {
+						$v = isset($req['ss']) && isset($req['sp']) && isset($req['sec']) && $req['sec'] != "nonee";
+						if($v)
+						{
+							$dt['ss'] = $req['ss'];
+							$dt['sp'] = $req['sp'];
+							$dt['sec'] = $req['sec'];
+						}
+						else
+						{
+							session()->flash("validation-status-error", "success"); 
+							return redirect()->back()->withInput();
+						}
+					 }
+					else
+		            {
+		            	$smtp = $this->helpers->smtpp[$req['server']];
+		                $dt['ss'] = $smtp['ss'];
+							$dt['sp'] = $smtp['sp'];
+							$dt['sec'] = $smtp['sec'];
+		            }
+            
+		            $dt['se'] = $dt['su'];
+		            $dt['sa'] = "yes";
+		            $dt['current'] = "no";
+		            $ret = $this->helpers->createSender($dt);
+					$ss = "add-sender-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->intended("senders");
+				 }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+    
+         /**
+	 * Show the Senders view.
+	 *
+	 * @return Response
+	 */
+	 	public function getSenders(Request $request)
+	     {
+	 		$user = null;
+	 		$nope = false;
+	 		$v = "";
+		
+	 		$signals = $this->helpers->signals;
+	 		$plugins = $this->helpers->getPlugins();
+	 		$cpt = ['user','signals','plugins'];
+       
+	   
+	 		if(Auth::check())
+	 		{
+			
+	 			$user = Auth::user();
+			
+	 			if($this->helpers->isAdmin($user))
+	 			{
+	 				$hasPermission = $this->helpers->hasPermission($user->id,['view_senders','edit_senders']);
+	 				#dd($hasPermission);
+	 				$req = $request->all();
+				
+	 				if($hasPermission)
+	 				{
+						$senders = $this->helpers->getSenders();
+						array_push($cpt,'senders');
+	 				    $v = "senders";
+	 				}
+	 				else
+	 				{
+	 					session()->flash("permissions-status-error","ok");
+	 					return redirect()->intended('/');
+	 				}				
+	 			}
+	 			else
+	 			{
+	 				Auth::logout();
+	 				$u = url('/');
+	 				return redirect()->intended($u);
+	 			}
+	 		}
+	 		else
+	 		{
+	 			$v = "login";
+	 		}
+	 		return view($v,compact($cpt));
+		
+	     }
+		 
+         /**
+	 * Show the Sender view.
+	 *
+	 * @return Response
+	 */
+	 	public function getSender(Request $request)
+	     {
+	 		$user = null;
+	 		$nope = false;
+	 		$v = "";
+		
+	 		$signals = $this->helpers->signals;
+	 		$plugins = $this->helpers->getPlugins();
+	 		$cpt = ['user','signals','plugins'];
+       
+	   
+	 		if(Auth::check())
+	 		{
+			
+	 			$user = Auth::user();
+			
+	 			if($this->helpers->isAdmin($user))
+	 			{
+	 				$hasPermission = $this->helpers->hasPermission($user->id,['view_senders','edit_senders']);
+	 				#dd($hasPermission);
+	 				$req = $request->all();
+				
+	 				if($hasPermission)
+	 				{
+						$req = $request->all();
+						
+				        $validator = Validator::make($req, [                          
+				                             's' => 'required'
+				         ]);
+         
+				         if($validator->fails())
+				         {
+				         	return redirect()->intended('senders');
+				         }
+						else
+						{
+						   $s = $this->helpers->getSender($req['s']);
+						   array_push($cpt,'s');
+	 				       $v = "sender";
+					    }
+	 				}
+	 				else
+	 				{
+	 					session()->flash("permissions-status-error","ok");
+	 					return redirect()->intended('/');
+	 				}				
+	 			}
+	 			else
+	 			{
+	 				Auth::logout();
+	 				$u = url('/');
+	 				return redirect()->intended($u);
+	 			}
+	 		}
+	 		else
+	 		{
+	 			$v = "login";
+	 		}
+	 		return view($v,compact($cpt));
+		
+	     }
+		 
+		 
+	 	/**
+	 	 * Handle update sender.
+	 	 *
+	 	 * @return Response
+	 	 */
+	 	public function postSender(Request $request)
+	     {
+	 		$user = null;
+	 		if(Auth::check())
+	 		{
+	 			$user = Auth::user();
+			
+	 			if($this->helpers->isAdmin($user))
+	 			{
+	 				$hasPermission = $this->helpers->hasPermission($user->id,['view_senders','edit_senders']);
+	 				#dd($hasPermission);
+	 				$req = $request->all();
+				
+	 				if($hasPermission)
+	 				{
+				
+	 				  #dd($req);
+				
+	 				  $validator = Validator::make($req,[
+	                     'server' => 'required|not_in:none',
+	                     'name' => 'required',
+	                     'username' => 'required'
+	 		                   ]);
+						
+	 				 if($validator->fails())
+	                  {
+	                    session()->flash("validation-status-error","ok");
+	 			       return redirect()->back()->withInput();
+	                  }
+	 				 else
+	 				 {
+	 		         	$dt = ['type' => $req['server'],'sn' => $req['name'],'su' => $req['username'],'spp' => $req['password']];
+         
+	 					 if($req['server'] == "other")
+	 					 {
+	 						$v = isset($req['ss']) && isset($req['sp']) && isset($req['sec']) && $req['sec'] != "nonee";
+	 						if($v)
+	 						{
+	 							$dt['ss'] = $req['ss'];
+	 							$dt['sp'] = $req['sp'];
+	 							$dt['sec'] = $req['sec'];
+	 						}
+	 						else
+	 						{
+	 							session()->flash("validation-status-error", "success"); 
+	 							return redirect()->back()->withInput();
+	 						}
+	 					 }
+	 					else
+	 		            {
+	 		            	$smtp = $this->helpers->smtpp[$req['server']];
+	 		                $dt['ss'] = $smtp['ss'];
+	 							$dt['sp'] = $smtp['sp'];
+	 							$dt['sec'] = $smtp['sec'];
+	 		            }
+            
+	 		            $dt['se'] = $dt['su'];
+	 		            $dt['sa'] = "yes";
+	 		            $dt['current'] = "no";
+	 		            $ret = $this->helpers->createSender($dt);
+	 					$ss = "add-sender-status";
+	 					if($ret == "error") $ss .= "-error";
+	 					session()->flash($ss,"ok");
+	 			        return redirect()->intended("senders");
+	 				 }
+	 				}
+	 				else
+	 				{
+	 					session()->flash("permissions-status-error","ok");
+	 					return redirect()->intended("/");
+	 				}
+	 			}
+	 			else
+	 			{
+	 				Auth::logout();
+	 				$u = url('/');
+	 				return redirect()->intended($u);
+	 			}
+	 		}
+	 		else
+	 		{
+	 			return redirect()->intended('/');
+	 		}
+	     }
+		 
+		 
+         /**
+	 * Handle Remove Sender.
+	 *
+	 * @return Response
+	 */
+	 	public function getRemoveSender(Request $request)
+	     {
+	 		$user = null;
+	 		$nope = false;
+	 		$v = "";
+		
+	 		$signals = $this->helpers->signals;
+	 		$plugins = $this->helpers->getPlugins();
+	 		$cpt = ['user','signals','plugins'];
+       
+	   
+	 		if(Auth::check())
+	 		{
+			
+	 			$user = Auth::user();
+			
+	 			if($this->helpers->isAdmin($user))
+	 			{
+	 				$hasPermission = $this->helpers->hasPermission($user->id,['view_senders','edit_senders']);
+	 				#dd($hasPermission);
+	 				$req = $request->all();
+				
+	 				if($hasPermission)
+	 				{
+						$req = $request->all();
+						
+				        $validator = Validator::make($req, [                          
+				                             's' => 'required'
+				         ]);
+         
+				         if($validator->fails())
+				         {
+				         	return redirect()->intended('senders');
+				         }
+						else
+						{
+						   $this->helpers->removeSender($req['s']);
+   	 					   $ss = "remove-sender-status";
+   	 					   session()->flash($ss,"ok");
+   	 			           return redirect()->intended("senders");
+					    }
+	 				}
+	 				else
+	 				{
+	 					session()->flash("permissions-status-error","ok");
+	 					return redirect()->intended('/');
+	 				}				
+	 			}
+	 			else
+	 			{
+	 				Auth::logout();
+	 				$u = url('/');
+	 				return redirect()->intended($u);
+	 			}
+	 		}
+	 		else
+	 		{
+	 			$v = "login";
+	 		}
+	 		return view($v,compact($cpt));
+		
+	     }
+		 
+		 
+         /**
+	 * Handle Remove Sender.
+	 *
+	 * @return Response
+	 */
+	 	public function getMarkSender(Request $request)
+	     {
+	 		$user = null;
+	 		$nope = false;
+	 		$v = "";
+		
+	 		$signals = $this->helpers->signals;
+	 		$plugins = $this->helpers->getPlugins();
+	 		$cpt = ['user','signals','plugins'];
+       
+	   
+	 		if(Auth::check())
+	 		{
+			
+	 			$user = Auth::user();
+			
+	 			if($this->helpers->isAdmin($user))
+	 			{
+	 				$hasPermission = $this->helpers->hasPermission($user->id,['view_senders','edit_senders']);
+	 				#dd($hasPermission);
+	 				$req = $request->all();
+				
+	 				if($hasPermission)
+	 				{
+						$req = $request->all();
+						
+				        $validator = Validator::make($req, [                          
+				                             's' => 'required'
+				         ]);
+         
+				         if($validator->fails())
+				         {
+				         	return redirect()->intended('senders');
+				         }
+						else
+						{
+						   $this->helpers->setAsCurrentSender($req['s']);
+   	 					   $ss = "mark-sender-status";
+   	 					   session()->flash($ss,"ok");
+   	 			           return redirect()->intended("senders");
+					    }
+	 				}
+	 				else
+	 				{
+	 					session()->flash("permissions-status-error","ok");
+	 					return redirect()->intended('/');
+	 				}				
+	 			}
+	 			else
+	 			{
+	 				Auth::logout();
+	 				$u = url('/');
+	 				return redirect()->intended($u);
+	 			}
+	 		}
+	 		else
+	 		{
+	 			$v = "login";
+	 		}
+	 		return view($v,compact($cpt));
+		
+	     }
+	
+	
 	/**
 	 * Show list of transactions on the platform.
 	 *
