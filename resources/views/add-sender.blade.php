@@ -9,7 +9,7 @@ $subtitle = "Add SMTP sender.";
 
 
 @section('page-header')
-@include('page-header',['title' => "Banners",'subtitle' => $title])
+@include('page-header',['title' => "Add SMTP Sender",'subtitle' => $title])
 @stop
 
 
@@ -27,7 +27,7 @@ $subtitle = "Add SMTP sender.";
 										  <div class="col-md-12">
 										  <div class="form-group">
                                             <h4>Full Name</h4>
-                                            <input type="text" class="form-control" name="name" id="as-name" placeholder="Sender name e.g Ace Luxury Store" value="Ace Luxury Store" required/>
+                                            <input type="text" class="form-control" name="name" id="as-name" placeholder="Sender name e.g Etuk NG" value="Etuk NG" required/>
 										  </div>
 										</div>
 										
