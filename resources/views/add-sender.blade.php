@@ -1,5 +1,4 @@
 <?php
-
 $title = "Add Sender";
 $subtitle = "Add SMTP sender.";
 ?>
@@ -50,36 +49,30 @@ $subtitle = "Add SMTP sender.";
 											</div>
 				                        </div>
 										
-									      <div id="as-other">
-										<div class="col-md-12">
-				                            <div class="form-group">
+									      <div class="col-md-12" id="as-other">
+										    <div class="form-group">
                                             <h4>SMTP host</h4>
                                             <input type="text" class="form-control" name="ss" id="as-server" placeholder="Server address e.g smtp.gmail.com"/>
 											</div>
-				                        </div>
-										<div class="col-md-12">
 				                            <div class="form-group">
                                             <h4>SMTP port</h4>
                                             <input type="number" class="form-control" name="sp" id="as-sp" placeholder="Port e.g 587" value="587"/>
 											</div>
-				                        </div>
-										<div class="col-md-12">
 				                            <div class="form-group">
-                                            <h4>SMTP encryption</h4>
-		  							      <select class="form-control" name="sec" id="as-sec" style="margin-bottom: 5px;">
-		  							        <option value="nonee">Select encryption</option>
-		  								    <?php
-		  								     $secs = ['tls' => "TLS",'ssl' => "SSL",'none' => "No encryption"];
-		  								     foreach($secs as $key => $value){
-		  								    ?>
-		  								    <option value="{{$key}}">{{$value}}</option>
-		  								    <?php
-		  								    }
-		  								    ?>
-		  							      </select>
-											</div>
-				                        </div>
-									  </div>
+                                              <h4>SMTP encryption</h4>
+		  							          <select class="form-control" name="sec" id="as-sec" style="margin-bottom: 5px;">
+		  							          <option value="nonee">Select encryption</option>
+		  								      <?php
+		  								       $secs = ['tls' => "TLS",'ssl' => "SSL",'none' => "No encryption"];
+		  								       foreach($secs as $key => $value){
+		  								      ?>
+		  								      <option value="{{$key}}">{{$value}}</option>
+		  								      <?php
+		  								      }
+		  								      ?>
+		  							          </select>
+										    </div>
+									      </div>
 									    </div>   
 										
 										<div class="row">
