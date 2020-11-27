@@ -587,7 +587,7 @@ class MainController extends Controller {
 				$v = "reviews";
 				$req = $request->all();
                 $reviews = $this->helpers->getAllReviews();
-				#dd($reviews);
+				dd($reviews);
                 array_push($cpt,'reviews');
                 }
 				else
