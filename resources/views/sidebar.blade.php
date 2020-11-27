@@ -82,12 +82,22 @@
                                     </ul>
                                 </div>
                             </li>
-							<li class="nav-item">
+			    <li class="nav-item">
                                 <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-fw fa-plug"></i>Plugins</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{url('plugins')}}">View plugins</a>
+                                        </li>     
+                                    </ul>
+                                </div>
+                            </li>
+			    <li class="nav-item">
+                                <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8" aria-controls="submenu-8"><i class="fas fa-fw fa-inbox"></i>Senders</a>
+                                <div id="submenu-8" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{url('senders')}}">View senders</a>
                                         </li>     
                                     </ul>
                                 </div>
