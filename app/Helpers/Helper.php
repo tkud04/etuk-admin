@@ -952,7 +952,8 @@ function isDuplicateUser($data)
 				 else
 			     {
 			    	// $lead->update(["status" =>"pending"]);
-			     }**/
+			     }
+				 **/
 			    }
 				
               return $ret; 
@@ -1438,6 +1439,8 @@ function updateApartment($data)
 		  $at = ApartmentTerms::where('id',$id)
 	                         ->orWhere('apartment_id',$id)->first();
 		  
+		  $reviews = Reviews::where('apartment_id',$id)->get();
+		  
           if($aa != null) $aa->delete();		  
           if($af != null)
 		  {
@@ -1450,6 +1453,12 @@ function updateApartment($data)
 			foreach($am as $amm) $amm->update(['deleted' => "yes"]);  
 		  }		  
           if($at != null) $at->delete();
+		  
+          if($reviews != null)
+		  {
+			 #dd($am);
+			foreach($reviews as $r) $this->removeReview(['xf' => $r->id]);  
+		  }	
 		  
 		  $apartment->delete();
 	  }
@@ -1649,6 +1658,8 @@ function updateApartment($data)
 			   
 			   if($r != null)
 			   {
+				   $rs = ReviewStats::where('review_id',$r->id)->first();
+				   if($rs != null) $rs->delete();
 				   $r->delete();
 				   $ret = "ok";
 			   }
