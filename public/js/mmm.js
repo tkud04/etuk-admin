@@ -9,7 +9,8 @@ $(document).ready(function() {
 	          "#login-loading","#login-finish",
 			  "#fp-loading","#fp-finish",
 			  "#rp-loading","#rp-finish",
-			  "#apt-chat-loading","#apt-chat-finish","#message-reply-loading"
+			  "#apt-chat-loading","#apt-chat-finish","#message-reply-loading",
+                          "#as-other"
 			  ]);
 	
 	
@@ -68,11 +69,14 @@ $(document).ready(function() {
 			   }
 			   
 			   if(valid){
-				 $('#add-sender-form'). submit();
+				 $('#as-form'). submit();
 			    //updateDeliveryFees({d1: d1, d2: d2});  
 			   }
 			   else{
-				   alert("Please fill all required fields");
+				   Swal.fire({
+			            icon: 'error',
+                                    title: "Please fill all the required fields"
+                                   })
 			   }
              
 		  });
