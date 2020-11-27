@@ -12,12 +12,70 @@ $(document).ready(function() {
 			  "#apt-chat-loading","#apt-chat-finish","#message-reply-loading"
 			  ]);
 	
+	
+	
 	/**
 	//Init wysiwyg editors
 	Simditor.locale = 'en-US';
 	let aptDescriptionTextArea = $('#add-apartment-description');
 	//console.log('area: ',aptDescriptionTextArea);
 	**/
+	
+    
+     $('#spp-show').click((e) => {
+	   e.preventDefault();
+	   let spps = $('#spp-s').val();
+	   
+	   if(spps == "hide"){
+		   $('#as-password').attr('type',"password");
+		   $('#spp-show').html("Show");
+		   $('#spp-s').val("show");
+	   }
+	   else{
+		   $('#as-password').attr('type',"text");
+		   $('#spp-show').html("Hide");
+		   $('#spp-s').val("hide");
+	   }
+   });
+		
+		$("#server").change((e) =>{
+			e.preventDefault();
+			let server = $("#server").val();
+			console.log("server: ",server);
+			
+			if(server == "other"){
+				$('#as-other').fadeIn();     
+            }
+            else{
+				$('#as-other').hide();     
+            }
+			
+		});
+		 $("#add-sender-submit").click(function(e){            
+		       e.preventDefault();
+			   let valid = true;
+			   let name = $('#as-name').val(), username = $('#as-username').val(),
+			   pass = $('#as-password').val(), s = $('#server').val(),
+			   ss = $('#as-server').val(), sp = $('#as-sp').val(), sec = $('#as-sec').val();
+			   
+			   if(name == "" || username == "" || pass == "" || s == "none"){
+				   valid = false;
+			   }
+			   else{
+				   if(s == "other"){
+					   if(ss == "" || sp == "" || sec == "nonee") valid = false;
+				   }
+			   }
+			   
+			   if(valid){
+				 $('#add-sender-form'). submit();
+			    //updateDeliveryFees({d1: d1, d2: d2});  
+			   }
+			   else{
+				   alert("Please fill all required fields");
+			   }
+             
+		  });
 	
 	
     $("a.lno-cart").on("click", function(e) {
