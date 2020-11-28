@@ -34,6 +34,7 @@ $subtitle = "View all Frequently Asked Questions";
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <h5 class="card-header">FAQs</h5>
+			    <a href="{{url('add-faq')}}" class="btn btn-outline-secondary">Add FAQ</a>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
@@ -54,7 +55,7 @@ $subtitle = "View all Frequently Asked Questions";
 											   {
 												   
 											   $uu = "javascript:void(0)";
-											   $du = url('remove-tag')."?xf=".$f['id'];
+											   $du = url('remove-faq')."?xf=".$f['id'];
 									        ?>
                                             <tr>
                                                <td>{{$f['tag']}}</td>
@@ -62,8 +63,8 @@ $subtitle = "View all Frequently Asked Questions";
                                                 <td><em>{{$f['answer']}}</em></td>
                                                 <td>{{$f['date']}}</td>
                                                 <td>
-												 <a class="btn btn-info btn-sm" href="{{$uu}}">Edit</a>
-												 <a class="btn btn-danger btn-sm" href="{{$du}}">Remove</a>
+												 <a class="btn btn-outline-primary" href="{{$uu}}">Edit</a>
+												 <a class="btn btn-outline-danger" href="{{$du}}">Remove</a>
 												 </td>
                                             </tr>
 									     <?php
