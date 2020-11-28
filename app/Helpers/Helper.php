@@ -37,6 +37,8 @@ use App\ApartmentPreferences;
 use App\Permissions;
 use App\Tickets;
 use App\TicketItems;
+use App\FAQs;
+use App\FAQTags;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -87,6 +89,11 @@ class Helper implements HelperContract
 					 "add-banner-status" => "Banner image uploaded.",
 					 "update-banner-status" => "Banner info updated.",
 					 "remove-banner-status" => "Banner image removed.",
+					 "add-faq-status" => "FAQ added.",
+					 "update-faq-status" => "FAQ updated.",
+					 "remove-faq-status" => "FAQ removed.",
+					 "add-faq-tag-status" => "FAQ tag added.",
+					 "remove-faq-tag-status" => "FAQ tag removed.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -116,6 +123,11 @@ class Helper implements HelperContract
 					 "add-banner-status-error" => "Banner could not be created, please try again",
 					 "update-banner-status-error" => "Banner could not be updated, please try again",
 					 "remove-banner-status-error" => "Banner could not be removed, please try again",
+					 "add-faq-status-error" => "FAQ could not be added, please try again.",
+					 "update-faq-status-error" => "FAQ could not be uodated, please try again.",
+					 "remove-faq-status-error" => "FAQ could not be removed, please try again.",
+					 "add-faq-tag-status-error" => "FAQ tag could not be added, please try again.",
+					 "remove-faq-tag-status-error" => "FAQ tag could not be removed, please try again.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -3919,6 +3931,176 @@ function createSocial($data)
 				   $s->update(['current' => "yes"]);
 			   }
 		   }
+		   
+		   
+	   	function createFAQ($data)
+	              {
+	   			   #dd($data);
+	   			 $ret = null;
+			 
+			 
+	   				 $ret = FAQs::create(['tag' => $data['tag'], 
+	                                                         'question' => $data['question'], 
+	                                                         'answer' => $data['answer']
+	                                                         ]);
+	   			  return $ret;
+	              }
+
+	      function getFAQs()
+	      {
+	   	   $ret = [];
+	   
+	   	   $faqs = FAQs::where('id','>',"0")->get();
+	   
+	   	   if(!is_null($faqs))
+	   	   {
+	   		   foreach($faqs as $f)
+	   		   {
+	   		     $temp = $this->getFAQ($f->id);
+	   		     array_push($ret,$temp);
+	   	       }
+	   	   }
+	   
+	   	   return $ret;
+	      }
+		  
+	 	 function getFAQ($id)
+	            {
+	            	$ret = [];
+	                $f = FAQs::where('id',$id)->first();
+ 
+	               if($f != null)
+	                {
+	                    	$temp['tag'] = $f->tag; 
+	                        $temp['question'] = $f->question; 
+	                        $temp['answer'] = $f->answer;
+	                        $temp['date'] = $f->created_at->format("jS F, Y"); 
+	                        $ret = $temp; 
+	                }                          
+                                                      
+	                 return $ret;
+	            }
+   
+  
+		   
+		   
+	   		  function updateFAQ($data)
+	              {
+	   			   #dd($data);
+	   			 $ret = "error";
+                 $f = FAQs::where('id',$data['xf'])->first();
+			 
+			 
+	   			 if(!is_null($f))
+	   			 {
+	   				 $s->update(['tag' => $data['tag'], 
+	                                                         'question' => $data['question'], 
+	                                                         'answer' => $data['answer']
+	                                                         ]);
+	   			   $ret = "ok";
+	   			 }
+           	
+                                                      
+	                   return $ret;
+	              }
+
+	   		   function removeFAQ($xf)
+	              {
+	   			    #dd($data);
+	   			    $ret = "error";
+	   			    $f = FAQs::where('id',$data['xf'])->first();
+			 
+			 
+	   			    if(!is_null($f))
+	   			    {
+	   				  $f->delete();
+	   			      $ret = "ok";
+	   			    }
+           
+	              }
+				  
+		  	   	function createFAQTag($data)
+		  	              {
+		  	   			   #dd($data);
+		  	   			 $ret = null;
+			 
+			 
+		  	   				 $ret = FAQTags::create(['tag' => $data['tag'], 
+		  	                                                         'name' => $data['name']
+		  	                                                         ]);
+		  	   			  return $ret;
+		  	              }
+
+		  	      function getFAQTags()
+		  	      {
+		  	   	   $ret = [];
+	   
+		  	   	   $tags = FAQTags::where('id','>',"0")->get();
+	   
+		  	   	   if(!is_null($tags))
+		  	   	   {
+		  	   		   foreach($tags as $t)
+		  	   		   {
+		  	   		     $temp = $this->getFAQTag($t->id);
+		  	   		     array_push($ret,$temp);
+		  	   	       }
+		  	   	   }
+	   
+		  	   	   return $ret;
+		  	      }
+				  
+		 	 	 function getFAQTag($id)
+		 	            {
+		 	            	$ret = [];
+		 	                $t = FAQTags::where('id',$id)->first();
+ 
+		 	               if($t != null)
+		 	                {
+		 	                    	$temp['tag'] = $t->tag; 
+		 	                        $temp['name'] = $t->name; 
+		 	                        $temp['date'] = $t->created_at->format("jS F, Y"); 
+		 	                        $ret = $temp; 
+		 	                }                          
+                                                      
+		 	                 return $ret;
+		 	            }
+   
+  
+		   
+		   
+		 	   		  function updateFAQTag($data)
+		 	              {
+		 	   			   #dd($data);
+		 	   			 $ret = "error";
+		                  $t = FAQTags::where('id',$id)->first();
+			 
+			 
+		 	   			 if(!is_null($t))
+		 	   			 {
+		 	   				 $t->update(['tag' => $data['tag'], 
+		 	                                                         'name' => $data['name']
+		 	                                                         ]);
+		 	   			   $ret = "ok";
+		 	   			 }
+           	
+                                                      
+		 	                   return $ret;
+		 	              }
+
+		 	   		   function removeFAQTag($xf)
+		 	              {
+		 	   			    #dd($data);
+		 	   			    $ret = "error";
+		 	   			    $t = FAQTags::where('id',$data['xf'])->first();
+			 
+			 
+		 	   			    if(!is_null($f))
+		 	   			    {
+		 	   				  $t->delete();
+		 	   			      $ret = "ok";
+		 	   			    }
+           
+		 	              }
 		   
 
    
