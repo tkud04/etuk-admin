@@ -37,8 +37,8 @@ use App\ApartmentPreferences;
 use App\Permissions;
 use App\Tickets;
 use App\TicketItems;
-use App\FAQs;
-use App\FAQTags;
+use App\Faqs;
+use App\FaqTags;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -3939,7 +3939,7 @@ function createSocial($data)
 	   			 $ret = null;
 			 
 			 
-	   				 $ret = FAQs::create(['tag' => $data['tag'], 
+	   				 $ret = Faqs::create(['tag' => $data['tag'], 
 	                                                         'question' => $data['question'], 
 	                                                         'answer' => $data['answer']
 	                                                         ]);
@@ -3950,7 +3950,7 @@ function createSocial($data)
 	      {
 	   	   $ret = [];
 	   
-	   	   $faqs = FAQs::where('id','>',"0")->get();
+	   	   $faqs = Faqs::where('id','>',"0")->get();
 	   
 	   	   if(!is_null($faqs))
 	   	   {
@@ -3967,7 +3967,7 @@ function createSocial($data)
 	 	 function getFAQ($id)
 	            {
 	            	$ret = [];
-	                $f = FAQs::where('id',$id)->first();
+	                $f = Faqs::where('id',$id)->first();
  
 	               if($f != null)
 	                {
@@ -3988,7 +3988,7 @@ function createSocial($data)
 	              {
 	   			   #dd($data);
 	   			 $ret = "error";
-                 $f = FAQs::where('id',$data['xf'])->first();
+                 $f = Faqs::where('id',$data['xf'])->first();
 			 
 			 
 	   			 if(!is_null($f))
@@ -4008,7 +4008,7 @@ function createSocial($data)
 	              {
 	   			    #dd($data);
 	   			    $ret = "error";
-	   			    $f = FAQs::where('id',$data['xf'])->first();
+	   			    $f = Faqs::where('id',$data['xf'])->first();
 			 
 			 
 	   			    if(!is_null($f))
@@ -4025,7 +4025,7 @@ function createSocial($data)
 		  	   			 $ret = null;
 			 
 			 
-		  	   				 $ret = FAQTags::create(['tag' => $data['tag'], 
+		  	   				 $ret = FaqTags::create(['tag' => $data['tag'], 
 		  	                                                         'name' => $data['name']
 		  	                                                         ]);
 		  	   			  return $ret;
@@ -4035,7 +4035,7 @@ function createSocial($data)
 		  	      {
 		  	   	   $ret = [];
 	   
-		  	   	   $tags = FAQTags::where('id','>',"0")->get();
+		  	   	   $tags = FaqTags::where('id','>',"0")->get();
 	   
 		  	   	   if(!is_null($tags))
 		  	   	   {
@@ -4052,7 +4052,7 @@ function createSocial($data)
 		 	 	 function getFAQTag($id)
 		 	            {
 		 	            	$ret = [];
-		 	                $t = FAQTags::where('id',$id)->first();
+		 	                $t = FaqTags::where('id',$id)->first();
  
 		 	               if($t != null)
 		 	                {
@@ -4072,7 +4072,7 @@ function createSocial($data)
 		 	              {
 		 	   			   #dd($data);
 		 	   			 $ret = "error";
-		                  $t = FAQTags::where('id',$id)->first();
+		                  $t = FaqTags::where('id',$id)->first();
 			 
 			 
 		 	   			 if(!is_null($t))
@@ -4091,7 +4091,7 @@ function createSocial($data)
 		 	              {
 		 	   			    #dd($data);
 		 	   			    $ret = "error";
-		 	   			    $t = FAQTags::where('id',$data['xf'])->first();
+		 	   			    $t = FaqTags::where('id',$data['xf'])->first();
 			 
 			 
 		 	   			    if(!is_null($f))
