@@ -3971,6 +3971,7 @@ function createSocial($data)
  
 	               if($f != null)
 	                {
+                                $temp['id'] = $f->id; 
 	                    	$temp['tag'] = $f->tag; 
 	                        $temp['question'] = $f->question; 
 	                        $temp['answer'] = $f->answer;
@@ -4057,6 +4058,7 @@ function createSocial($data)
 		 	               if($t != null)
 		 	                {
 		 	                    	$temp['tag'] = $t->tag; 
+                                                $temp['id'] = $t->id; 
 		 	                        $temp['name'] = $t->name; 
 		 	                        $temp['date'] = $t->created_at->format("jS F, Y"); 
 		 	                        $ret = $temp; 
