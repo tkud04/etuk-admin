@@ -41,10 +41,10 @@ $subtitle = "Add a question/answer pair to FAQs";
                                             <select class="form-control" name="tag" id="faq-tag" style="margin-bottom: 5px;">
 							                  <option value="none">Select tag</option>
 								           <?php
-								              foreach($tags as $key => $value){
+								              foreach($tags as $t){
 									      	 
 								           ?>
-								              <option value="{{$key}}">{{$value}}</option>
+								              <option value="{{$t['tag']}}">{{$t['name']}}</option>
 								           <?php
 								           }
 								           ?>
