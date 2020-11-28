@@ -82,6 +82,17 @@ Route::post('sender', 'MainController@postSender');
 Route::get('remove-sender', 'MainController@getRemoveSender');
 Route::get('mark-sender', 'MainController@getMarkSender');
 
+//FAQs
+Route::get('faqs', 'MainController@getFAQs');
+Route::get('add-faq', 'MainController@getAddFAQ');
+Route::post('add-faq', 'MainController@postAddFAQ');
+Route::get('faq', 'MainController@getUpdateFAQ');
+Route::get('remove-faq', 'MainController@getRemoveFAQ');
+Route::get('faq-tags', 'MainController@getFAQTags');
+Route::get('add-faq-tag', 'MainController@getAddFAQTag');
+Route::post('add-faq-tag', 'MainController@postAddFAQTag');
+Route::get('remove-faq-tag', 'MainController@getRemoveFAQTag');
+
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');
 
