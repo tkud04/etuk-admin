@@ -323,5 +323,30 @@ $(document).ready(function() {
 	   
 	   
     });
+    
+    //ADD FAQ
+	$("#faq-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let tag = $('#faq-tag').val(), question = $('#faq-question').val(), 
+       answer = $('#faq-answer').val(), validation = (question == "" || answer == "" || tag == "none");
+	        
+	        
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
+	   }
+	   
+	   else{	 
+		 $('#faq-form').submit();
+	   }
+	   
+	   
+    });
+    
+    
 	
 });
