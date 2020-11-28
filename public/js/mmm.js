@@ -342,9 +342,27 @@ $(document).ready(function() {
 	   
 	   else{	 
 		 $('#faq-form').submit();
+	   }   
+    });
+    
+    $("#faq-tag-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let tag = $('#faq-tag').val(), name = $('#faq-name').val(), 
+       validation = (name == "" || tag == "");
+	        
+	        
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
 	   }
 	   
-	   
+	   else{	 
+		 $('#faq-tag-form').submit();
+	   }   
     });
     
     
