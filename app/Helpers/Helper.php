@@ -39,6 +39,7 @@ use App\Tickets;
 use App\TicketItems;
 use App\Faqs;
 use App\FaqTags;
+use App\Posts;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -4103,6 +4104,94 @@ function createSocial($data)
 		 	   			    }
            
 		 	              }
+						  
+						  function createPost($data)
+	              {
+	   			   #dd($data);
+	   			 $ret = null;
+			 
+			 
+	   				 $ret = Faqs::create(['tag' => $data['tag'], 
+	                                                         'question' => $data['question'], 
+	                                                         'answer' => $data['answer']
+	                                                         ]);
+	   			  return $ret;
+	              }
+
+	      function getPosts()
+	      {
+	   	   $ret = [];
+	   
+	   	   $posts = Posts::where('id','>',"0")->get();
+	   
+	   	   if(!is_null($posts))
+	   	   {
+			   $posts = $posts->sortByDesc('created_at');	
+	   		   foreach($posts as $p)
+	   		   {
+	   		     $temp = $this->getPost($p->id);
+	   		     array_push($ret,$temp);
+	   	       }
+	   	   }
+	   
+	   	   return $ret;
+	      }
+		  
+	 	 function getPost($id)
+	            {
+	            	$ret = [];
+	                $f = Faqs::where('id',$id)->first();
+ 
+	               if($f != null)
+	                {
+                                $temp['id'] = $f->id; 
+	                    	$temp['tag'] = $f->tag; 
+	                        $temp['question'] = $f->question; 
+	                        $temp['answer'] = $f->answer;
+	                        $temp['date'] = $f->created_at->format("jS F, Y"); 
+	                        $ret = $temp; 
+	                }                          
+                                                      
+	                 return $ret;
+	            }
+   
+  
+		   
+		   
+	   		  function updatePost($data)
+	              {
+	   			   #dd($data);
+	   			 $ret = "error";
+                 $f = Faqs::where('id',$data['xf'])->first();
+			 
+			 
+	   			 if(!is_null($f))
+	   			 {
+	   				 $s->update(['tag' => $data['tag'], 
+	                                                         'question' => $data['question'], 
+	                                                         'answer' => $data['answer']
+	                                                         ]);
+	   			   $ret = "ok";
+	   			 }
+           	
+                                                      
+	                   return $ret;
+	              }
+
+	   		   function removePost($xf)
+	              {
+	   			    #dd($data);
+	   			    $ret = "error";
+	   			    $f = Faqs::where('id',$data['xf'])->first();
+			 
+			 
+	   			    if(!is_null($f))
+	   			    {
+	   				  $f->delete();
+	   			      $ret = "ok";
+	   			    }
+           
+	              }
 		   
 
    
