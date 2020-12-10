@@ -364,6 +364,37 @@ $(document).ready(function() {
 		 $('#faq-tag-form').submit();
 	   }   
     });
+	
+	$("#abp-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let title = $('#ap-title').val(), url = $('#ap-url').val(), description = $('#ap-description').val(), 
+	     apImages = $(`#ap-images input[type=file]`), emptyImage = false, validation = (title == "" || url == "" || description == "");
+			
+	     for(let i = 0; i < apImages.length; i++){
+			   if(apImages[i].files.length < 1) emptyImage = true;
+		   }
+       
+	        
+	        
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
+	   }
+	   else if(emptyImage){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please upload an image."
+           })
+	   }
+	   
+	   else{	 
+		 $('#abp-form').submit();
+	   }   
+    });
     
     
 	
