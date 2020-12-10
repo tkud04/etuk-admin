@@ -93,6 +93,15 @@ Route::get('add-faq-tag', 'MainController@getAddFAQTag');
 Route::post('add-faq-tag', 'MainController@postAddFAQTag');
 Route::get('remove-faq-tag', 'MainController@getRemoveFAQTag');
 
+//Posts
+Route::get('posts', 'MainController@getPosts');
+Route::get('add-post', 'MainController@getAddPost');
+Route::post('add-post', 'MainController@postAddPost');
+Route::get('post', 'MainController@getUpdatePost');
+Route::post('post', 'MainController@postUpdatePost');
+Route::get('remove-post', 'MainController@getRemovePost');
+
+
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');
 
