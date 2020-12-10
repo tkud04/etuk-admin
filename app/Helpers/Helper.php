@@ -40,6 +40,9 @@ use App\TicketItems;
 use App\Faqs;
 use App\FaqTags;
 use App\Posts;
+use App\PostTags;
+use App\Comments;
+use App\Tags;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -227,7 +230,8 @@ public $smtpp = [
 	   'view_tickets','edit_tickets',
 	   'view_banners','edit_banners',
 	   'view_plugins','edit_plugins',
-	    'view_senders','edit_senders'
+	    'view_senders','edit_senders',
+	    'view_posts','edit_posts'
 	   ];
   
   public $adminEmail = "aquarius4tkud@yahoo.com";
@@ -2573,7 +2577,7 @@ function createSocial($data)
 		   
 		   
 		   
-		   function getOrder($ref)
+		   function getOrder($ref,$optionalParams=[])
            {
            	$ret = [];
 
@@ -2582,9 +2586,11 @@ function createSocial($data)
 			  #dd($o);
               if($o != null)
                {
+				    $guest = isset($optionalParams['guest']) ? $optionalParams['guest'] : false;
 				  $temp = [];
                   $temp['id'] = $o->id;
                   $temp['user_id'] = $o->user_id;
+				  if($guest) $temp['guest'] = $this->getUser($o->user_id);
                   $temp['reference'] = $o->reference;
                   $temp['amount'] = $o->amount;
                   $temp['type'] = $o->type;
@@ -4111,9 +4117,12 @@ function createSocial($data)
 	   			 $ret = null;
 			 
 			 
-	   				 $ret = Faqs::create(['tag' => $data['tag'], 
-	                                                         'question' => $data['question'], 
-	                                                         'answer' => $data['answer']
+	   				 $ret = Posts::create(['title' => $data['title'], 
+	                                                         'author' => $data['author'], 
+	                                                         'content' => $data['content'],
+	                                                         'url' => $data['url'],
+	                                                         'img' => $data['img'],
+	                                                         'status' => "enabled"
 	                                                         ]);
 	   			  return $ret;
 	              }
@@ -4140,15 +4149,18 @@ function createSocial($data)
 	 	 function getPost($id)
 	            {
 	            	$ret = [];
-	                $f = Faqs::where('id',$id)->first();
+	                $p = Posts::where('id',$id)->first();
  
-	               if($f != null)
+	               if($p != null)
 	                {
-                                $temp['id'] = $f->id; 
-	                    	$temp['tag'] = $f->tag; 
-	                        $temp['question'] = $f->question; 
-	                        $temp['answer'] = $f->answer;
-	                        $temp['date'] = $f->created_at->format("jS F, Y"); 
+                                $temp['id'] = $p->id; 
+	                    	$temp['title'] = $p->title; 
+	                    	$temp['url'] = $p->url; 
+	                    	$temp['status'] = $p->status; 
+	                        $temp['author'] = $this->getUser($p->author); 
+	                        $temp['content'] = $this->parseBlogContent($p->content);
+	                        $temp['img'] = $this->getCloudinaryImage($p->img);
+	                        $temp['date'] = $p->created_at->format("jS F, Y h:i A"); 
 	                        $ret = $temp; 
 	                }                          
                                                       

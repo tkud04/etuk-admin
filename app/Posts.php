@@ -13,6 +13,6 @@ class Posts extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'author', 'content', 'url', 'img'
+        'title', 'author', 'content', 'url', 'img', 'status'
     ];
 }

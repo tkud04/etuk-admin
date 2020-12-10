@@ -70,6 +70,19 @@
                                 Site Maintenance
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9" aria-controls="submenu-6"><i class="fas fa-fw fa-image"></i>FAQs</a>
+                                <div id="submenu-9" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo e(url('faqs')); ?>">View FAQs</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo e(url('faq-tags')); ?>">View FAQ tags</a>
+                                        </li> 
+                                    </ul>
+                                </div>
+                            </li>
+			    <li class="nav-item">
                                 <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-image"></i>Banners</a>
                                 <div id="submenu-6" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
@@ -82,12 +95,22 @@
                                     </ul>
                                 </div>
                             </li>
-							<li class="nav-item">
+			    <li class="nav-item">
                                 <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-fw fa-plug"></i>Plugins</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="<?php echo e(url('plugins')); ?>">View plugins</a>
+                                        </li>     
+                                    </ul>
+                                </div>
+                            </li>
+			    <li class="nav-item">
+                                <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8" aria-controls="submenu-8"><i class="fas fa-fw fa-inbox"></i>Senders</a>
+                                <div id="submenu-8" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo e(url('senders')); ?>">View senders</a>
                                         </li>     
                                     </ul>
                                 </div>
@@ -100,4 +123,5 @@
         </div>
         <!-- ============================================================== -->
         <!-- end left sidebar -->
-        <!-- ============================================================== --><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/sidebar.blade.php ENDPATH**/ ?>
+        <!-- ============================================================== -->
+<?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/sidebar.blade.php ENDPATH**/ ?>
