@@ -44,7 +44,7 @@ $subtitle = "View all blog posts";
                                                  <th>Title</th>
                                                  <th>URL</th>
                                                  <th>Posted by</th>
-                                                 <th>Comments & Replies</th>
+                                                 <th>Comments</th>
                                                  <th>Status</th>
                                                  <th>Actions</th>
                                             </tr>
@@ -60,7 +60,7 @@ $subtitle = "View all blog posts";
 												    $content = $p['content'];
 												    $img = $p['img'];
 												    $date = $p['date'];
-												    $crCount = $p['crCount'];
+												    $crCount = count($p['comments']);
 							                        $author = $p['author'];
 										            $avatar = $author['avatar'];
                                                     if($avatar == "") $avatar = [asset("images/avatar.png")];
@@ -77,13 +77,16 @@ $subtitle = "View all blog posts";
 													    $sciText = "Show post";
 													}
 													$sci = url('adp')."?xf=".$p['id']."&type=".$sciType;
+													$pu = url('post')."?xf=".$p['id'];
 										  ?>
                                             <tr>
 											     <td>
+												 <a href="{{$pu}}">
 												   <img class="mr-3 mb-3" src="{{$img}}" alt="{{$title}}" style="width: 192px; height: 100px;"/><br>
 												   {{ ucwords($title) }}
+												   </a>
 												 </td>
-											     <td>{{ $url }}</td>
+											     <td><a href="{{$pu}}">{{ $url }}</a></td>
                                                 <td>
 												  <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$aname}}" style="width: 100px; height: 100px;"/>
 												  <br>{{ $aname }}

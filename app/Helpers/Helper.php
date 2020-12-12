@@ -98,6 +98,9 @@ class Helper implements HelperContract
 					 "remove-faq-status" => "FAQ removed.",
 					 "add-faq-tag-status" => "FAQ tag added.",
 					 "remove-faq-tag-status" => "FAQ tag removed.",
+					 "add-post-status" => "Post added.",
+					 "update-post-status" => "Post updated.",
+					 "remove-post-status" => "Post removed.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -132,6 +135,9 @@ class Helper implements HelperContract
 					 "remove-faq-status-error" => "FAQ could not be removed, please try again.",
 					 "add-faq-tag-status-error" => "FAQ tag could not be added, please try again.",
 					 "remove-faq-tag-status-error" => "FAQ tag could not be removed, please try again.",
+					 "add-post-status-error" => "Post could not be added, please try again.",
+					 "update-post-status-error" => "Post could not be uodated, please try again.",
+					 "remove-post-status-error" => "Post could not be removed, please try again.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -4111,7 +4117,7 @@ function createSocial($data)
            
 		 	              }
 						  
-						  function createPost($data)
+				function createPost($data)
 	              {
 	   			   #dd($data);
 	   			 $ret = null;
@@ -4121,8 +4127,8 @@ function createSocial($data)
 	                                                         'author' => $data['author'], 
 	                                                         'content' => $data['content'],
 	                                                         'url' => $data['url'],
-	                                                         'img' => $data['img'],
-	                                                         'status' => "enabled"
+	                                                         'img' => $data['ird'],
+	                                                         'status' => $data['status']
 	                                                         ]);
 	   			  return $ret;
 	              }
@@ -4146,6 +4152,11 @@ function createSocial($data)
 	   	   return $ret;
 	      }
 		  
+		  function parseBlogPostContent($c)
+		  {
+			  return $c;
+		  }
+		  
 	 	 function getPost($id)
 	            {
 	            	$ret = [];
@@ -4158,9 +4169,11 @@ function createSocial($data)
 	                    	$temp['url'] = $p->url; 
 	                    	$temp['status'] = $p->status; 
 	                        $temp['author'] = $this->getUser($p->author); 
-	                        $temp['content'] = $this->parseBlogContent($p->content);
+	                        $temp['content'] = $this->parseBlogPostContent($p->content);
 	                        $temp['img'] = $this->getCloudinaryImage($p->img);
+	                        $temp['comments'] = $this->getComments($p->id);
 	                        $temp['date'] = $p->created_at->format("jS F, Y h:i A"); 
+	                        $temp['updated'] = $p->updated_at->format("jS F, Y h:i A"); 
 	                        $ret = $temp; 
 	                }                          
                                                       
@@ -4204,6 +4217,63 @@ function createSocial($data)
 	   			    }
            
 	              }
+				  
+			  function createComment($data)
+	              {
+	   			   #dd($data);
+	   			 $ret = null;
+			 
+			 
+	   				 $ret = Comments::create(['post_id' => $data['post_id'], 
+	                                                         'parent_id' => $data['parent_id'], 
+	                                                         'content' => $data['content'],
+	                                                         'type' => $data['type'],
+	                                                         'user_id' => $data['user_id'],
+	                                                         'status' => $data['status']
+	                                                         ]);
+	   			  return $ret;
+	              }
+				  
+		 function getComments($post_id)
+	      {
+	   	   $ret = [];
+	   
+	   	   $comments = Comments::where('post_id',$post_id)->get();
+	   
+	   	   if(!is_null($comments))
+	   	   {
+			  # $posts = $posts->sortByDesc('created_at');	
+	   		   foreach($comments as $c)
+	   		   {
+	   		     $temp = $this->getComment($c->id);
+	   		     array_push($ret,$temp);
+	   	       }
+	   	   }
+		   
+		   return $ret;
+		  }
+		  
+		  
+		  function getComment($id)
+	            {
+	            	$ret = [];
+	                $c = Comments::where('id',$id)->first();
+ 
+	               if($c != null)
+	                {
+                            $temp['id'] = $c->id; 
+	                    	$temp['post_id'] = $c->post_id; 
+	                    	$temp['parent_id'] = $c->parent_id; 
+	                    	$temp['type'] = $c->type; 
+	                    	$temp['status'] = $c->status; 
+	                        $temp['author'] = $this->getUser($c->user_id); 
+	                        $temp['content'] = $c->content;
+	                        $temp['date'] = $c->created_at->format("jS F, Y h:i A"); 
+	                        $ret = $temp; 
+	                }                          
+                                                      
+	                 return $ret;
+	            }
 		   
 
    

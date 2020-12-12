@@ -13,6 +13,6 @@ class Comments extends Model
      * @var array
      */
     protected $fillable = [
-       'parent_id', 'type', 'user_id', 'content', 'status'
+       'post_id', 'parent_id', 'type', 'user_id', 'content', 'status'
     ];
 }

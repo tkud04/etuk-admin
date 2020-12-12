@@ -44,7 +44,7 @@ $subtitle = "View all blog posts";
                                                  <th>Title</th>
                                                  <th>URL</th>
                                                  <th>Posted by</th>
-                                                 <th>Comments & Replies</th>
+                                                 <th>Comments</th>
                                                  <th>Status</th>
                                                  <th>Actions</th>
                                             </tr>
@@ -60,7 +60,7 @@ $subtitle = "View all blog posts";
 												    $content = $p['content'];
 												    $img = $p['img'];
 												    $date = $p['date'];
-												    $crCount = $p['crCount'];
+												    $crCount = count($p['comments']);
 							                        $author = $p['author'];
 										            $avatar = $author['avatar'];
                                                     if($avatar == "") $avatar = [asset("images/avatar.png")];
@@ -77,14 +77,17 @@ $subtitle = "View all blog posts";
 													    $sciText = "Show post";
 													}
 													$sci = url('adp')."?xf=".$p['id']."&type=".$sciType;
+													$pu = url('post')."?xf=".$p['id'];
 										  ?>
                                             <tr>
 											     <td>
+												 <a href="<?php echo e($pu); ?>">
 												   <img class="mr-3 mb-3" src="<?php echo e($img); ?>" alt="<?php echo e($title); ?>" style="width: 192px; height: 100px;"/><br>
 												   <?php echo e(ucwords($title)); ?>
 
+												   </a>
 												 </td>
-											     <td><?php echo e($url); ?></td>
+											     <td><a href="<?php echo e($pu); ?>"><?php echo e($url); ?></a></td>
                                                 <td>
 												  <img class="rounded-circle mr-3 mb-3" src="<?php echo e($avatar[0]); ?>" alt="<?php echo e($aname); ?>" style="width: 100px; height: 100px;"/>
 												  <br><?php echo e($aname); ?>
