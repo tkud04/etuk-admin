@@ -144,6 +144,14 @@ addPostContentEditor.setValue(`<?php echo $content; ?>`);
                                                </div>
 										    </div>
 										  </div>
+										  
+										  <div class="row mb-3">
+										     <div class="col-md-12 pl-0">
+                                                <p class="text-right">
+                                                    <button class="btn btn-space btn-secondary" id="abp-form-btn">Save</button>
+                                                </p>
+                                            </div>
+										  </div>
 										
 
                                     </form>

@@ -69,7 +69,7 @@ addPostContentEditor.setValue(`{!! $content !!}`);
 
                                 <h5 class="card-header">Post Details</h5>
                                 <div class="card-body">
-                                    <form action="javascript:void(0)" id="t-form">
+                                    <form action="javascript:void(0)" id="ap-form">
 									    <div class="row">
 										
 										<div class="col-md-3">
@@ -143,6 +143,14 @@ addPostContentEditor.setValue(`{!! $content !!}`);
                                                  <textarea class="form-control" name="content" id="ap-content"></textarea>
                                                </div>
 										    </div>
+										  </div>
+										  
+										  <div class="row mb-3">
+										     <div class="col-md-12 pl-0">
+                                                <p class="text-right">
+                                                    <button class="btn btn-space btn-secondary" id="ubp-form-btn">Save</button>
+                                                </p>
+                                            </div>
 										  </div>
 										
 

@@ -4238,7 +4238,8 @@ function createSocial($data)
 	      {
 	   	   $ret = [];
 	   
-	   	   $comments = Comments::where('post_id',$post_id)->get();
+	   	   $comments = Comments::where(['type' => "post",
+		                                'post_id' => $post_id])->get();
 	   
 	   	   if(!is_null($comments))
 	   	   {
@@ -4253,6 +4254,25 @@ function createSocial($data)
 		   return $ret;
 		  }
 		  
+		  function getCommentReplies($comment_id)
+	      {
+	   	   $ret = [];
+	   
+	   	   $comments = Comments::where(['type' => "comment",
+		                                'parent_id' => $comment_id])->get();
+	   
+	   	   if(!is_null($comments))
+	   	   {
+			  # $posts = $posts->sortByDesc('created_at');	
+	   		   foreach($comments as $c)
+	   		   {
+	   		     $temp = $this->getComment($c->id);
+	   		     array_push($ret,$temp);
+	   	       }
+	   	   }
+		   
+		   return $ret;
+		  }
 		  
 		  function getComment($id)
 	            {
@@ -4268,6 +4288,7 @@ function createSocial($data)
 	                    	$temp['status'] = $c->status; 
 	                        $temp['author'] = $this->getUser($c->user_id); 
 	                        $temp['content'] = $c->content;
+	                        $temp['replies'] = $this->getCommentReplies($c->id);
 	                        $temp['date'] = $c->created_at->format("jS F, Y h:i A"); 
 	                        $ret = $temp; 
 	                }                          
