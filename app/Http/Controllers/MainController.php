@@ -3262,7 +3262,7 @@ class MainController extends Controller {
 				{
 					$v = "post";
 					$p = $this->helpers->getPost($req['xf']);
-				    dd($p);
+				    #dd($p);
 					if(count($p) < 1)
 					{
 						session()->flash("validation-status-error","ok");
