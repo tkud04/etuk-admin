@@ -3310,6 +3310,7 @@ class MainController extends Controller {
 	public function postUpdatePost(Request $request)
     {
 		$user = null;
+		
 		if(Auth::check())
 		{
 			$user = Auth::user();
@@ -3318,16 +3319,20 @@ class MainController extends Controller {
 			{
 				$hasPermission = $this->helpers->hasPermission($user->id,['view_posts','edit_posts']);
 				#dd($hasPermission);
-				$req = $request->all();
 				
 				if($hasPermission)
 				{
 				
-				dd($req);
+				$req = $request->all();
+				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                    'xf' => 'required',
-                             'msg' => 'required'
+		                     'xf' => 'required',
+		                     'title' => 'required',
+                             'url' => 'required',
+							 'ap-images' => 'required',
+                             'content' => 'required',
+                             'status' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -3337,14 +3342,46 @@ class MainController extends Controller {
                 }
 				else
 				{
-					$req['added_by'] = $user->id;
-					$ret = $this->helpers->updateTicket($req);
-					$ss = "update-ticket-status";
-					if($ret == "error") $ss .= "-error";
-					session()->flash($ss,"ok");
-					$uu = "ticket?xf=".$req['xf'];
-			        return redirect()->intended($uu);
-				}
+					$ird = [];
+                    $networkError = false;
+				    
+					
+                      for($i = 0; $i < count($req['ap-images']); $i++)
+                      {
+						  $img = $req['ap-images'][$i];
+						  if($img != null)
+					      {
+            		        
+					        $imgg = $this->helpers->uploadCloudImage($img->getRealPath());
+						
+					        if(isset($imgg['status']) && $imgg['status'] == "error")
+					        {
+						      $networkError = true;
+						      break;
+					        }
+					        else
+					        {
+						      $req['ird'] = $imgg['public_id'];
+					        }    								
+					     }
+					  }
+					  if($networkError)
+					  {
+					    session()->flash("network-status-error","ok");
+			            return redirect()->back()->withInput();
+					  }
+					  else
+					  {
+					    $req['author'] = $user->id;
+					   
+			            $ret = $this->helpers->updatePost($req);
+			            $ss = "update-post-status";
+					    if($ret == "error") $ss .= "-error";
+					    session()->flash($ss,"ok");
+			            return redirect()->back();
+					  }
+				    
+				  }
 				}
 				else
 				{

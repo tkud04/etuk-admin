@@ -4187,15 +4187,21 @@ function createSocial($data)
 	              {
 	   			   #dd($data);
 	   			 $ret = "error";
-                 $f = Faqs::where('id',$data['xf'])->first();
+                 $p = Posts::where('id',$data['xf'])->first();
 			 
 			 
-	   			 if(!is_null($f))
+	   			 if(!is_null($p))
 	   			 {
-	   				 $s->update(['tag' => $data['tag'], 
-	                                                         'question' => $data['question'], 
-	                                                         'answer' => $data['answer']
-	                                                         ]);
+					 $fields = [
+					             'title' => $data['title'], 
+	                             'author' => $data['author'], 
+	                             'content' => $data['content'],
+	                             'url' => $data['url'],
+	                             'status' => $data['status']
+	                           ];
+					  if(isset($data['ird'])) $fields['img'] = $data['ird'];
+					  
+	   				 $p->update($fields);
 	   			   $ret = "ok";
 	   			 }
            	

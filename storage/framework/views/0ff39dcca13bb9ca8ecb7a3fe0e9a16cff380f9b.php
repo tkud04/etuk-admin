@@ -39,6 +39,7 @@ $subtitle = "View post.";
 							$date = $p['date'];
 							$updated_at = $p['updated'];
 							#$utu = url('update-post')."?xf=".$p['ticket_id'];
+							$img = $p['img'];
 							
 							  $author = $p['author'];
 										  $avatar = $author['avatar'];
@@ -56,10 +57,9 @@ let addPostContentEditor = new Simditor({
 		textarea: $('#ap-content'),
 		toolbar: toolbar,
 		placeholder: `Enter your post content here. Maximum of 7000 words..`
-	});	
+	});
+addPostContentEditor.setValue(`<?php echo $content; ?>`);	
 });
-
-addPostContentEditor.setValue(`<?php echo $content; ?>`);
 
 
 </script>
@@ -69,21 +69,53 @@ addPostContentEditor.setValue(`<?php echo $content; ?>`);
 
                                 <h5 class="card-header">Post Details</h5>
                                 <div class="card-body">
-                                    <form action="javascript:void(0)" id="t-form">
+                                    <form action="<?php echo e(url('post')); ?>" method="post" id="ubp-form">
+										<?php echo csrf_field(); ?>
+
+										<input type="hidden" name="xf" value="<?php echo e($p['id']); ?>"/>
 									    <div class="row">
 										
-										<div class="col-md-3">
-										 <a href="<?php echo e($uu); ?>">
-										  <div class="form-group">
-                                             <label>Author</label>
-                                             <div class="form-control hover">
-										       <img class="rounded-circle mr-3 mb-3" src="<?php echo e($avatar[0]); ?>" alt="<?php echo e($aname); ?>" style="width: 100px; height: 100px;"/><br>
-											   <?php echo e($aname); ?> 
-										     </div>
-                                           </div>
-										   </a>
+										<div class="col-md-4">
+										  <div class="row">
+										    <div class="col-md-12">
+										      <a href="<?php echo e($uu); ?>">
+										      <div class="form-group">
+                                                <label>Author</label>
+                                                <div class="form-control hover">
+										          <img class="rounded-circle mr-3 mb-3" src="<?php echo e($avatar[0]); ?>" alt="<?php echo e($aname); ?>" style="width: 100px; height: 100px;"/><br>
+											      <?php echo e($aname); ?> 
+										        </div>
+                                              </div>
+										      </a>
+										    </div>
+										  </div>
+										  <div class="row">
+										    <div class="col-md-12">
+										      <a href="javascript:void(0)">
+										      <div class="form-group">
+                                                <label>Image</label>
+                                                <div class="form-control hover">
+										          <img class="rounded-circle mr-3 mb-3" src="<?php echo e($img); ?>" alt="<?php echo e($title); ?>" style="width: 200px; height: 200px;"/><br>										       
+										        </div>
+                                              </div>
+											  <div class="form-group">
+                                            <label for="ap-img">Change image:</label>
+                                            <div id="ap-images">
+												<div id="ap-image-div-0" class="row">
+												  <div class="col-md-7">
+												    <input type="file" class="form-control" onchange="readURL(this,{id: 'ap',ctr: '0'})" id="ap-img-0" name="ap-images[]">												    
+												  </div>
+												  <div class="col-md-5">
+												    <img id="ap-preview-0" src="#" alt="preview" style="width: 100px; height: 100px;"/>
+													</div>
+												</div>
+										    </div>
+                                        </div>
+										      </a>
+										    </div>
+										  </div>
 										</div>
-										<div class="col-md-9">
+										<div class="col-md-8">
 										  <div class="row mb-3">
 										    <div class="col-md-12">
 										       <div class="form-group">
@@ -105,7 +137,7 @@ addPostContentEditor.setValue(`<?php echo $content; ?>`);
 										            'disabled' => "Disabled"
 													];
 										          ?>
-                                                  <select class="form-control" id="ap-status">
+                                                  <select class="form-control" id="ap-status" name="status">
 												  <option value="none">Select status</option>
 												  <?php
 												  foreach($statuses as $key => $value)
@@ -148,7 +180,7 @@ addPostContentEditor.setValue(`<?php echo $content; ?>`);
 										  <div class="row mb-3">
 										     <div class="col-md-12 pl-0">
                                                 <p class="text-right">
-                                                    <button class="btn btn-space btn-secondary" id="abp-form-btn">Save</button>
+                                                    <button class="btn btn-space btn-secondary" id="ubp-form-btn">Save</button>
                                                 </p>
                                             </div>
 										  </div>

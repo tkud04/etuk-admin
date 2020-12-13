@@ -39,6 +39,7 @@ $subtitle = "View post.";
 							$date = $p['date'];
 							$updated_at = $p['updated'];
 							#$utu = url('update-post')."?xf=".$p['ticket_id'];
+							$img = $p['img'];
 							
 							  $author = $p['author'];
 										  $avatar = $author['avatar'];
@@ -56,10 +57,9 @@ let addPostContentEditor = new Simditor({
 		textarea: $('#ap-content'),
 		toolbar: toolbar,
 		placeholder: `Enter your post content here. Maximum of 7000 words..`
-	});	
+	});
+addPostContentEditor.setValue(`{!! $content !!}`);	
 });
-
-addPostContentEditor.setValue(`{!! $content !!}`);
 
 
 </script>
@@ -69,21 +69,52 @@ addPostContentEditor.setValue(`{!! $content !!}`);
 
                                 <h5 class="card-header">Post Details</h5>
                                 <div class="card-body">
-                                    <form action="javascript:void(0)" id="ap-form">
+                                    <form action="{{url('post')}}" method="post" id="ubp-form">
+										{!! csrf_field() !!}
+										<input type="hidden" name="xf" value="{{$p['id']}}"/>
 									    <div class="row">
 										
-										<div class="col-md-3">
-										 <a href="{{$uu}}">
-										  <div class="form-group">
-                                             <label>Author</label>
-                                             <div class="form-control hover">
-										       <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$aname}}" style="width: 100px; height: 100px;"/><br>
-											   {{$aname}} 
-										     </div>
-                                           </div>
-										   </a>
+										<div class="col-md-4">
+										  <div class="row">
+										    <div class="col-md-12">
+										      <a href="{{$uu}}">
+										      <div class="form-group">
+                                                <label>Author</label>
+                                                <div class="form-control hover">
+										          <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$aname}}" style="width: 100px; height: 100px;"/><br>
+											      {{$aname}} 
+										        </div>
+                                              </div>
+										      </a>
+										    </div>
+										  </div>
+										  <div class="row">
+										    <div class="col-md-12">
+										      <a href="javascript:void(0)">
+										      <div class="form-group">
+                                                <label>Image</label>
+                                                <div class="form-control hover">
+										          <img class="rounded-circle mr-3 mb-3" src="{{$img}}" alt="{{$title}}" style="width: 200px; height: 200px;"/><br>										       
+										        </div>
+                                              </div>
+											  <div class="form-group">
+                                            <label for="ap-img">Change image:</label>
+                                            <div id="ap-images">
+												<div id="ap-image-div-0" class="row">
+												  <div class="col-md-7">
+												    <input type="file" class="form-control" onchange="readURL(this,{id: 'ap',ctr: '0'})" id="ap-img-0" name="ap-images[]">												    
+												  </div>
+												  <div class="col-md-5">
+												    <img id="ap-preview-0" src="#" alt="preview" style="width: 100px; height: 100px;"/>
+													</div>
+												</div>
+										    </div>
+                                        </div>
+										      </a>
+										    </div>
+										  </div>
 										</div>
-										<div class="col-md-9">
+										<div class="col-md-8">
 										  <div class="row mb-3">
 										    <div class="col-md-12">
 										       <div class="form-group">
@@ -105,7 +136,7 @@ addPostContentEditor.setValue(`{!! $content !!}`);
 										            'disabled' => "Disabled"
 													];
 										          ?>
-                                                  <select class="form-control" id="ap-status">
+                                                  <select class="form-control" id="ap-status" name="status">
 												  <option value="none">Select status</option>
 												  <?php
 												  foreach($statuses as $key => $value)
@@ -159,6 +190,39 @@ addPostContentEditor.setValue(`{!! $content !!}`);
                             </div>
                         </div>
 </div>	
+
+<div class="row">
+  <div class="col-md-12" style="margin-bottom: 20px;">
+											<div class="form-group">
+											   
+												<div class="row">
+												 <?php
+												   $tags = [
+												     ['name' => "Tag 1"],
+												     ['name' => "Tag 2"],
+												     ['name' => "Tag 3"],
+												     ['name' => "Tag 4"],
+												     ['name' => "Tag 5"],
+												   ];
+											        foreach($tags as $t)
+													{
+														$n = $t['name'];
+											      ?>
+												  <div class="col-lg-3 col-md-6 col-sm-12">
+												   
+ 												    <a class="btn btn-primary btn-sm text-white apt-service" id="apt-service-{{$key}}" onclick="toggleFacility('{{$key}}')" data-check="unchecked">
+													  <center><i id="apt-service-icon-{{$key}}" class="ti-control-stop"></i></center>
+													</a>
+													 <label>{{$value}}</label>
+												  </div>
+												  <?php
+													}
+												  ?>
+												</div>
+												
+											</div>
+										</div>
+</div>
 
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

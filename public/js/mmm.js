@@ -415,15 +415,10 @@ $(document).ready(function() {
              title: "Please fill all required fields."
            })
 	   }
-	   else if(emptyImage){
-		   Swal.fire({
-			 icon: 'error',
-             title: "Please upload an image."
-           })
-	   }
+	 
 	   
 	   else{	 
-		 $('#abp-form').submit();
+		 $('#ubp-form').submit();
 	   }   
     });
     
