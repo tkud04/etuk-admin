@@ -1,6 +1,6 @@
 <?php
-$title = "Transactions";
-$subtitle = "View all transactions on the platform";
+$title = "Apartments";
+$subtitle = "View all apartments";
 ?>
 
 @extends('layout')
@@ -33,84 +33,72 @@ $subtitle = "View all transactions on the platform";
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
-                            <h5 class="card-header">Transactions</h5>
+                            <h5 class="card-header">View all apartments</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Reference #</th>
-                                                <th>Guest</th>
-                                                <th>Booking Details</th>
+                                                <th>Apartment</th>
+                                                <th>Rating</th>
+												<th>Host</th>
+                                                <th>Subscription plan</th>
+                                                <th>Date Added</th>
+                                                <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-										 <?php
-									   if(count($transactions) > 0)
-									   {
-										for($d = 0; $d < count($transactions); $d++)
-										{
-											$t = $transactions[$d];
-											$ll = ""; $sm = " class='text-muted'"; $tc = "";
-											
-											if($d == 0)
-											{
-												$ll = " active";
-											    $sm = "";
-											    $tc = " text-white";
-											}
-											
-										  $vu = url('transaction')."?xf=".$t['id'];
-										  $guest = $t['guest'];
-										  $avatar = $guest['avatar'];
-                                         
-										 if($avatar == "") $avatar = [asset("images/avatar.png")];
-										  $gname = $guest['fname']." ".$guest['lname'];
-										
-										  $i = $t['item'];
-										  $ref = $i['order_id'];
-											            $temp = [];
-														 $apartment = $i['apartment'];
-														 $temp['au'] = $apartment['url'];
-														 $temp['name'] = $apartment['name'];
-														 $cmedia = $apartment['cmedia'];
-														 $temp['imgs'] = $cmedia['images'];
-														 $adata = $apartment['data'];
-														 $temp['terms'] = $apartment['terms'];
-														 $host = $apartment['host'];
-														 $temp['hostName'] = $host['fname']." ".substr($host['lname'],0,1).".";
-														 $temp['amount'] = $adata['amount'];
-														 $address = $apartment['address'];
-														 $temp['location'] = $address['city'].", ".$address['state'];
-														 $temp['checkin'] = $i['checkin'];
-														 $temp['checkout'] = $i['checkout'];
-														 $temp['guests'] = $i['guests'];
-														 $temp['kids'] = $i['kids'];
-														
-									   ?>
-                                            <tr>
-                                                <td>{{$ref}}</td>
-                                                <td>
-												<center>
-												   <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$gname}}" style="width: 100px; height: 100px;"/><br>
-														  {{$gname}} 
-												</center>
-												</td>
-                                                <td>
-												  <div class="d-flex w-100 ">
-											<img class="rounded-circle mr-3 mb-3" src="{{$temp['imgs'][0]}}" alt="{{$temp['name']}}" style="width: 100px; height: 100px;"/>
-											  <div>
-                                                <h5 class="mb-1{{$tc}}">{{$temp['name']}}</h5>
-                                                <small{{$sm}}>{{$temp['checkin']." - ".$temp['checkout']}}</small>
+										  <?php
+										   if(count($apartments) > 0)
+										   {
+											  foreach($apartments as $a)
+											   {
+												$statusClass = "danger";
+												$arrClass = "success";
+												$arrText = "Approve";
 												
-												<p class="mb-1">Adults: {{$temp['guests']}} | Children: {{$temp['kids']}}</p>
-                                            <small{{$sm}}>Price per night: &#8358;{{number_format($temp['amount'])}}</small>
-											  </div>
-                                            </div>
+												$h = $a['host'];
+
+											   $name = $a['name'];
+											   $uu = url('apartment')."?xf=".$a['apartment_id'];
+											    $sss = $a['status'];
+												
+												if($sss == "approved")
+												{
+													$statusClass = "success";
+													$arrClass = "warning";
+													$arrText = "Reject";
+												}
+											   $imgs = $a['cmedia']['images'];
+
+												   $arr = url('uas')."?axf=".$a['apartment_id']."&type=".strtolower($arrText);
+												   $dr = url('remove-apartment')."?axf=".$a['apartment_id'];
+												   $ar = $a['rating'];
+										  ?>
+                                            <tr>
+                                               <td>
+												  <img class="img-fluid" onclick="window.location='{{$uu}}'" src="{{$imgs[0]}}" alt="{{$name}}" style="cursor: pointer; width: 100px; height: 100px;"/>
+												  <a href="{{$uu}}"><h4>{{ucwords($name)}}</h4></a><br>							  
+												</td>
+												<td>
+												  <h3>
+												   @for($i = 0; $i < $ar; $i++)
+												     <i class="fas fa-star"></i>
+											       @endfor
+												  </h3>						  
 												</td>
                                                 <td>
-												 <a class="btn btn-primary btn-sm" href="{{$vu}}">View</a>
+												  Name: <em>{{$h['fname']." ".$h['lname']}}</em><br>
+												  Phone no: <em>{{$h['phone']}}</em><br>
+												  Email: <em>{{$h['email']}}</em><br>
+												</td>
+                                                <td>None</td>
+                                                <td>{{$a['date']}}</td>
+                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($sss)}}</td>
+                                                <td>
+												 <a class="btn btn-{{$arrClass}} btn-sm" href="{{$arr}}">{{$arrText}}</a>
+												 <a class="btn btn-danger btn-sm" href="{{$dr}}">Remove</a>
 												 </td>
                                             </tr>
 									     <?php

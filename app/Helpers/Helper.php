@@ -1019,7 +1019,24 @@ function isDuplicateUser($data)
 		 
 		 
 		 
-	 
+	 function getAllApartments()
+           {
+           	$ret = [];
+              $apartments = Apartments::where('id',">","0")->get();
+								   
+				$apartments = $apartments->sortByDesc('created_at');				   
+ 
+              if($apartments != null)
+               {
+				  foreach($apartments as $a)
+				  {
+					     $aa = $this->getApartment($a->id,['host' => true,'imgId' => true]);
+					     array_push($ret,$aa); 
+				  }
+               }                         
+                                                      
+                return $ret;
+           }
 	 function getApartments($user)
            {
            	$ret = [];

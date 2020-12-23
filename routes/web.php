@@ -35,6 +35,15 @@ Route::get('user', 'MainController@getUser');
 Route::post('user', 'MainController@postUser');
 Route::get('edu', 'MainController@getEnableDisableUser');
 
+//Apartments
+Route::get('apartments', 'MainController@getApartments');
+Route::get('add-apartment', 'MainController@getAddApartment');
+Route::post('add-apartment', 'MainController@postAddApartment');
+Route::get('apartment', 'MainController@getApartment');
+Route::post('apartment', 'MainController@postApartment');
+Route::get('remove-apartment', 'MainController@getRemoveApartment');
+Route::get('uas', 'MainController@getUpdateApartmentStatus');
+
 //Reviews
 Route::get('reviews', 'MainController@getReviews');
 Route::get('arr', 'MainController@getApproveRejectReview');
