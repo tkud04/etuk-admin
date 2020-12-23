@@ -43,6 +43,7 @@ use App\Posts;
 use App\PostTags;
 use App\Comments;
 use App\Tags;
+use App\ReservationLogs;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -101,6 +102,10 @@ class Helper implements HelperContract
 					 "add-post-status" => "Post added.",
 					 "update-post-status" => "Post updated.",
 					 "remove-post-status" => "Post removed.",
+					 "add-reservation-status" => "Reservation added.",
+					 "update-reservation-status" => "Reservation log updated.",
+					 "remove-reservation-status" => "Reservation log removed.",
+					 "respond-to-reservation-status" => "Response sent.",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -138,6 +143,9 @@ class Helper implements HelperContract
 					 "add-post-status-error" => "Post could not be added, please try again.",
 					 "update-post-status-error" => "Post could not be uodated, please try again.",
 					 "remove-post-status-error" => "Post could not be removed, please try again.",
+					 "add-reservation-status-error" => "Reservation could not be created, please try again",
+					 "update-reservation-status-error" => "Reservation could not be updated, please try again.",
+					 "remove-reservation-status-error" => "Reservation could not be removed, please try again.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -4301,6 +4309,108 @@ function createSocial($data)
                                                       
 	                 return $ret;
 	            }
+				
+		   function createReservationLog($data)
+	        {
+	   			   #dd($data);
+	   			 $ret = null;
+			     $ret = ReservationLogs::create(['user_id' => $data['user_id'], 
+	                                   'apartment_id' => $data['apartment_id'], 
+	                                   'status' => $data['status']
+	                                  ]);
+	   			 return $ret;
+	         }
+
+	      function getReservationLogs($user)
+	      {
+	   	   $ret = [];
+	       
+		   if($user != null)
+		   {
+	   	     $logs = ReservationLogs::where('user_id',$user->id)->get();
+	   
+	   	     if(!is_null($logs))
+	   	     {
+			   $logs = $logs->sortByDesc('created_at');	
+	   		   foreach($logs as $l)
+	   		   {
+	   		     $temp = $this->getReservationLog($l->id);
+	   		     array_push($ret,$temp);
+	   	       }
+			 }
+	   	   }
+	   
+	   	   return $ret;
+	      }
+		  
+		  
+	 	 function getReservationLog($id)
+	            {
+	            	$ret = [];
+	                $l = ReservationLogs::where('id',$id)->first();
+ 
+	               if($l != null)
+	                {
+                            $temp['id'] = $l->id; 
+	                    	$temp['status'] = $l->status; 
+	                        //$temp['user'] = $this->getUser($p->user); 
+	                        $temp['user_id'] = $l->user_id; 
+	                        $temp['apartment'] = $this->getApartment($l->apartment_id,['host' => true,'imgId' => true]);
+	                        $temp['date'] = $l->created_at->format("jS F, Y h:i A"); 
+	                        $temp['updated'] = $l->updated_at->format("jS F, Y h:i A"); 
+	                        $ret = $temp; 
+	                }                          
+                                                      
+	                 return $ret;
+	            }
+   
+  
+		   
+		   
+	   		  function updateReservationLog($data)
+	              {
+	   			   #dd($data);
+	   			 $ret = "error";
+                 $l = ReservationLogs::where('id',$data['xf'])->first();
+			 
+			 
+	   			 if(!is_null($l))
+	   			 {
+					 $fields = [
+					             'status' => $data['status']
+	                           ];
+					  $l->update($fields);
+	   			   $ret = "ok";
+	   			 }
+           	
+                                                      
+	                   return $ret;
+	              }
+
+	   		   function removeReservationLog($xf)
+	              {
+	   			    #dd($data);
+	   			    $ret = "error";
+	   			     $l = ReservationLogs::where('id',$xf])->first();
+			 
+			 
+	   			    if(!is_null($l))
+	   			    {
+	   				  $l->delete();
+	   			      $ret = "ok";
+	   			    }
+           
+	              }
+				  
+				function hasReservation($dt)
+		        {
+			      $ret = false;
+				  
+                  $l = ReservationLogs::where($dt)->first();
+			      if($l != null) $ret = true;
+                  
+				  return $ret;
+		        }
 		   
 
    

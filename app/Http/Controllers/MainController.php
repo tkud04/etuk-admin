@@ -3462,6 +3462,81 @@ class MainController extends Controller {
 		}
     }
 	
+	/**
+	 * Handle Respond to reservation request.
+	 *
+	 * @return Response
+	 */
+	public function getRespondToReservation(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				$validator = Validator::make($req,[
+		                    'xf' => 'required|numeric',
+							'axf' => 'required',
+							'gxf' => 'required|numeric'
+		        ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->intended('/');
+                }
+				else
+				{
+					$dt = [
+			         'id' => $req['xf'],
+			         'apartment_id' => $req['axf'],
+			         'user_id' => $req['gxf']
+			        ];
+			 
+			       if($this->helpers->hasReservation($dt))
+			       {
+				     $dt['type'] = $req['type'];
+				     $dt['auth'] = $user->id;
+				
+			         $this->helpers->respondToReservation($dt);
+			         session()->flash("respond-to-reservation-status","ok");
+                     return redirect()->intended('/');
+			       }
+			       else
+			       {
+			   	     session()->flash("duplicate-reservation-status-error","ok");
+			         return redirect()->intended('/');
+			       }
+				 }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
 	
 	
 	

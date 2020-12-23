@@ -101,6 +101,8 @@ Route::get('post', 'MainController@getUpdatePost');
 Route::post('post', 'MainController@postUpdatePost');
 Route::get('remove-post', 'MainController@getRemovePost');
 
+//Reservation Logs
+Route::get('respond-to-reservation', 'MainController@getRespondToReservation');
 
 Route::get('zohoverify/{nn}', 'MainController@getZoho');
 Route::get('tb', 'MainController@getTestBomb');
