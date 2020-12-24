@@ -1806,6 +1806,7 @@ class MainController extends Controller {
 				{
 					$v = "apartment";
 					$apartment = $this->helpers->getApartment($req['xf'],['host' => true,'imgId' => true]);
+					$services = $this->helpers->getServices();
 					#dd($t);
 					if(count($apartment) < 1)
 					{
@@ -1815,6 +1816,7 @@ class MainController extends Controller {
 					else
 					{
 						array_push($cpt,'apartment');                                 
+						array_push($cpt,'services');                                 
 					}
 					
 				}
