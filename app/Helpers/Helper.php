@@ -573,6 +573,7 @@ $subject = $data['subject'];
                                                       'phone' => $data['phone'], 
                                                       'role' => $data['role'], 
                                                       'mode' => $data['mode'], 
+													  'mode_type' => $data['mode_type'], 
                                                       'avatar' => $avatar, 
                                                       'avatar_type' => $avatarType, 
                                                       'currency' => $data['currency'], 
@@ -637,6 +638,8 @@ $subject = $data['subject'];
                        $temp['email'] = $u->email; 
                        $temp['role'] = $u->role; 
                        $temp['status'] = $u->status;
+					   $temp['mode'] = $u->mode; 
+                       $temp['mode_type'] = $u->mode_type; 
 					   $temp['avatar'] = $this->getCloudinaryMedia([[ 'url' => $u->avatar,'src_type' => $u->avatar_type ]]);
                        $temp['verified'] = $u->verified; 
                        $temp['id'] = $u->id; 
