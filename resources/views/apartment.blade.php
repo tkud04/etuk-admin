@@ -330,39 +330,40 @@ let apartmentDescriptionEditor = new Simditor({
 											</div>
 										</div>
 										
-										
-                                        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px;">
-											<h4 class="mb-3">Facilities & Services</h4>
-										</div>										
-										
-										<div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 20px;">
-											<div class="form-group">
-											   
-												<div class="row">
-												  <?php
-											        foreach($services as $s)
-													{
-														$key = $s['tag'];
-														$value = $s['name'];
-											      ?>
-												  <div class="col-lg-3 col-md-6 col-sm-12">
-												   
- 												    <a class="btn btn-primary btn-sm text-white apt-service" id="apt-service-{{$key}}" onclick="toggleFacility('{{$key}}')" data-check="unchecked">
-													  <center><i id="apt-service-icon-{{$key}}" class="ti-control-stop"></i></center>
-													</a>
-													 <label>{{$value}}</label>
-												  </div>
-												  <?php
-													}
-												  ?>
-												</div>
-												
-											</div>
-										</div>
 										  </div>
 										  
 										 </div>
 										 <div id="admin-apt-side-2">
+											 <div class="row mb-3">
+		                                        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px;">
+													<h4 class="mb-3">Facilities & Services</h4>
+												</div>										
+										
+												<div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 20px;">
+													<div class="form-group">
+											   
+														<div class="row">
+														  <?php
+													        foreach($services as $s)
+															{
+																$key = $s['tag'];
+																$value = $s['name'];
+													      ?>
+														  <div class="col-lg-3 col-md-6 col-sm-12">
+												   
+		 												    <a class="btn btn-primary btn-sm text-white apt-service" id="apt-service-{{$key}}" onclick="toggleFacility('{{$key}}')" data-check="unchecked">
+															  <center><i id="apt-service-icon-{{$key}}" class="ti-control-stop"></i></center>
+															</a>
+															 <label>{{$value}}</label>
+														  </div>
+														  <?php
+															}
+														  ?>
+														</div>
+												
+													</div>
+												</div>
+											 </div>
 										 </div>
 										 <a href="javascript:void(0)" class="btn btn-primary" id="admin-apt-prev">Previous</a>
 										 <a href="javascript:void(0)" class="btn btn-primary" id="admin-apt-next">Next</a>
