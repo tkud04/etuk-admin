@@ -50,7 +50,7 @@ $subtitle = "View information about this apartment.";
 
 <?php $__env->startSection('content'); ?>
 <script>
-let selectedSide = "1", facilities = [], aptImages = [], aptImgCount = <?php echo e(count($cmedia['images'])); ?>,
+let selectedSide = 1, facilities = [], aptImages = [], aptImgCount = <?php echo e(count($cmedia['images'])); ?>,
     aptCover = "0", aptCurrentImgCount = "<?php echo e(count($imgs)); ?>";
 
 $(document).ready(() => {
@@ -331,39 +331,140 @@ let apartmentDescriptionEditor = new Simditor({
 											</div>
 										</div>
 										
-										
-                                        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px;">
-											<h4 class="mb-3">Facilities & Services</h4>
-										</div>										
-										
-										<div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 20px;">
-											<div class="form-group">
-											   
-												<div class="row">
-												  <?php
-											        foreach($services as $s)
-													{
-														$key = $s['tag'];
-														$value = $s['name'];
-											      ?>
-												  <div class="col-lg-3 col-md-6 col-sm-12">
-												   
- 												    <a class="btn btn-primary btn-sm text-white apt-service" id="apt-service-<?php echo e($key); ?>" onclick="toggleFacility('<?php echo e($key); ?>')" data-check="unchecked">
-													  <center><i id="apt-service-icon-<?php echo e($key); ?>" class="ti-control-stop"></i></center>
-													</a>
-													 <label><?php echo e($value); ?></label>
-												  </div>
-												  <?php
-													}
-												  ?>
-												</div>
-												
-											</div>
-										</div>
 										  </div>
 										  
 										 </div>
 										 <div id="admin-apt-side-2">
+										 
+											 <div class="row mb-3">
+											    <div class="col-md-12">
+											     <h3>Extras</h3>
+											    </div>
+		                                        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px;">
+													<h4 class="mb-3">Facilities & Services</h4>
+												</div>										
+										
+												<div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 20px;">
+													<div class="form-group">
+											   
+														<div class="row">
+														  <?php
+													        foreach($services as $s)
+															{
+																$key = $s['tag'];
+																$value = $s['name'];
+													      ?>
+														  <div class="col-lg-3 col-md-6 col-sm-12">
+												   
+		 												    <a class="btn btn-primary btn-sm text-white apt-service" id="apt-service-<?php echo e($key); ?>" onclick="toggleFacility('<?php echo e($key); ?>')" data-check="unchecked">
+															  <center><i id="apt-service-icon-<?php echo e($key); ?>" class="ti-control-stop"></i></center>
+															</a>
+															 <label><?php echo e($value); ?></label>
+														  </div>
+														  <?php
+															}
+														  ?>
+														</div>
+												
+													</div>
+												</div>
+												<div class="col-lg-12 col-md-12 col-sm-12">
+											<h4 class="mb-3">Location & Media</h4>
+										</div>
+																			
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<label>Address<i class="req">*</i></label>
+												<input type="text" class="form-control" id="my-apartment-address" value="<?php echo e($address['address']); ?>" placeholder="House address">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>City<i class="req">*</i></label>
+												<input type="text" class="form-control" id="my-apartment-city" value="<?php echo e($address['city']); ?>" placeholder="City">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>LGA<i class="req">*</i></label>
+												<input type="text" class="form-control" id="my-apartment-lga" value="<?php echo e($address['lga']); ?>" placeholder="LGA">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>State<i class="req">*</i></label>
+												<select class="form-control" id="my-apartment-state">
+												  <option value="none">Select state</option>
+												  <?php
+												   foreach($states as $key => $value)
+												   {
+													   $ss = $key == $address['state'] ? " selected='selected'" : "";
+												  ?>
+												    <option value="<?php echo e($key); ?>"<?php echo e($ss); ?>><?php echo e($value); ?></option>
+												  <?php
+												   }
+												  ?>
+												</select>
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>Country<i class="req">*</i></label>
+												<select class="form-control" id="my-apartment-country">
+												  <option value="none">Select country</option>
+												  <?php
+												   foreach($countries as $key => $value)
+												   {
+													   $ss = $key == $address['country'] ? " selected='selected'" : "";
+												  ?>
+												    <option value="<?php echo e($key); ?>"<?php echo e($ss); ?>><?php echo e($value); ?></option>
+												  <?php
+												   }
+												  ?>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<label>Images<i class="req">*</i></label>
+												<div class="row">
+												 <?php
+												  for($x = 0; $x < count($imgs); $x++)
+												  {
+													  $img = $imgs[$x];
+													  $imgId = $rawImgs[$x]['id'];
+													  $cover = $rawImgs[$x]['cover'];
+													  $dt = "{apartment_id: '".$apartment['apartment_id']."',id:".$imgId."}";
+												 ?>
+												 <div class="col-lg-4 col-md-4 col-sm-12" id="my-apartment-current-img-<?php echo e($imgId); ?>">
+												    <div>
+												      <img src="<?php echo e($img); ?>" alt="preview" style="width: 100px; height: 100px;"/>	
+                                                       <?php if($cover == "yes"): ?>
+                                                        <label class="label label-success" id="my-apartment-cover-label">Cover image</label>
+                                                       <?php endif; ?>														   
+												    </div>
+												    <div style="margin-top: 10px;" id="sci-<?php echo e($imgId); ?>-submit">
+													   <?php if($cover == "no"): ?>
+													   <a href="javascript:void(0)" onclick="myAptSetCurrentCoverImage(<?php echo e($dt); ?>)" class="btn btn-theme btn-sm">Set as cover image</a>
+												       <?php endif; ?>
+													   <a href="javascript:void(0)" onclick="myAptRemoveCurrentImage(<?php echo e($dt); ?>)"class="btn btn-warning btn-sm">Remove</a>
+												    </div>
+													<div style="margin-top: 10px;" id="sci-<?php echo e($imgId); ?>-loading">
+													   <h4>Processing.. <img src="<?php echo e(asset('img/loading.gif')); ?>" class="img img-fluid" alt="Processing.."></h4>
+													</div>
+												  </div>
+												  <?php
+												  }
+												  ?>
+												</div>
+											</div>
+										</div>
+											 </div>
 										 </div>
 										 <a href="javascript:void(0)" class="btn btn-primary" id="admin-apt-prev">Previous</a>
 										 <a href="javascript:void(0)" class="btn btn-primary" id="admin-apt-next">Next</a>
@@ -379,4 +480,5 @@ let apartmentDescriptionEditor = new Simditor({
                         </div>
 </div>			
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/apartment.blade.php ENDPATH**/ ?>

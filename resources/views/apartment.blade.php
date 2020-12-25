@@ -50,7 +50,7 @@ $subtitle = "View information about this apartment.";
 
 @section('content')
 <script>
-let selectedSide = "1", facilities = [], aptImages = [], aptImgCount = {{count($cmedia['images'])}},
+let selectedSide = 1, facilities = [], aptImages = [], aptImgCount = {{count($cmedia['images'])}},
     aptCover = "0", aptCurrentImgCount = "{{count($imgs)}}";
 
 $(document).ready(() => {
@@ -334,7 +334,11 @@ let apartmentDescriptionEditor = new Simditor({
 										  
 										 </div>
 										 <div id="admin-apt-side-2">
+										 
 											 <div class="row mb-3">
+											    <div class="col-md-12">
+											     <h3>Extras</h3>
+											    </div>
 		                                        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px;">
 													<h4 class="mb-3">Facilities & Services</h4>
 												</div>										
@@ -363,6 +367,102 @@ let apartmentDescriptionEditor = new Simditor({
 												
 													</div>
 												</div>
+												<div class="col-lg-12 col-md-12 col-sm-12">
+											<h4 class="mb-3">Location & Media</h4>
+										</div>
+																			
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<label>Address<i class="req">*</i></label>
+												<input type="text" class="form-control" id="my-apartment-address" value="{{$address['address']}}" placeholder="House address">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>City<i class="req">*</i></label>
+												<input type="text" class="form-control" id="my-apartment-city" value="{{$address['city']}}" placeholder="City">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>LGA<i class="req">*</i></label>
+												<input type="text" class="form-control" id="my-apartment-lga" value="{{$address['lga']}}" placeholder="LGA">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>State<i class="req">*</i></label>
+												<select class="form-control" id="my-apartment-state">
+												  <option value="none">Select state</option>
+												  <?php
+												   foreach($states as $key => $value)
+												   {
+													   $ss = $key == $address['state'] ? " selected='selected'" : "";
+												  ?>
+												    <option value="{{$key}}"{{$ss}}>{{$value}}</option>
+												  <?php
+												   }
+												  ?>
+												</select>
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label>Country<i class="req">*</i></label>
+												<select class="form-control" id="my-apartment-country">
+												  <option value="none">Select country</option>
+												  <?php
+												   foreach($countries as $key => $value)
+												   {
+													   $ss = $key == $address['country'] ? " selected='selected'" : "";
+												  ?>
+												    <option value="{{$key}}"{{$ss}}>{{$value}}</option>
+												  <?php
+												   }
+												  ?>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<label>Images<i class="req">*</i></label>
+												<div class="row">
+												 <?php
+												  for($x = 0; $x < count($imgs); $x++)
+												  {
+													  $img = $imgs[$x];
+													  $imgId = $rawImgs[$x]['id'];
+													  $cover = $rawImgs[$x]['cover'];
+													  $dt = "{apartment_id: '".$apartment['apartment_id']."',id:".$imgId."}";
+												 ?>
+												 <div class="col-lg-4 col-md-4 col-sm-12" id="my-apartment-current-img-{{$imgId}}">
+												    <div>
+												      <img src="{{$img}}" alt="preview" style="width: 100px; height: 100px;"/>	
+                                                       @if($cover == "yes")
+                                                        <label class="label label-success" id="my-apartment-cover-label">Cover image</label>
+                                                       @endif														   
+												    </div>
+												    <div style="margin-top: 10px;" id="sci-{{$imgId}}-submit">
+													   @if($cover == "no")
+													   <a href="javascript:void(0)" onclick="myAptSetCurrentCoverImage({{$dt}})" class="btn btn-theme btn-sm">Set as cover image</a>
+												       @endif
+													   <a href="javascript:void(0)" onclick="myAptRemoveCurrentImage({{$dt}})"class="btn btn-warning btn-sm">Remove</a>
+												    </div>
+													<div style="margin-top: 10px;" id="sci-{{$imgId}}-loading">
+													   <h4>Processing.. <img src="{{asset('img/loading.gif')}}" class="img img-fluid" alt="Processing.."></h4>
+													</div>
+												  </div>
+												  <?php
+												  }
+												  ?>
+												</div>
+											</div>
+										</div>
 											 </div>
 										 </div>
 										 <a href="javascript:void(0)" class="btn btn-primary" id="admin-apt-prev">Previous</a>

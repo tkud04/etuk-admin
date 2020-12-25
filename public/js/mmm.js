@@ -421,6 +421,27 @@ $(document).ready(function() {
 		 $('#ubp-form').submit();
 	   }   
     });
+	
+	//APARTMENTS
+	$("#admin-apt-prev").click(e => {
+       e.preventDefault();
+	   
+	   if(selectedSide == 2){
+		   $('#admin-apt-side-2').hide();
+		   $('#admin-apt-side-1').fadeIn();
+		   selectedSide = 1;
+	   }
+    });
+	
+	$("#admin-apt-next").click(e => {
+       e.preventDefault();
+	   
+	   if(selectedSide == 1){
+		   $('#admin-apt-side-1').hide();
+		   $('#admin-apt-side-2').fadeIn();
+		   selectedSide = 2;
+	   }
+    });
     
     
 	

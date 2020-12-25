@@ -13,6 +13,6 @@ class ApartmentAddresses extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'apartment_id', 'address', 'city', 'lga', 'state'
+        'id', 'apartment_id', 'address', 'city', 'lga', 'state', 'country'
 	];
 }

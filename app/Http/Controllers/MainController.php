@@ -1807,7 +1807,9 @@ class MainController extends Controller {
 					$v = "apartment";
 					$apartment = $this->helpers->getApartment($req['xf'],['host' => true,'imgId' => true]);
 					$services = $this->helpers->getServices();
-					#dd($t);
+					$states = $this->helpers->states;
+					$countries = $this->helpers->countries;
+					#dd($apartment);
 					if(count($apartment) < 1)
 					{
 						session()->flash("validation-status-error","ok");
@@ -1817,6 +1819,8 @@ class MainController extends Controller {
 					{
 						array_push($cpt,'apartment');                                 
 						array_push($cpt,'services');                                 
+						array_push($cpt,'states');                                 
+						array_push($cpt,'countries');                                 
 					}
 					
 				}
