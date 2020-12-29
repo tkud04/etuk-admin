@@ -3670,6 +3670,444 @@ class MainController extends Controller {
 		}
     }
 	
+		/**
+	 * Show list of blog posts.
+	 *
+	 * @return Response
+	 */
+	public function getPosts(Request $request)
+    {
+		$user = null;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_posts','edit_posts']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				 $v = "posts";
+				 $posts = $this->helpers->getPosts();
+				 #dd($posts);
+				 array_push($cpt,'posts');
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	
+	/**
+	 * Show the Add Post view.
+	 *
+	 * @return Response
+	 */
+	public function getAddPost(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_posts','edit_posts']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+					$v = "add-post";
+					
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
+								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Handle add post.
+	 *
+	 * @return Response
+	 */
+	public function postAddPost(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_posts','edit_posts']);
+				#dd($hasPermission);
+				$req = $request->all();
+
+				if($hasPermission)
+				{
+				
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                     'title' => 'required',
+                             'url' => 'required|unique:posts',
+							 'ap-images' => 'required',
+                             'content' => 'required'
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$ird = [];
+                    $networkError = false;
+				
+                    for($i = 0; $i < count($req['ap-images']); $i++)
+                    {
+            		  $img = $req['ap-images'][$i];
+					  $imgg = $this->helpers->uploadCloudImage($img->getRealPath());
+						
+					  if(isset($imgg['status']) && $imgg['status'] == "error")
+					  {
+						  $networkError = true;
+						  break;
+					  }
+					  else
+					  {
+						 $req['ird'] = $imgg['public_id'];
+					  }
+             	        								
+					}
+					
+					if($networkError)
+					{
+						session()->flash("network-status-error","ok");
+			            return redirect()->back()->withInput();
+					}
+					else
+					{
+						$req['status'] = "enabled";
+					    $req['author'] = $user->id;
+					   
+			            $ret = $this->helpers->createPost($req);
+			            $ss = "add-post-status";
+					    if($ret == "error") $ss .= "-error";
+					    session()->flash($ss,"ok");
+			            return redirect()->intended("posts");
+					}
+					
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
+	/**
+	 * Show the Update Post view.
+	 *
+	 * @return Response
+	 */
+	public function getUpdatePost(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$permissions = $this->helpers->permissions;
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+                
+				if(isset($req['xf']))
+				{
+					$v = "post";
+					$p = $this->helpers->getPost($req['xf']);
+				    #dd($p);
+					if(count($p) < 1)
+					{
+						session()->flash("validation-status-error","ok");
+						return redirect()->intended('posts');
+					}
+					else
+					{
+						array_push($cpt,'p');                                 
+					}
+					
+				}
+				else
+				{
+					session()->flash("validation-status-error","ok");
+					return redirect()->intended('posts');
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
+								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	
+	/**
+	 * Handle update post.
+	 *
+	 * @return Response
+	 */
+	public function postUpdatePost(Request $request)
+    {
+		$user = null;
+		
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				$req = $request->all();
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                     'xf' => 'required',
+		                     'title' => 'required',
+                             'url' => 'required',
+							 'ap-images' => 'required',
+                             'content' => 'required',
+                             'status' => 'required'
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$ird = [];
+                    $networkError = false;
+				    
+					
+                      for($i = 0; $i < count($req['ap-images']); $i++)
+                      {
+						  $img = $req['ap-images'][$i];
+						  if($img != null)
+					      {
+            		        
+					        $imgg = $this->helpers->uploadCloudImage($img->getRealPath());
+						
+					        if(isset($imgg['status']) && $imgg['status'] == "error")
+					        {
+						      $networkError = true;
+						      break;
+					        }
+					        else
+					        {
+						      $req['ird'] = $imgg['public_id'];
+					        }    								
+					     }
+					  }
+					  if($networkError)
+					  {
+					    session()->flash("network-status-error","ok");
+			            return redirect()->back()->withInput();
+					  }
+					  else
+					  {
+					    $req['author'] = $user->id;
+					   
+			            $ret = $this->helpers->updatePost($req);
+			            $ss = "update-post-status";
+					    if($ret == "error") $ss .= "-error";
+					    session()->flash($ss,"ok");
+			            return redirect()->back();
+					  }
+				    
+				  }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
+	/**
+	 * Handle remove post.
+	 *
+	 * @return Response
+	 */
+	public function getRemovePost(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+			   	    dd($req);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				    $validator = Validator::make($req,[
+		                    'xf' => 'required|numeric'
+		                   ]);
+						
+				    if($validator->fails())
+                    {
+                      session()->flash("validation-status-error","ok");
+			          return redirect()->back()->withInput();
+                    }
+				    else
+				    {   
+					  $ret = $this->helpers->removeFAQTag($req['xf']);
+					  $ss = "remove-faq-tag-status";
+					  if($ret == "error") $ss .= "-error";
+					  session()->flash($ss,"ok");
+			          return redirect()->intended("faq-tags");
+				    }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+			        return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
+	
 	
 	
 	
