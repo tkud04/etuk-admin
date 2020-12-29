@@ -4696,6 +4696,7 @@ function createSocial($data)
 	                        $temp['name'] = $p->name; 
 	                        $temp['description'] = $p->description; 
 	                        $temp['amount'] = $p->amount; 
+	                        $temp['frequency'] = $p->frequency; 
 	                        $temp['ps_id'] = $p->ps_id;
 	                        $temp['date'] = $p->created_at->format("jS F, Y h:i A"); 
 	                        $temp['updated'] = $p->updated_at->format("jS F, Y h:i A"); 
@@ -4722,6 +4723,7 @@ function createSocial($data)
 					             'description' => $data['description'],
 					             'amount' => $data['amount'],
 					             'ps_id' => $data['ps_id'],
+					             'frequency' => $data['frequency'],
 					             'status' => $data['status']
 	                           ];
 					  $p->update($fields);
@@ -4731,12 +4733,32 @@ function createSocial($data)
                                                       
 	                   return $ret;
 	              }
+				  
+		  function updateEDP($data)
+           {  
+              $ret = 'error'; 
+         
+              if(isset($data['xf']))
+               {
+               	$p = Plans::where('id', $data['xf'])->first();
+                   
+                        if($p != null)
+                        {
+							$status = $data['type'] == "enable" ? "enabled" : "disabled";
+							
+                        	$p->update(['status' => $status]);
+						                   
+                             $ret = "ok";
+                        }                                    
+               }                                 
+                  return $ret;                               
+           }
 
 	   		   function removePlan($xf)
 	              {
 	   			    #dd($data);
 	   			    $ret = "error";
-	   			     $p = ReservationLogs::where('id',$xf)->first();
+	   			     $p = Plans::where('id',$xf)->first();
 			 
 			 
 	   			    if(!is_null($p))

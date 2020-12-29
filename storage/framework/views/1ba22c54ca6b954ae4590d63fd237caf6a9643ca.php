@@ -59,20 +59,20 @@ $subtitle = "View all subscription plans";
 												    $date = $p['date'];
 												    $updated = $p['updated'];
 												    $ps_id = $p['ps_id'];
-							                        $author = $p['author'];
+							                        $author = $p['added_by'];
 										            $avatar = $author['avatar'];
                                                     if($avatar == "") $avatar = [asset("images/avatar.png")];
 										            $aname = $author['fname']." ".$author['lname'];
 													$ru = url('remove-plan')."?xf=".$p['id'];
 													$ss = $p['status'] == "enabled" ? "badge-primary" : "badge-danger";
 													
-													$sciType = "enable";
-													$sciText = "Enable plan";
+													$sciType = "disable";
+													$sciText = "Disable plan";
 													
 													if($p['status'] == "disabled")
 													{
-														$sciType = "disable";
-													    $sciText = "Disable plan";
+														$sciType = "enable";
+													    $sciText = "Enable plan";
 													}
 													$sci = url('ed-plan')."?xf=".$p['id']."&type=".$sciType;
 													$pu = url('plan')."?xf=".$p['id'];
@@ -81,10 +81,12 @@ $subtitle = "View all subscription plans";
 											     <td>
 												   <a href="<?php echo e($pu); ?>">
 												     <h4><?php echo e(ucwords($name)); ?></h4>
-												     <p>&#8358;<?php echo e(number_format($amount,2)); ?> / month</p>
-													 <p>Description: <em><?php echo $description; ?></em></p>
-													 <p>PayStack ID: <b><?php echo $ps_id; ?></b></p>
-												   </a>
+												    </a>
+													<div>
+													  <span>&#8358;<?php echo e(number_format($amount,2)); ?> / month</span><br>
+													  <span>Description: <em><?php echo $description; ?></em></span><br>
+													  <span>PayStack ID: <b><?php echo $ps_id; ?></b></span><br>
+													</div>
 												 </td>
 											     <td>
 												  <img class="rounded-circle mr-3 mb-3" src="<?php echo e($avatar[0]); ?>" alt="<?php echo e($aname); ?>" style="width: 100px; height: 100px;"/>

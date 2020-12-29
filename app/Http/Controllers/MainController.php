@@ -3845,7 +3845,7 @@ class MainController extends Controller {
 	
 	
 	/**
-	 * Show the Update Post view.
+	 * Show the Update Plan view.
 	 *
 	 * @return Response
 	 */
@@ -3876,13 +3876,13 @@ class MainController extends Controller {
                 
 				if(isset($req['xf']))
 				{
-					$v = "post";
-					$p = $this->helpers->getPost($req['xf']);
+					$v = "plan";
+					$p = $this->helpers->getPlan($req['xf']);
 				    #dd($p);
 					if(count($p) < 1)
 					{
 						session()->flash("validation-status-error","ok");
-						return redirect()->intended('posts');
+						return redirect()->intended('plans');
 					}
 					else
 					{
@@ -3893,7 +3893,7 @@ class MainController extends Controller {
 				else
 				{
 					session()->flash("validation-status-error","ok");
-					return redirect()->intended('posts');
+					return redirect()->intended('plans');
 				}
 				}
 				else
@@ -3919,7 +3919,7 @@ class MainController extends Controller {
 	
 	
 	/**
-	 * Handle update post.
+	 * Handle update plan.
 	 *
 	 * @return Response
 	 */
@@ -3944,11 +3944,10 @@ class MainController extends Controller {
 				
 				$validator = Validator::make($req,[
 		                     'xf' => 'required',
-		                     'title' => 'required',
-                             'url' => 'required',
-							 'ap-images' => 'required',
-                             'content' => 'required',
-                             'status' => 'required'
+		                     'name' => 'required',
+                             'amount' => 'required|numeric',
+							 'frequency' => 'required',
+                             'ps_id' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -3958,46 +3957,16 @@ class MainController extends Controller {
                 }
 				else
 				{
-					$ird = [];
-                    $networkError = false;
-				    
 					
-                      for($i = 0; $i < count($req['ap-images']); $i++)
-                      {
-						  $img = $req['ap-images'][$i];
-						  if($img != null)
-					      {
-            		        
-					        $imgg = $this->helpers->uploadCloudImage($img->getRealPath());
-						
-					        if(isset($imgg['status']) && $imgg['status'] == "error")
-					        {
-						      $networkError = true;
-						      break;
-					        }
-					        else
-					        {
-						      $req['ird'] = $imgg['public_id'];
-					        }    								
-					     }
-					  }
-					  if($networkError)
-					  {
-					    session()->flash("network-status-error","ok");
-			            return redirect()->back()->withInput();
-					  }
-					  else
-					  {
-					    $req['author'] = $user->id;
+					    $req['added_by'] = $user->id;
 					   
-			            $ret = $this->helpers->updatePost($req);
-			            $ss = "update-post-status";
+			            $ret = $this->helpers->updatePlan($req);
+			            $ss = "update-plan-status";
 					    if($ret == "error") $ss .= "-error";
 					    session()->flash($ss,"ok");
 			            return redirect()->back();
-					  }
-				    
-				  }
+					
+				}
 				}
 				else
 				{
@@ -4020,7 +3989,7 @@ class MainController extends Controller {
 	
 	
 	/**
-	 * Handle remove post.
+	 * Handle remove plan.
 	 *
 	 * @return Response
 	 */
@@ -4063,6 +4032,65 @@ class MainController extends Controller {
 				{
 					session()->flash("permissions-status-error","ok");
 			        return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
+	/**
+	 * Handle Enable/Disable plan.
+	 *
+	 * @return Response
+	 */
+	public function getEnableDisablePlan(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				$validator = Validator::make($req,[
+		                    'xf' => 'required|numeric',
+		                    'type' => 'required',
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$ret = $this->helpers->updateEDP($req);
+					$ss = "update-plan-status";
+					if($ret == "error") $ss .= "-error";
+					session()->flash($ss,"ok");
+			        return redirect()->intended('plans');
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
 				}
 			}
 			else
