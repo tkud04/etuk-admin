@@ -43,8 +43,9 @@ use App\Posts;
 use App\PostTags;
 use App\Comments;
 use App\Tags;
-use App\ReservationLogs
+use App\ReservationLogs;
 use App\Plans;
+use App\UserPlans;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -4652,11 +4653,11 @@ function createSocial($data)
 	        {
 	   			   #dd($data);
 	   			 $ret = null;
-			     $ret = Plans::create(['user_id' => $data['user_id'], 
-	                                   'name' => $data['name'], 
+			     $ret = Plans::create(['name' => $data['name'], 
 	                                   'description' => $data['description'], 
 	                                   'amount' => $data['amount'], 
 	                                   'ps_id' => $data['ps_id'], 
+	                                   'frequency' => $data['frequency'], 
 	                                   'added_by' => $data['added_by'], 
 	                                   'status' => $data['status']
 	                                  ]);
@@ -4690,7 +4691,6 @@ function createSocial($data)
 	                {
                             $temp['id'] = $p->id; 
 	                    	$temp['status'] = $p->status; 
-	                        $temp['user'] = $this->getUser($p->user_id); 
 	                        $temp['added_by'] = $this->getUser($p->added_by); 
 	                        $temp['user_id'] = $p->user_id; 
 	                        $temp['name'] = $p->name; 

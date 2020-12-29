@@ -3670,12 +3670,12 @@ class MainController extends Controller {
 		}
     }
 	
-		/**
-	 * Show list of blog posts.
+	/**
+	 * Show list of subscription plans.
 	 *
 	 * @return Response
 	 */
-	public function getPosts(Request $request)
+	public function getPlans(Request $request)
     {
 		$user = null;
 		$v = "";
@@ -3693,16 +3693,16 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_posts','edit_posts']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
 				#dd($hasPermission);
 				$req = $request->all();
 				
 				if($hasPermission)
 				{
-				 $v = "posts";
-				 $posts = $this->helpers->getPosts();
+				 $v = "plans";
+				 $plans = $this->helpers->getPlans();
 				 #dd($posts);
-				 array_push($cpt,'posts');
+				 array_push($cpt,'plans');
 				}
 				else
 				{
@@ -3726,11 +3726,11 @@ class MainController extends Controller {
 	
 	
 	/**
-	 * Show the Add Post view.
+	 * Show the Add Plan view.
 	 *
 	 * @return Response
 	 */
-	public function getAddPost(Request $request)
+	public function getAddPlan(Request $request)
     {
 		$user = null;
 		$nope = false;
@@ -3746,13 +3746,13 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_posts','edit_posts']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
 				#dd($hasPermission);
 				$req = $request->all();
 				
 				if($hasPermission)
 				{
-					$v = "add-post";
+					$v = "add-plan";
 					
 				}
 				else
@@ -3777,11 +3777,11 @@ class MainController extends Controller {
     }
 	
 	/**
-	 * Handle add post.
+	 * Handle add plan.
 	 *
 	 * @return Response
 	 */
-	public function postAddPost(Request $request)
+	public function postAddPlan(Request $request)
     {
 		$user = null;
 		if(Auth::check())
@@ -3790,7 +3790,7 @@ class MainController extends Controller {
 			
 			if($this->helpers->isAdmin($user))
 			{
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_posts','edit_posts']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
 				#dd($hasPermission);
 				$req = $request->all();
 
@@ -3800,10 +3800,10 @@ class MainController extends Controller {
 				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                     'title' => 'required',
-                             'url' => 'required|unique:posts',
-							 'ap-images' => 'required',
-                             'content' => 'required'
+		                     'name' => 'required',
+                             'amount' => 'required|numeric',
+							 'frequency' => 'required',
+                             'ps_id' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -3813,42 +3813,14 @@ class MainController extends Controller {
                 }
 				else
 				{
-					$ird = [];
-                    $networkError = false;
-				
-                    for($i = 0; $i < count($req['ap-images']); $i++)
-                    {
-            		  $img = $req['ap-images'][$i];
-					  $imgg = $this->helpers->uploadCloudImage($img->getRealPath());
-						
-					  if(isset($imgg['status']) && $imgg['status'] == "error")
-					  {
-						  $networkError = true;
-						  break;
-					  }
-					  else
-					  {
-						 $req['ird'] = $imgg['public_id'];
-					  }
-             	        								
-					}
-					
-					if($networkError)
-					{
-						session()->flash("network-status-error","ok");
-			            return redirect()->back()->withInput();
-					}
-					else
-					{
-						$req['status'] = "enabled";
-					    $req['author'] = $user->id;
+					$req['status'] = "enabled";
+					$req['added_by'] = $user->id;
 					   
-			            $ret = $this->helpers->createPost($req);
-			            $ss = "add-post-status";
+			        $ret = $this->helpers->createPlan($req);
+			            $ss = "add-plan-status";
 					    if($ret == "error") $ss .= "-error";
 					    session()->flash($ss,"ok");
-			            return redirect()->intended("posts");
-					}
+			            return redirect()->intended("plans");
 					
 				}
 				}
@@ -3877,7 +3849,7 @@ class MainController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function getUpdatePost(Request $request)
+	public function getUpdatePlan(Request $request)
     {
 		$user = null;
 		$nope = false;
@@ -3951,7 +3923,7 @@ class MainController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function postUpdatePost(Request $request)
+	public function postUpdatePlan(Request $request)
     {
 		$user = null;
 		
@@ -4052,7 +4024,7 @@ class MainController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function getRemovePost(Request $request)
+	public function getRemovePlan(Request $request)
     {
 		$user = null;
 		if(Auth::check())
