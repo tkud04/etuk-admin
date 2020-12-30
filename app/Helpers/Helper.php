@@ -4685,7 +4685,8 @@ function createSocial($data)
 	 	 function getPlan($id)
 	            {
 	            	$ret = [];
-	                $p = Plans::where('id',$id)->first();
+	                $p = Plans::where('id',$id)
+					          ->orWhere('ps_id',$id)->first();
  
 	               if($p != null)
 	                {
@@ -4775,6 +4776,7 @@ function createSocial($data)
 	   			 $ret = null;
 			     $ret = UserPlans::create(['user_id' => $data['user_id'], 
 	                                   'plan_id' => $data['plan_id'], 
+	                                   'ps_ref' => $data['ps_ref'], 
 	                                   'status' => $data['status']
 	                                  ]);
 	   			 return $ret;
@@ -4808,7 +4810,8 @@ function createSocial($data)
 	               if($p != null)
 	                {
                             $temp['id'] = $p->id; 
-	                    	$temp['status'] = $p->status; 
+	                    	$temp['status'] = $p->status;
+                            $temp['ps_ref'] = $p->ps_ref; 	                        							
 	                        $temp['user'] = $this->getUser($p->user_id); 
 	                        $temp['plan'] = $this->getPlan($p->plan_id); 
 	                        $temp['stats'] = $this->getUserPlanStats($temp); 

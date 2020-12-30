@@ -13,6 +13,6 @@ class UserPlans extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'user_id', 'plan_id', 'status'
+        'id', 'user_id', 'plan_id', 'ps_ref', 'status'
     ];
 }
