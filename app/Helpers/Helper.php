@@ -4656,6 +4656,7 @@ function createSocial($data)
 			     $ret = Plans::create(['name' => $data['name'], 
 	                                   'description' => $data['description'], 
 	                                   'amount' => $data['amount'], 
+	                                   'pc' => $data['pc'], 
 	                                   'ps_id' => $data['ps_id'], 
 	                                   'frequency' => $data['frequency'], 
 	                                   'added_by' => $data['added_by'], 
@@ -4697,6 +4698,7 @@ function createSocial($data)
 	                        $temp['name'] = $p->name; 
 	                        $temp['description'] = $p->description; 
 	                        $temp['amount'] = $p->amount; 
+	                        $temp['pc'] = $p->pc; 
 	                        $temp['frequency'] = $p->frequency; 
 	                        $temp['ps_id'] = $p->ps_id;
 	                        $temp['date'] = $p->created_at->format("jS F, Y h:i A"); 
@@ -4723,6 +4725,7 @@ function createSocial($data)
 					             'name' => $data['name'],
 					             'description' => $data['description'],
 					             'amount' => $data['amount'],
+					             'pc' => $data['pc'],
 					             'ps_id' => $data['ps_id'],
 					             'frequency' => $data['frequency'],
 					             'status' => $data['status']

@@ -1,6 +1,6 @@
 <?php
-$title = "Add Plan";
-$subtitle = "Add a subscription plan to the system.";				
+$title = $p['name']." Plan";
+$subtitle = "Edit this subscription plan.";				
 ?>
 
 @extends('layout')
@@ -45,6 +45,12 @@ addPlanDescriptionEditor.setValue(`{!! $p['description'] !!}`);
 										<div class="form-group">
                                             <label for="asp-amount">Amount</label>
                                              <input id="asp-amount" type="number" placeholder="Price" name="amount" value="{{$p['amount']}}" class="form-control">
+                                        </div>
+										</div>
+										<div class="col-md-12">
+										<div class="form-group">
+                                            <label for="asp-tc">Post Count</label>
+                                             <input id="asp-tc" type="number" placeholder="Posting count" name="pc" value="{{$p['pc']}}" class="form-control">
                                         </div>
 										</div>
 										<div class="col-md-12">

@@ -13,6 +13,6 @@ class Plans extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'description', 'amount', 'frequency', 'ps_id', 'added_by', 'status'
+        'id', 'name', 'description', 'amount', 'pc', 'frequency', 'ps_id', 'added_by', 'status'
     ];
 }

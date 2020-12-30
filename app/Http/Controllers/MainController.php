@@ -3802,6 +3802,7 @@ class MainController extends Controller {
 				$validator = Validator::make($req,[
 		                     'name' => 'required',
                              'amount' => 'required|numeric',
+                             'pc' => 'required|numeric',
 							 'frequency' => 'required',
                              'ps_id' => 'required'
 		                   ]);
@@ -3946,6 +3947,7 @@ class MainController extends Controller {
 		                     'xf' => 'required',
 		                     'name' => 'required',
                              'amount' => 'required|numeric',
+							 'pc' => 'required|numeric',
 							 'frequency' => 'required',
                              'ps_id' => 'required'
 		                   ]);

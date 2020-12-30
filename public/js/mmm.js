@@ -449,8 +449,8 @@ $(document).ready(function() {
        e.preventDefault();
 	   
 	   let name = $('#asp-name').val(), description = $('#asp-description').val(), amount = $('#asp-amount').val(),
-	       psID = $('#asp-ps-id').val(), frequency = $('#asp-frequency').val(),
-		   validation = (name == "" || parseInt(amount) < 0 || psID == "" || frequency == "none");
+	       psID = $('#asp-ps-id').val(), frequency = $('#asp-frequency').val(), pc = $('#asp-pc').val(),
+		   validation = (name == "" || parseInt(amount) < 0 || parseInt(pc) < 0 || psID == "" || frequency == "none");
 	   
 	   if(validation){
 		   Swal.fire({

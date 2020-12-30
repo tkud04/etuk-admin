@@ -1,6 +1,6 @@
 <?php
-$title = "Add Plan";
-$subtitle = "Add a subscription plan to the system.";				
+$title = $p['name']." Plan";
+$subtitle = "Edit this subscription plan.";				
 ?>
 
 
@@ -46,6 +46,12 @@ addPlanDescriptionEditor.setValue(`<?php echo $p['description']; ?>`);
 										<div class="form-group">
                                             <label for="asp-amount">Amount</label>
                                              <input id="asp-amount" type="number" placeholder="Price" name="amount" value="<?php echo e($p['amount']); ?>" class="form-control">
+                                        </div>
+										</div>
+										<div class="col-md-12">
+										<div class="form-group">
+                                            <label for="asp-tc">Post Count</label>
+                                             <input id="asp-tc" type="number" placeholder="Posting count" name="pc" value="<?php echo e($p['pc']); ?>" class="form-control">
                                         </div>
 										</div>
 										<div class="col-md-12">
