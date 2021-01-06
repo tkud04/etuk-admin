@@ -46,6 +46,7 @@ use App\Tags;
 use App\ReservationLogs;
 use App\Plans;
 use App\UserPlans;
+use App\Activities;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -1913,6 +1914,29 @@ function updateApartment($data)
 			   if($r != null)
 			   {
 				   $r->update(['status' => $dt['status']]);
+				   #dd($r);
+				    if($dt['status'] == "approved")
+					  {
+						 //add activity
+			             //guest
+			             $this->createActivity([
+			              'type' => "review",
+			              'mode' => "guest",
+			              'user_id' => $r->user_id,
+			              'data' => $r->id,
+			             ]);
+
+			             //host
+			             $a = $this->getApartment($r->apartment_id,['host' => true]);
+			             $h = $a['host'];
+			             $this->createActivity([
+			               'type' => "review",
+			               'mode' => "host",
+			               'user_id' => $h['id'],
+			               'data' => $r->id.",".$r->user_id,
+			             ]);
+					  }
+				   
 				   $ret = "ok";
 			   }
 			   
@@ -4867,6 +4891,21 @@ function createSocial($data)
 	   			    }
            
 	              }
+				  
+				  
+					
+		    function createActivity($data)
+	        {
+	   			   #dd($data);
+	   			 $ret = null;
+			     $ret = Activities::create(['user_id' => $data['user_id'], 
+	                                   'type' => $data['type'], 
+	                                   'data' => $data['data'], 
+	                                   'mode' => $data['mode']	                               
+	                                  ]);
+	   			 return $ret;
+	         }
+
 
    
 }

@@ -647,6 +647,7 @@ class MainController extends Controller {
 					  $dt = ['id' => $req['xf'],'status' => ""];
 					  $dt['status'] = $req['type'] == "approve" ? "approved" : "rejected";
 					  $ret = $this->helpers->updateReviewStatus($dt);
+					  
 					  $ss = "update-review-status";
 					  if($ret == "error") $ss .= "-error";
 					  session()->flash($ss,"ok");
