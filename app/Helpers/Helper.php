@@ -47,6 +47,7 @@ use App\ReservationLogs;
 use App\Plans;
 use App\UserPlans;
 use App\Activities;
+use App\Leads;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -4906,7 +4907,80 @@ function createSocial($data)
 	   			 return $ret;
 	         }
 
+            function createLead($data)
+	        {
+	   			   #dd($data);
+	   			 $ret = null;
+			     $ret = Leads::create(['email' => $data['email'], 
+	                                   'status' => $data['status']                              
+	                                  ]);
+	   			 return $ret;
+	         }
 
+	      function getLeads()
+	      {
+	   	   $ret = [];
+	       $leads = Leads::where('id','>',"0")->get();
+	   	     if(!is_null($leads))
+	   	     {
+			   $leads = $leads->sortByDesc('created_at');	
+	   		   foreach($leads as $l)
+	   		   {
+	   		     $temp = $this->getLead($l->id);
+	   		     array_push($ret,$temp);
+	   	       }
+			 }
+	   
+	   	   return $ret;
+	      }
+		  
+		  
+	 	 function getLead($id)
+	            {
+	            	$ret = [];
+	                $l = Leads::where('id',$id)->first();
+ 
+	               if($l != null)
+	                {
+                            $temp['id'] = $l->id; 
+	                    	$temp['email'] = $l->email; 
+	                        $temp['status'] = $l->status; 
+							$temp['date'] = $l->created_at->format("jS F, Y h:i A"); 
+	                        $temp['updated'] = $l->updated_at->format("jS F, Y h:i A"); 
+							$ret = $temp; 
+	                }                          
+                                                      
+	                 return $ret;
+	            }
+				
+          function updateLead($xf,$data)
+	              {
+	   			    #dd($data);
+	   			    $ret = "error";
+	   			     $l = Leads::where('id',$xf)->first();
+			 
+			 
+	   			    if(!is_null($l))
+	   			    {
+	   				  $l->update(['status' => $data['status']]);
+	   			      $ret = "ok";
+	   			    }
+           
+	              }
+		  function removeLead($xf)
+	              {
+	   			    #dd($data);
+	   			    $ret = "error";
+	   			     $l = Leads::where('id',$xf)->first();
+			 
+			 
+	   			    if(!is_null($l))
+	   			    {
+	   				  $l->delete();
+	   			      $ret = "ok";
+	   			    }
+           
+	              }
    
 }
 ?>
