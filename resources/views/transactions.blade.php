@@ -1,5 +1,5 @@
 <?php
-$title = "Transactions";
+$title = "Finance";
 $subtitle = "View all transactions on the platform";
 ?>
 
@@ -33,7 +33,7 @@ $subtitle = "View all transactions on the platform";
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
-                            <h5 class="card-header">Transactions</h5>
+                            <h5 class="card-header">{{$subtitle}}</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
@@ -58,9 +58,8 @@ $subtitle = "View all transactions on the platform";
 											{
 												$ll = " active";
 											    $sm = "";
-											    $tc = " text-white";
 											}
-											
+		
 										  $vu = url('transaction')."?xf=".$t['id'];
 										  $guest = $t['guest'];
 										  $avatar = $guest['avatar'];

@@ -37,14 +37,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-credit-card"></i>Transactions</a>
-                                <div id="submenu-3" class="collapse submenu" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="<?php echo e(url('transactions')); ?>">View transactions</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a class="nav-link" href="<?php echo e(url('finance')); ?>"><i class="fas fa-fw fa-credit-card"></i>Finance</a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fas fa-fw fa-bed"></i>Reviews</a>

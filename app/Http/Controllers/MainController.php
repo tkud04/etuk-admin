@@ -1597,6 +1597,16 @@ class MainController extends Controller {
 	 */
 	public function getTransactions(Request $request)
     {
+	    return redirect()->intended("finance");
+    }
+	
+	/**
+	 * Show list of transactions on the platform.
+	 *
+	 * @return Response
+	 */
+	public function getFinance(Request $request)
+    {
 		$user = null;
 		$nope = false;
 		$v = "";
@@ -1703,6 +1713,65 @@ class MainController extends Controller {
 					return redirect()->intended('/');
 				}
 								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Show the Post Apartment view.
+	 *
+	 * @return Response
+	 */
+	public function getAddApartment(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_apartments','edit_apartments']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				$v = "add-apartment";
+				$req = $request->all();
+                $states = $this->helpers->states;
+		        $countries = $this->helpers->countries;
+		        $services = $this->helpers->getServices();
+				#dd($apartments);
+                array_push($cpt,'states');
+                array_push($cpt,'countries');
+                array_push($cpt,'services');
+                }
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
 			}
 			else
 			{

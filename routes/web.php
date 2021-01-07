@@ -37,8 +37,8 @@ Route::get('edu', 'MainController@getEnableDisableUser');
 
 //Apartments
 Route::get('apartments', 'MainController@getApartments');
-Route::get('add-apartment', 'MainController@getAddApartment');
-Route::post('add-apartment', 'MainController@postAddApartment');
+Route::get('post-apartment', 'MainController@getAddApartment');
+Route::post('post-apartment', 'MainController@postAddApartment');
 Route::get('apartment', 'MainController@getApartment');
 Route::post('apartment', 'MainController@postApartment');
 Route::get('remove-apartment', 'MainController@getRemoveApartment');
@@ -55,6 +55,7 @@ Route::post('add-permissions', 'MainController@postAddPermission');
 Route::get('remove-permission', 'MainController@getRemovePermission');
 
 //Transactions
+Route::get('finance', 'MainController@getFinance');
 Route::get('transactions', 'MainController@getTransactions');
 Route::get('transaction', 'MainController@getTransaction');
 
