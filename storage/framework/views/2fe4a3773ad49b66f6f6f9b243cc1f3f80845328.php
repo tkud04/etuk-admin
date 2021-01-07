@@ -32,6 +32,7 @@
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="<?php echo e(url('apartments')); ?>">View apartments</a>
+                                            <a class="nav-link" href="<?php echo e(url('post-apartment')); ?>">Post apartment</a>
                                         </li>
                                     </ul>
                                 </div>
