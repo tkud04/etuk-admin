@@ -3,24 +3,24 @@ $title = "Post Apartment";
 $subtitle = "Post a new apartment to the system.";
 ?>
 
-@extends('layout')
-
-@section('title',$title)
 
 
-@section('page-header')
-@include('page-header',['title' => "Apartments",'subtitle' => $title])
-@stop
+<?php $__env->startSection('title',$title); ?>
 
 
-@section('content')
+<?php $__env->startSection('page-header'); ?>
+<?php echo $__env->make('page-header',['title' => "Apartments",'subtitle' => $title], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
+
+
+<?php $__env->startSection('content'); ?>
 <div class="row">
    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
      <div class="card">
-        <h4 class="card-header">{{$subtitle}}</h4>
+        <h4 class="card-header"><?php echo e($subtitle); ?></h4>
         <div class="card-body">
-          <form action="{{url('add-banner')}}" id="pa-form" method="post" enctype="multipart/form-data">
-		     <input type="hidden" id="tk-pa" value="{{csrf_token()}}"/>
+          <form action="<?php echo e(url('add-banner')); ?>" id="pa-form" method="post" enctype="multipart/form-data">
+		     <input type="hidden" id="tk-pa" value="<?php echo e(csrf_token()); ?>"/>
 			 <div class="row" id="pa-side-1">
 			    <div class="col-md-12">
 				  <h3><span class="label label-primary">Basic Information</span></h3>
@@ -68,7 +68,7 @@ $subtitle = "Post a new apartment to the system.";
 					   foreach($opts3 as $k => $v)
 					   {
 					  ?>
-					  <option value="{{$v}}">{{$k}}</option>
+					  <option value="<?php echo e($v); ?>"><?php echo e($k); ?></option>
 					  <?php
 					  }
 					  ?>
@@ -81,4 +81,5 @@ $subtitle = "Post a new apartment to the system.";
      </div>
    </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\bkupp\lokl\repo\etuk-admin\resources\views/add-apartment.blade.php ENDPATH**/ ?>
