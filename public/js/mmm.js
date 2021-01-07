@@ -18,7 +18,7 @@ $(document).ready(function() {
 	/**
 	//Init wysiwyg editors
 	Simditor.locale = 'en-US';
-	let aptDescriptionTextArea = $('#add-apartment-description');
+	let aptDescriptionTextArea = $('#pa-description');
 	//console.log('area: ',aptDescriptionTextArea);
 	**/
 	
@@ -443,6 +443,207 @@ $(document).ready(function() {
 	   }
     });
     
+	
+	//ADD APARTMENT
+	$("#pa-side-1-next").click(e => {
+       e.preventDefault();
+	   
+	   let aptUrl = $('#pa-url').val(), aptName = $('#pa-name').val(), aptAmount = $('#pa-amount').val(),
+	   aptMaxAdults = $('#pa-max-adults').val(),aptMaxChildren = $('#pa-max-children').val(),aptDescription = $('#pa-description').val(),
+	       aptCategory = $('#pa-category').val(), aptPType = $('#pa-ptype').val(),aptRooms = $('#pa-rooms').val(),
+	       aptUnits = $('#pa-units').val(),aptBathrooms = $('#pa-bathrooms').val(),
+		   aptBedrooms = $('#pa-bedrooms').val(), aptPets = $('#pa-pets').val(),
+		      side1_validation = (aptUrl == "" || aptName == "" || aptMaxAdults == "" || aptMaxChildren == "" || aptAmount < 0 || aptDescription == "" || aptCategory == "none" || aptPType == "none" || aptRooms == "none" || aptUnits == "none" || aptBedrooms == "none" || aptBathrooms == "none" || aptPets == "none" || facilities.length < 1);	  
+	  
+	   if(side1_validation){
+		  Swal.fire({
+			     icon: 'error',
+                 title: `All fields are required`
+               }); 
+	   }
+	   else{
+		 let aptSidebarFacilitiesHTML = ``;
+		   for(let adf = 0; adf < facilities.length; adf++){
+			   aptSidebarFacilitiesHTML += `<li>${facilities[adf].id}</li>`;
+		   }
+		   $('#apt-sidebar-facilities').html(aptSidebarFacilitiesHTML);
+		   hideElem(['#pa-side-1','#pa-side-3']);
+	       selectCheckoutSide({side: 2,type: ".add-apartment",content: "ti-check"});
+	       showElem(['#pa-side-2']);
+	   }
+    });
+	$("#pa-side-1-prev").click(e => {
+       e.preventDefault();
+	  hideElem(['#pa-side-1','#pa-side-2','#pa-side-3']);
+	  showElem(['#pa-side-0']);
+    });	
+	
+	$("#pa-side-2-next").click(e => {
+       e.preventDefault();
+	   
+	   //side 2 validation imgs = $(`${BUUPlist[bc].id}-images-div input[type=file]`);
+	   let aptAddress = $('#pa-address').val(), aptCity = $('#pa-city').val(), aptLGA = $('#pa-lga').val(),aptState = $('#pa-state').val(),
+	       aptImages = $(`#pa-images input[type=file]`), emptyImage = false,
+           side2_validation = (aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none");
+		   
+		   if(side2_validation){
+			 Swal.fire({
+			     icon: 'error',
+                 title: `All fields are required`
+               });   
+		   }
+		   else{
+			  hideElem(['#pa-side-1','#pa-side-2']);
+	         selectCheckoutSide({side: 3,type: ".add-apartment",content: "ti-check"});
+	         aptFinalPreview("add-apartment"); 
+	  
+	         let ac = aptCover == "none" ? 0 : aptCover;
+	         //Add the cover image to the apt sidebar
+	         if (aptImages[ac].files && aptImages[ac].files[0]) {
+	         let reader = new FileReader();
+    
+	         reader.onload = function(e) {
+	           $(`#apt-sidebar-cover`).attr({
+	             'src': e.target.result,
+	             'width': "236",
+	             'height': "161"
+	           });
+            }
+    
+            reader.readAsDataURL(aptImages[ac].files[0]); // convert to base64 string
+		
+		    let ii = aptImages.length == 1 ? "image" : "images";
+		    $('#apt-sidebar-img-count').html(`${aptImages.length} ${ii}`);
+           }
+	       
+		   showElem(['#pa-side-3']);
+    
+		   }
+	     });
+	$("#pa-side-3-prev").click(e => {
+       e.preventDefault();
+	  hideElem(['#pa-side-1','#pa-side-3']);
+	  selectCheckoutSide({side: 2,type: ".add-apartment",content: "ti-check"});
+	  showElem(['#pa-side-2']);
+    });	
+	$("#pa-side-3-next").click(e => {
+       e.preventDefault();
+	   console.log("add apartment submit");
+	   
+	   //side 1 validation
+	   let aptUrl = $('#pa-url').val(), aptName = $('#pa-name').val(), aptAmount = $('#pa-amount').val(),
+	   aptMaxAdults = $('#pa-max-adults').val(),aptMaxChildren = $('#pa-max-children').val(),aptDescription = $('#pa-description').val(),
+	       aptCategory = $('#pa-category').val(), aptPType = $('#pa-ptype').val(),aptRooms = $('#pa-rooms').val(),
+	       aptUnits = $('#pa-units').val(),aptBathrooms = $('#pa-bathrooms').val(),
+		   aptBedrooms = $('#pa-bedrooms').val(), aptPets = $('#pa-pets').val(),
+		   side1_validation = (aptUrl == "" || aptName == "" || aptMaxAdults == "" || aptMaxChildren == "" || aptAmount < 0 || aptDescription == "" || aptCategory == "none" || aptPType == "none" || aptRooms == "none" || aptUnits == "none" || aptBedrooms == "none" || aptBathrooms == "none" || aptPets == "none" || facilities.length < 1);	  
+	  
+       //side 2 validation imgs = $(`${BUUPlist[bc].id}-images-div input[type=file]`);
+	   let aptAddress = $('#pa-address').val(), aptCity = $('#pa-city').val(), aptLGA = $('#pa-lga').val(),aptState = $('#pa-state').val(),
+	       aptImages = $(`#pa-images input[type=file]`), emptyImage = false,
+           side2_validation = (aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none");
+           
+		   for(let i = 0; i < aptImages.length; i++){
+			   if(aptImages[i].files.length < 1) emptyImage = true;
+		   }
+		   
+        // console.log("video: ",aptVideo);
+         //console.log("images: ",aptImages);
+	   
+	   let aptPlan = $('#pa-plan').val(), side3_validation = (aptPlan == "none"); 
+	   
+	   if(side1_validation || side2_validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all the required fields"
+           })
+	   }
+	   else if(emptyImage){
+		   Swal.fire({
+			 icon: 'error',
+             title: "You have an empty image field."
+           })
+	   }
+	   else if(aptCover == "none"){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Select a cover image."
+           })
+	   }
+	   else if(side3_validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Select a subscription plan."
+           })
+	   }
+	   /**
+	   else if(aptVideo[0].size > 15000000){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Video must not be larger than 10MB"
+           })
+	   }
+	   **/
+	   else{
+		 //let aptName = $('#pa-name').val(),   
+		 console.log("final");
+		 
+		 let ff = [];
+		 for(let y = 0; y < facilities.length; y++){
+			 if(facilities[y].selected) ff.push(facilities[y]);
+		 }
+		 
+		 let fd =  new FormData();
+		 fd.append("url",aptUrl);
+		 fd.append("name",aptName);
+		 fd.append("max_adults",aptMaxAdults);
+		 fd.append("max_children",aptMaxChildren);
+		 fd.append("description",aptDescription);
+		 fd.append("rooms",aptRooms);
+		 fd.append("category",aptCategory);
+		 fd.append("property_type",aptPType);
+		 fd.append("amount",aptAmount);
+		 fd.append("bedrooms",aptBedrooms);
+		fd.append("bathrooms",aptBathrooms);
+		fd.append("units",aptUnits);
+		 fd.append("pets",aptPets);
+		 fd.append("address",aptAddress);
+		 fd.append("city",aptCity);
+		 fd.append("lga",aptLGA);
+		 fd.append("state",aptState);
+		 fd.append("facilities",JSON.stringify(ff));
+		 
+		 //fd.append("video",aptVideo[0]);
+		 fd.append("cover",aptCover);
+		 fd.append("img_count",aptImages.length);
+		 
+		 for(let r = 0; r < aptImages.length; r++)
+		 {
+		    let imgg = aptImages[r];
+			let imgName = imgg.getAttribute("id");
+            //console.log("imgg name: ",imgName);			
+            fd.append(imgName,imgg.files[0]);   			   			
+		 }
+		 
+		 /**
+		 for(let vv of fd.values()){
+			 console.log("vv: ",vv);
+		 }
+		 **/
+		  fd.append("_token",$('#tk-apt').val());
+		  
+		  $('#pa-submit').hide();
+		  $('#pa-loading').fadeIn();
+		  
+		  if(aptPlan == "free"){
+			addApartment(fd);  
+		  }
+		  else{
+			  console.log(aptPlan);
+		  }
+		  
+	   }
+    });
 	
 	//SUBSCRIPTION PLANS
 	$("#asp-form-btn").click(e => {

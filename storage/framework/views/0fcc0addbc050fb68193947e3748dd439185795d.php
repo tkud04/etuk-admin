@@ -14,6 +14,19 @@ $subtitle = "Post a new apartment to the system.";
 
 
 <?php $__env->startSection('content'); ?>
+<script>
+let selectedSide = "1", facilities = [], aptImages = [], aptImgCount = 1, aptCover = "none";              
+  
+$(document).ready(() => {
+$('#pa-loading').hide();
+let postApartmentDescriptionEditor = new Simditor({
+		textarea: $('#pa-description'),
+		toolbar: toolbar,
+		placeholder: `Enter description here`
+	});	
+});
+
+</script>
 <div class="row">
    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
      <div class="card">
@@ -68,13 +81,136 @@ $subtitle = "Post a new apartment to the system.";
 					   foreach($opts3 as $k => $v)
 					   {
 					  ?>
-					  <option value="<?php echo e($v); ?>"><?php echo e($k); ?></option>
+					  <option value="<?php echo e($k); ?>"><?php echo e($v); ?></option>
 					  <?php
 					  }
 					  ?>
 					</select>
 				  </div>
 				</div>
+				<div class="col-md-12">
+				  <div class="form-group">
+                    <h4>Description<span class="req">*</span></h4>
+                    <textarea class="form-control" id="pa-description"></textarea>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>Category<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-category">
+					  <option value="none">Select category</option>
+					  <?php
+					  $opts4 = [
+								'studio' => "Studio",
+												    '1bed' => "1 bedroom",
+												    '2bed' => "2 bedrooms",
+												    '3bed' => "3 bedrooms",
+												    'penthouse' => "Penthouse apartment",
+					  ];
+					   foreach($opts4 as $k => $v)
+					   {
+					  ?>
+					  <option value="<?php echo e($k); ?>"><?php echo e($v); ?></option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>Property type<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-ptype">
+					  <option value="none">Select property type</option>
+					  <?php
+					  $opts5 = [
+								'unfurnished' => "Unfurnished apartment",
+												    'Furnished' => "Furnished apartment",
+												    'serviced' => "Serviced apartment",
+					  ];
+					   foreach($opts5 as $k => $v)
+					   {
+					  ?>
+					  <option value="<?php echo e($k); ?>"><?php echo e($v); ?></option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>No. of rooms<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-rooms">
+					  <option value="none">Select no. of rooms</option>
+					  <?php
+					   for($i = 0; $i < 5; $i++)
+					   {
+						   $rr = $i == 0 ? "room" : "rooms";
+					  ?>
+					  <option value="<?php echo e($i + 1); ?>"><?php echo e($i + 1); ?> <?php echo e($rr); ?></option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>No. of units<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-units">
+					  <option value="none">Select no. of units</option>
+					  <?php
+					  for($i = 0; $i < 5; $i++)
+					   {
+						   $rr = $i == 0 ? "unit" : "units";
+					  ?>
+					  <option value="<?php echo e($i + 1); ?>"><?php echo e($i + 1); ?> <?php echo e($rr); ?></option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>No. of bathrooms<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-bathrooms">
+					  <option value="none">Select no. of bathrooms</option>
+					  <?php
+					  for($i = 0; $i < 5; $i++)
+					   {
+						   $rr = $i == 0 ? "bathroom" : "bathrooms";
+					  ?>
+					  <option value="<?php echo e($i + 1); ?>"><?php echo e($i + 1); ?> <?php echo e($rr); ?></option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>No. of bedrooms<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-bedrooms">
+					  <option value="none">Select no. of bedrooms</option>
+					  <?php
+					  for($i = 0; $i < 5; $i++)
+					   {
+						   $rr = $i == 0 ? "bedhroom" : "bedhrooms";
+					  ?>
+					  <option value="<?php echo e($i + 1); ?>"><?php echo e($i + 1); ?> <?php echo e($rr); ?></option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>
+				</div>
+				<div class="col-sm-12 pl-0">
+                   <p class="text-center">
+                      <button class="btn btn-space btn-secondary" id="pa-side-1-next">Next</button>
+                   </p>
+                </div>
 			 </div>
           </form>
         </div>
