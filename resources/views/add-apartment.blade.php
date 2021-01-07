@@ -32,7 +32,7 @@ let postApartmentDescriptionEditor = new Simditor({
      <div class="card">
         <h4 class="card-header">{{$subtitle}}</h4>
         <div class="card-body">
-          <form action="{{url('add-banner')}}" id="pa-form" method="post" enctype="multipart/form-data">
+          <form id="pa-form" method="post" enctype="multipart/form-data">
 		     <input type="hidden" id="tk-pa" value="{{csrf_token()}}"/>
 			 <div class="row" id="pa-side-1">
 			    <div class="col-md-12">
@@ -209,6 +209,116 @@ let postApartmentDescriptionEditor = new Simditor({
 				<div class="col-sm-12 pl-0">
                    <p class="text-center">
                       <button class="btn btn-space btn-secondary" id="pa-side-1-next">Next</button>
+                   </p>
+                </div>
+			 </div>
+			 <div class="row" id="pa-side-2">
+			 <div class="col-md-12">
+				  <h3><span class="label label-primary">Location & Media</span></h3>
+				</div>
+				
+			   <div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 20px;">
+											<div class="form-group">
+											   
+												<div class="row">
+												 <?php
+											        foreach($services as $s)
+													{
+														$key = $s['tag'];
+														$value = $s['name'];
+											      ?>
+												  <div class="col-lg-3 col-md-6 col-sm-12">
+												   
+ 												    <a class="btn btn-primary btn-sm text-white apt-service" id="apt-service-{{$key}}" onclick="toggleFacility('{{$key}}')" data-check="unchecked">
+													  <center><i id="apt-service-icon-{{$key}}" class="ti-control-stop"></i></center>
+													</a>
+													 <label>{{$value}}</label>
+												  </div>
+												  <?php
+													}
+												  ?>
+												</div>
+												
+											</div>
+										</div>
+				<div class="col-md-12">
+				  <div class="form-group">
+                    <h4>Address<span class="req">*</span></h4>
+                    <input type="text" class="form-control" id="pa-address" placeholder="House address"/>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>City<span class="req">*</span></h4>
+                    <input type="text" class="form-control" id="pa-city" placeholder="City"/>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>LGA<span class="req">*</span></h4>
+                    <input type="text" class="form-control" id="pa-lga" placeholder="LGA"/>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>State<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-state">
+					  <option value="none">Select state</option>
+					  <?php
+					   foreach($states as $k => $v)
+					   {
+					  ?>
+					  <option value="{{$k}}">{{$v}}</option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>Country<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-country">
+					  <option value="none">Select country</option>
+					  <?php
+					   foreach($countries as $k => $v)
+					   {
+					  ?>
+					  <option value="{{$k}}">{{$v}}</option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>	
+				</div>
+				 <div class="col-md-12">
+											<div class="form-group">
+												<label>Images<i class="req">*</i></label>
+												<div id="pa-images">
+												<div id="pa-image-div-0" class="row">
+												  <div class="col-md-7">
+												    <input type="file" class="form-control" onchange="readURL(this,{id: 'pa',ctr: '0'})" id="pa-image-0" name="pa-images[]">												    
+												  </div>
+												  <div class="col-md-5">
+												    <img id="pa-preview-0" src="#" alt="preview" style="width: 50px; height: 50px;"/>
+													<a href="javascript:void(0)" onclick="aptSetCoverImage(0)" class="btn btn-theme btn-sm">Set as cover image</a>
+												    <a href="javascript:void(0)" onclick="aptRemoveImage({id: 'pa',ctr: '0'})" class="btn btn-warning btn-sm">Remove</a>
+												  </div>
+												</div>
+												</div>
+											</div>
+											<div class="form-group">
+											    <a href="javascript:void(0)" onclick="aptAddImage({id: 'pa'})" class="btn btn-warning btn-sm">Add image</a>
+											    <ol class="form-control-plaintext">
+												  <li>Recommended dimensions: Your images should not exceed <b>1280x880</b></li>
+												  <li>Maximum file size: Your images must not be more than <b>1.5MB</b></li>
+												</ol>
+											</div>
+										</div>
+			   <div class="col-sm-12 pl-0">
+                   <p class="text-center">
+                      <button class="btn btn-space btn-secondary" id="pa-side-2-prev">Back</button>
+                      <button class="btn btn-space btn-secondary" id="pa-side-2-next">Next</button>
                    </p>
                 </div>
 			 </div>
