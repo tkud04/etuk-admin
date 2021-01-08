@@ -197,7 +197,7 @@ let postApartmentDescriptionEditor = new Simditor({
 					  <?php
 					  for($i = 0; $i < 5; $i++)
 					   {
-						   $rr = $i == 0 ? "bedhroom" : "bedhrooms";
+						   $rr = $i == 0 ? "bedroom" : "bedrooms";
 					  ?>
 					  <option value="<?php echo e($i + 1); ?>"><?php echo e($i + 1); ?> <?php echo e($rr); ?></option>
 					  <?php
@@ -214,10 +214,11 @@ let postApartmentDescriptionEditor = new Simditor({
 			 </div>
 			 <div class="row" id="pa-side-2">
 			 <div class="col-md-12">
-				  <h3><span class="label label-primary">Location & Media</span></h3>
+				  <h3><span class="label label-primary">Additional Details</span></h3>
 				</div>
 				
 			   <div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 20px;">
+			   <h4>Facilities<span class="req">*</span></h4>
 											<div class="form-group">
 											   
 												<div class="row">
@@ -322,6 +323,30 @@ let postApartmentDescriptionEditor = new Simditor({
                    </p>
                 </div>
 			 </div>
+			  <div class="row" id="pa-side-3">
+			    <div class="col-sm-12 pl-0">
+				<div class="table-responsive">
+				<table class="table table-striped">
+                  <thead>
+                  <tr>
+				    <th>Property</th>
+				    <th>Value</th>
+				  </tr>				
+				  </thead>				
+				  <tbody id="pa-final-preview"></tbody>				
+				</table>
+				</div>
+				<hr>
+				<h4>Final Notes</h4>
+				<p>Take a moment to preview the information about your apartment to ensure there are no errors or mistypes as your request will be reviewed by an admin. If you are sure all your information is correct click on <b>Submit</b> below. To make changes click on <b>Back</b>.</p>
+
+				
+                   <p class="text-center">
+                      <button class="btn btn-space btn-secondary" id="pa-side-3-prev">Back</button>
+                      <button class="btn btn-space btn-secondary" id="pa-side-3-next">Submit</button>
+                   </p>
+                </div>
+			  </div>
           </form>
         </div>
      </div>

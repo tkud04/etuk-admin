@@ -462,11 +462,7 @@ $(document).ready(function() {
                }); 
 	   }
 	   else{
-		 let aptSidebarFacilitiesHTML = ``;
-		   for(let adf = 0; adf < facilities.length; adf++){
-			   aptSidebarFacilitiesHTML += `<li>${facilities[adf].id}</li>`;
-		   }
-		   $('#apt-sidebar-facilities').html(aptSidebarFacilitiesHTML);
+		 
 		   hideElem(['#pa-side-1','#pa-side-3']);
 	       showElem(['#pa-side-2']);
 	   }
@@ -493,6 +489,12 @@ $(document).ready(function() {
 		   else{
 			  hideElem(['#pa-side-1','#pa-side-2']);
 	         
+			 let aptSidebarFacilitiesHTML = ``;
+		   for(let adf = 0; adf < facilities.length; adf++){
+			   aptSidebarFacilitiesHTML += `<li>${facilities[adf].id}</li>`;
+		   }
+		   $('#pa-facilities').html(aptSidebarFacilitiesHTML);
+			 
 	         let ac = aptCover == "none" ? 0 : aptCover;
 	         //Add the cover image to the apt sidebar
 	         if (aptImages[ac].files && aptImages[ac].files[0]) {
@@ -509,9 +511,10 @@ $(document).ready(function() {
             reader.readAsDataURL(aptImages[ac].files[0]); // convert to base64 string
 		
 		    let ii = aptImages.length == 1 ? "image" : "images";
-		    $('#apt-sidebar-img-count').html(`${aptImages.length} ${ii}`);
+		    $('#pa-img-count').html(`${aptImages.length} ${ii}`);
            }
 	       
+		   aptFinalPreview('pa');
 		   showElem(['#pa-side-3']);
     
 		   }
