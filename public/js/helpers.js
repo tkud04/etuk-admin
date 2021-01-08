@@ -271,7 +271,7 @@ const toggleFacility = dt => {
 
 const aptAddImage = dt => {
 	let i = $(`#${dt.id}-images`), ctr = $(`#${dt.id}-images div.row`).length;
-	let sciText = dt.id == "add-apartment" ? "<a href='javascript:void(0)' onclick=\"aptSetCoverImage('${ctr}')\" class='btn btn-theme btn-sm'>Set as cover image</a>" : "";
+	let sciText = `<a href='javascript:void(0)' onclick="aptSetCoverImage('${ctr}')" class='btn btn-primary btn-sm'>Set as cover image</a>`;
 	
 	i.append(`
 			  <div id="${dt.id}-image-div-${ctr}" class="row">
@@ -343,11 +343,36 @@ const aptFinalPreview = (id) => {
 		   
 		   if(aptUrl == "") aptUrl = "not specified";
 		   
-		   let aptAvb = id == "my-apartment" ? $(`#${id}-avb`).val() : "Pending review";
+		   let aptAvb = $(`#${id}-avb`).val(), ci = null;
+		   
+		   let ac = aptCover == "none" ? 0 : aptCover, reader = null;
+           let imgs = aptImages[ac].files, rawImgs = [], ii = aptImages.length == 1 ? "image" : "images";
+	       
+		   //Add the images to the apt preview
+			 for(let i = 0; i < aptImages.length; i++){
+			    reader = new FileReader();
+ 	            reader.onload = function(e) {
+					let x = {
+						 src:`<img src="${e.target.result}" width="236" height="161">`,
+						 cover:"no",
+						 cml: null
+						};
+						
+	                if(ac == i){
+						x.cover = "yes";
+						x.cml = `<span class="label label-primary">Cover image</span>`;
+					} 
+					rawImgs.push(x);
+                }
+                reader.readAsDataURL(aptImages[i].files[0]); // convert to base64 string
+		      }
+		   
+		   console.log(rawImgs);
+		   
 	let i = `
 	     <tr><td>Apartment ID</td><td><span>Will be generated</span></td></tr>
 	     <tr><td>Friendly name</td><td><span>${aptName}</span></td></tr>
-	     <tr><td>Friendly URL</td><td><span>${axf}?xf=<b>${aptUrl}</b></span></td></tr>
+	     <tr><td>Friendly URL</td><td><span>[main website]?xf=<b>${aptUrl}</b></span></td></tr>
 	     <tr><td>Max. guests</td><td><span>${aptMaxAdults}</span></td></tr>
 	     <tr><td>Availability</td><td><span>${aptAvb}</span></td></tr>
 	     <tr><td>Price per day</td><td><span>&#8358;${aptAmount}</span></td></tr>
@@ -359,6 +384,12 @@ const aptFinalPreview = (id) => {
 	     <tr><td>No. of bathrooms</td><td><span>${aptBathrooms}</span></td></tr>
 	     <tr><td>Pets</td><td><span>${aptPets}</span></td></tr>
 	     <tr><td>Facilities & services</td><td><span>${ff}</span></td></tr>
+	     <tr>
+		  <td>Images</td>
+		  <td>
+		    <h4>${aptImages.length} ${ii}</h4>
+		     ${rawImgs.map(r => r.src + " " + r.cml).join("")}
+		  </td></tr>
 	`;
 	
 	$(`#${id}-final-preview`).html(i);

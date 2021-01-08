@@ -13,7 +13,7 @@ $(document).ready(function() {
                           "#as-other"
 			  ]);
 	
-	hideElem(["#sps-row","#pa-side-2","#pa-side-3"]);
+	hideElem(["#sps-row","#pa-side-2","#pa-side-3","#pa-loading"]);
 	
 	/**
 	//Init wysiwyg editors
@@ -477,8 +477,8 @@ $(document).ready(function() {
 	   
 	   //side 2 validation imgs = $(`${BUUPlist[bc].id}-images-div input[type=file]`);
 	   let aptAddress = $('#pa-address').val(), aptCity = $('#pa-city').val(), aptLGA = $('#pa-lga').val(),aptState = $('#pa-state').val(),
-	       aptImages = $(`#pa-images input[type=file]`), emptyImage = false,
-           side2_validation = (facilities.length < 1 || aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none");
+	       aptCountry = $('#pa-country').val(), aptAVB = $('#pa-avb').val(),aptImages = $(`#pa-images input[type=file]`), emptyImage = false,
+           side2_validation = (facilities.length < 1 || aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none" || aptCountry == "none" || aptAVB == "none");
 		   
 		   if(side2_validation){
 			 Swal.fire({
@@ -488,32 +488,7 @@ $(document).ready(function() {
 		   }
 		   else{
 			  hideElem(['#pa-side-1','#pa-side-2']);
-	         
-			 let aptSidebarFacilitiesHTML = ``;
-		   for(let adf = 0; adf < facilities.length; adf++){
-			   aptSidebarFacilitiesHTML += `<li>${facilities[adf].id}</li>`;
-		   }
-		   $('#pa-facilities').html(aptSidebarFacilitiesHTML);
-			 
-	         let ac = aptCover == "none" ? 0 : aptCover;
-	         //Add the cover image to the apt sidebar
-	         if (aptImages[ac].files && aptImages[ac].files[0]) {
-	         let reader = new FileReader();
-    
-	         reader.onload = function(e) {
-	           $(`#apt-sidebar-cover`).attr({
-	             'src': e.target.result,
-	             'width': "236",
-	             'height': "161"
-	           });
-            }
-    
-            reader.readAsDataURL(aptImages[ac].files[0]); // convert to base64 string
-		
-		    let ii = aptImages.length == 1 ? "image" : "images";
-		    $('#pa-img-count').html(`${aptImages.length} ${ii}`);
-           }
-	       
+
 		   aptFinalPreview('pa');
 		   showElem(['#pa-side-3']);
     
@@ -538,8 +513,8 @@ $(document).ready(function() {
 	  
        //side 2 validation imgs = $(`${BUUPlist[bc].id}-images-div input[type=file]`);
 	   let aptAddress = $('#pa-address').val(), aptCity = $('#pa-city').val(), aptLGA = $('#pa-lga').val(),aptState = $('#pa-state').val(),
-	       aptImages = $(`#pa-images input[type=file]`), emptyImage = false,
-           side2_validation = (aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none");
+	       aptImages = $(`#pa-images input[type=file]`), emptyImage = false,aptCountry = $('#pa-country').val(), aptAVB = $('#pa-avb').val(),
+           side2_validation = (aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none" || aptCountry == "none" || aptAVB == "none");
            
 		   for(let i = 0; i < aptImages.length; i++){
 			   if(aptImages[i].files.length < 1) emptyImage = true;
@@ -566,12 +541,6 @@ $(document).ready(function() {
 		   Swal.fire({
 			 icon: 'error',
              title: "Select a cover image."
-           })
-	   }
-	   else if(side3_validation){
-		   Swal.fire({
-			 icon: 'error',
-             title: "Select a subscription plan."
            })
 	   }
 	   /**
@@ -609,6 +578,8 @@ $(document).ready(function() {
 		 fd.append("city",aptCity);
 		 fd.append("lga",aptLGA);
 		 fd.append("state",aptState);
+		 fd.append("country",aptCountry);
+		 fd.append("avb",aptAVB);
 		 fd.append("facilities",JSON.stringify(ff));
 		 
 		 //fd.append("video",aptVideo[0]);
@@ -628,17 +599,11 @@ $(document).ready(function() {
 			 console.log("vv: ",vv);
 		 }
 		 **/
-		  fd.append("_token",$('#tk-apt').val());
+		  fd.append("_token",$('#tk-pa').val());
 		  
 		  $('#pa-submit').hide();
 		  $('#pa-loading').fadeIn();
-		  
-		  if(aptPlan == "free"){
-			addApartment(fd);  
-		  }
-		  else{
-			  console.log(aptPlan);
-		  }
+		  //addApartment(fd);  
 		  
 	   }
     });

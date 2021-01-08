@@ -292,6 +292,29 @@ let postApartmentDescriptionEditor = new Simditor({
 					</select>
 				  </div>	
 				</div>
+				<div class="col-md-12">
+				  <div class="form-group">
+                    <h4>Availability<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-avb">
+					<?php
+					 $avb = [
+					   'pending' => "Pending",
+					   'available' => "Available",
+					   'occupied' => "Occupied",
+					 ];
+					?>
+					  <option value="none">Select availability</option>
+					  <?php
+					   foreach($avb as $k => $v)
+					   {
+					  ?>
+					  <option value="<?php echo e($k); ?>"><?php echo e($v); ?></option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>	
+				</div>
 				 <div class="col-md-12">
 											<div class="form-group">
 												<label>Images<i class="req">*</i></label>
@@ -302,7 +325,7 @@ let postApartmentDescriptionEditor = new Simditor({
 												  </div>
 												  <div class="col-md-5">
 												    <img id="pa-preview-0" src="#" alt="preview" style="width: 50px; height: 50px;"/>
-													<a href="javascript:void(0)" onclick="aptSetCoverImage(0)" class="btn btn-theme btn-sm">Set as cover image</a>
+													<a href="javascript:void(0)" onclick="aptSetCoverImage(0)" class="btn btn-primary btn-sm">Set as cover image</a>
 												    <a href="javascript:void(0)" onclick="aptRemoveImage({id: 'pa',ctr: '0'})" class="btn btn-warning btn-sm">Remove</a>
 												  </div>
 												</div>
@@ -341,10 +364,13 @@ let postApartmentDescriptionEditor = new Simditor({
 				<p>Take a moment to preview the information about your apartment to ensure there are no errors or mistypes as your request will be reviewed by an admin. If you are sure all your information is correct click on <b>Submit</b> below. To make changes click on <b>Back</b>.</p>
 
 				
-                   <p class="text-center">
+                   <p class="text-center" id="pa-submit">
                       <button class="btn btn-space btn-secondary" id="pa-side-3-prev">Back</button>
                       <button class="btn btn-space btn-secondary" id="pa-side-3-next">Submit</button>
                    </p>
+				   <p class="text-center" id="pa-loading">
+					 <h4>Processing.. <img src="<?php echo e(asset('img/loading.gif')); ?>" class="img img-fluid" alt="Processing.."></h4><br>
+				   </p>
                 </div>
 			  </div>
           </form>
