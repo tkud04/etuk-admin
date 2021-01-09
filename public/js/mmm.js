@@ -603,7 +603,7 @@ $(document).ready(function() {
 		  
 		  $('#pa-submit').hide();
 		  $('#pa-loading').fadeIn();
-		  //addApartment(fd);  
+		  addApartment(fd);  
 		  
 	   }
     });

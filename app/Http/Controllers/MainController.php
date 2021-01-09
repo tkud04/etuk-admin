@@ -1788,6 +1788,127 @@ class MainController extends Controller {
     }
 	
 	/**
+	 * Handle add ticket.
+	 *
+	 * @return Response
+	 */
+	public function postAddApartment(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_apartments','edit_apartments']);
+				#dd($hasPermission);
+				$req = $request->all();
+				$ret = ['status' => "error",'message' => "nothing happened"];
+				
+				if($hasPermission)
+				{
+				
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                    'name' => 'required',
+		                    'url' => 'required',
+		                    'description' => 'required',
+		                    'category' => 'required|not_in:none',
+		                    'property_type' => 'required|not_in:none',
+		                    'rooms' => 'required|numeric',
+		                    'units' => 'required|numeric',
+		                    'bathrooms' => 'required|numeric',
+		                    'bedrooms' => 'required|numeric',
+		                    'max_adults' => 'required|numeric',
+		                    'amount' => 'required|numeric',
+		                    'address' => 'required',
+		                    'city' => 'required',
+		                    'lga' => 'required',
+		                    'state' => 'required',
+		                    'facilities' => 'required',
+		                    'img_count' => 'required|numeric',
+		                    'cover' => 'required',
+		                    'avb' => 'required',
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  $ret['message'] = "validation";
+                }
+				else
+				{
+					$ird = [];
+                    $networkError = false;
+				
+                    for($i = 0; $i < $req['img_count']; $i++)
+                    {
+            		  $img = $request->file("pa-image-".$i);
+					  $imgg = $this->helpers->uploadCloudImage($img->getRealPath());
+						
+					  if(isset($imgg['status']) && $imgg['status'] == "error")
+					  {
+						  $networkError = true;
+						  break;
+					  }
+					  else
+					  {
+						$ci = ($req['cover'] != null && $req['cover'] == $i) ? "yes": "no";
+					    $temp = [
+					       'public_id' => $imgg['public_id'],
+					       'delete_token' => $imgg['delete_token'],
+					       'deleted' => "no",
+					       'ci' => $ci,
+						   'type' => "image"
+						  ];
+			             array_push($ird, $temp);  
+					  }
+             	        
+                      										
+					}
+					
+					if($networkError)
+					{
+						$ret['message'] = "network";
+					}
+					else
+					{
+						$req['payment_type'] = "card";
+					    $req['user_id'] = "admin";
+					    $req['ird'] = $ird;
+					    $req['checkin'] = "12pm";
+					    $req['checkout'] = "1pm";
+					    $req['id_required'] = "yes";
+					    $req['children'] = "none";
+					    $req['pets'] = "no";
+				 
+			            $this->helpers->createApartment($req);
+			             $ret = ['status' => "ok"];
+					}
+				 }
+				 return json_encode($ret);
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	/**
 	 * Show list of apartments on the platform.
 	 *
 	 * @return Response

@@ -18,7 +18,7 @@ $subtitle = "Post a new apartment to the system.";
 let selectedSide = "1", facilities = [], aptImages = [], aptImgCount = 1, aptCover = "none";              
   
 $(document).ready(() => {
-$('#pa-loading').hide();
+//$('#pa-loading').hide();
 let postApartmentDescriptionEditor = new Simditor({
 		textarea: $('#pa-description'),
 		toolbar: toolbar,
@@ -368,9 +368,8 @@ let postApartmentDescriptionEditor = new Simditor({
                       <button class="btn btn-space btn-secondary" id="pa-side-3-prev">Back</button>
                       <button class="btn btn-space btn-secondary" id="pa-side-3-next">Submit</button>
                    </p>
-				   <p class="text-center" id="pa-loading">
-					 <h4>Processing.. <img src="<?php echo e(asset('img/loading.gif')); ?>" class="img img-fluid" alt="Processing.."></h4><br>
-				   </p>
+				    <h4 id="pa-loading">Processing.. <img src="<?php echo e(asset('images/loading.gif')); ?>" class="img img-fluid" alt="Processing.."></h4>
+				   
                 </div>
 			  </div>
           </form>

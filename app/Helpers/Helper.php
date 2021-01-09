@@ -636,7 +636,19 @@ $subject = $data['subject'];
 		   function getUser($id)
            {
            	$ret = [];
-               $u = User::where('email',$id)
+			if($id == "admin")
+			{
+			  $ret = [
+			    'id' => "admin",
+			    'fname' => "Admin",
+			    'lname' => "",
+			    'phone' => "admin",
+			    'email' => "admin",
+			  ];
+			}
+			else
+			{
+				$u = User::where('email',$id)
 			            ->orWhere('id',$id)->first();
               
               if($u != null)
@@ -656,9 +668,10 @@ $subject = $data['subject'];
                        $temp['date'] = $u->created_at->format("jS F, Y"); 
                        $temp['updated'] = $u->updated_at->format("jS F, Y h:i A"); 
                        $ret = $temp; 
-               }                          
-                                                      
-                return $ret;
+               }
+			}                                      
+            
+			return $ret;
            }
 		   
 		   
@@ -1012,7 +1025,8 @@ function isDuplicateUser($data)
 								   'delete_token' => $i['delete_token'],
 								   'deleted' => $i['deleted'],
 								   'cover' => $i['ci'],
-								   'type' => $i['type']
+								   'type' => $i['type'],
+								   'src_type' => ""
                          ]);
                     }
 				}

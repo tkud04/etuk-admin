@@ -497,7 +497,7 @@ const updateApartmentPreference = (dt) => {
 
 const addApartment = (dt) => {
 	//create request
-	const req = new Request("add-apartment",{method: 'POST', body: dt});
+	const req = new Request("post-apartment",{method: 'POST', body: dt});
 	//console.log(req);
 	
 	
@@ -515,8 +515,8 @@ const addApartment = (dt) => {
 	   })
 	   .catch(error => {
 		    alert("Failed to add apartment: " + error);			
-			$('#add-apartment-loading').hide();
-		     $('#add-apartment-submit').fadeIn();
+			$('#pa-loading').hide();
+		     $('#pa-submit').fadeIn();
 	   })
 	   .then(res => {
 		   console.log(res);
@@ -527,7 +527,7 @@ const addApartment = (dt) => {
                  title: "Apartment added!"
                }).then((result) => {
                if (result.value) {                 
-			     window.location = `my-apartments`;
+			     window.location = `apartments`;
                 }
               });
 		   }
@@ -535,6 +535,9 @@ const addApartment = (dt) => {
 			   let hh = ``;
 			   if(res.message == "validation"){
 				 hh = `Please fill all required fields and try again.`;  
+			   }
+			   else if(res.message == "network"){
+				 hh = `A network error has occured, please check your connection and try again.`;  
 			   }
 			   else if(res.message == "Technical error"){
 				 hh = `A technical error has occured, please try again.`;  
@@ -544,8 +547,8 @@ const addApartment = (dt) => {
                  title: hh
                }).then((result) => {
                if (result.value) {
-                  $('#add-apartment-loading').hide();
-		          $('#add-apartment-submit').fadeIn();	
+                  $('#pa-loading').hide();
+		          $('#pa-submit').fadeIn();	
                 }
               });					 
 		   }
@@ -554,8 +557,8 @@ const addApartment = (dt) => {
 		  
 	   }).catch(error => {
 		     alert("Failed to add apartment: " + error);			
-			$('#add-apartment-loading').hide();
-		     $('#add-apartment-submit').fadeIn();			
+			$('#pa-loading').hide();
+		     $('#pa-submit').fadeIn();			
 	   });
 }
 
