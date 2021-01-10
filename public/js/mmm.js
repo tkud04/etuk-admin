@@ -477,8 +477,8 @@ $(document).ready(function() {
 	   
 	   //side 2 validation imgs = $(`${BUUPlist[bc].id}-images-div input[type=file]`);
 	   let aptAddress = $('#pa-address').val(), aptCity = $('#pa-city').val(), aptLGA = $('#pa-lga').val(),aptState = $('#pa-state').val(),
-	       aptCountry = $('#pa-country').val(), aptAVB = $('#pa-avb').val(),aptImages = $(`#pa-images input[type=file]`), emptyImage = false,
-           side2_validation = (facilities.length < 1 || aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none" || aptCountry == "none" || aptAVB == "none");
+	       aptCountry = $('#pa-country').val(), aptAVB = $('#pa-avb').val(), aptStatus = $('#pa-status').val(), aptImages = $(`#pa-images input[type=file]`), emptyImage = false,
+           side2_validation = (facilities.length < 1 || aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none" || aptCountry == "none" || aptAVB == "none" || aptStatus == "none");
 		   
 		   if(side2_validation){
 			 Swal.fire({
@@ -513,8 +513,8 @@ $(document).ready(function() {
 	  
        //side 2 validation imgs = $(`${BUUPlist[bc].id}-images-div input[type=file]`);
 	   let aptAddress = $('#pa-address').val(), aptCity = $('#pa-city').val(), aptLGA = $('#pa-lga').val(),aptState = $('#pa-state').val(),
-	       aptImages = $(`#pa-images input[type=file]`), emptyImage = false,aptCountry = $('#pa-country').val(), aptAVB = $('#pa-avb').val(),
-           side2_validation = (aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none" || aptCountry == "none" || aptAVB == "none");
+	       aptImages = $(`#pa-images input[type=file]`), emptyImage = false,aptCountry = $('#pa-country').val(), aptAVB = $('#pa-avb').val(), aptStatus = $('#pa-status').val(),
+           side2_validation = (aptAddress == "" || aptCity == "" || aptLGA == "" || aptState == "none" || aptCountry == "none" || aptAVB == "none" || aptStatus == "none");
            
 		   for(let i = 0; i < aptImages.length; i++){
 			   if(aptImages[i].files.length < 1) emptyImage = true;
@@ -580,6 +580,7 @@ $(document).ready(function() {
 		 fd.append("state",aptState);
 		 fd.append("country",aptCountry);
 		 fd.append("avb",aptAVB);
+		 fd.append("status",aptStatus);
 		 fd.append("facilities",JSON.stringify(ff));
 		 
 		 //fd.append("video",aptVideo[0]);

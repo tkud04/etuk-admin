@@ -1830,7 +1830,8 @@ class MainController extends Controller {
 		                    'facilities' => 'required',
 		                    'img_count' => 'required|numeric',
 		                    'cover' => 'required',
-		                    'avb' => 'required',
+		                    'avb' => 'required|not_in:none',
+		                    'status' => 'required|not_in:none',
 		                   ]);
 						
 				if($validator->fails())

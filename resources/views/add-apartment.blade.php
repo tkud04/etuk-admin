@@ -292,13 +292,12 @@ let postApartmentDescriptionEditor = new Simditor({
 					</select>
 				  </div>	
 				</div>
-				<div class="col-md-12">
+				<div class="col-md-6">
 				  <div class="form-group">
                     <h4>Availability<span class="req">*</span></h4>
                     <select class="form-control" id="pa-avb">
 					<?php
 					 $avb = [
-					   'pending' => "Pending",
 					   'available' => "Available",
 					   'occupied' => "Occupied",
 					 ];
@@ -306,6 +305,29 @@ let postApartmentDescriptionEditor = new Simditor({
 					  <option value="none">Select availability</option>
 					  <?php
 					   foreach($avb as $k => $v)
+					   {
+					  ?>
+					  <option value="{{$k}}">{{$v}}</option>
+					  <?php
+					  }
+					  ?>
+					</select>
+				  </div>	
+				</div>
+				<div class="col-md-6">
+				  <div class="form-group">
+                    <h4>Status<span class="req">*</span></h4>
+                    <select class="form-control" id="pa-status">
+					<?php
+					 $ss = [
+					   'aprroved' => "Approved",
+					   'pending' => "Pending",
+					   'rejected' => "Rejected",
+					 ];
+					?>
+					  <option value="none">Select status</option>
+					  <?php
+					   foreach($ss as $k => $v)
 					   {
 					  ?>
 					  <option value="{{$k}}">{{$v}}</option>

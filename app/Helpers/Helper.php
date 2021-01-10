@@ -995,7 +995,7 @@ function isDuplicateUser($data)
                                                       'avb' => $data['avb'],                                                       
                                                       'url' => $data['url'],                                                       
                                                       'in_catalog' => "no", 
-                                                      'status' => "enabled", 
+                                                      'status' => $data['status'] 
                                                       ]);
                                                       
                  $data['apartment_id'] = $ret->apartment_id;                         
@@ -1026,7 +1026,7 @@ function isDuplicateUser($data)
 								   'deleted' => $i['deleted'],
 								   'cover' => $i['ci'],
 								   'type' => $i['type'],
-								   'src_type' => ""
+								   'src_type' => "cloudinary"
                          ]);
                     }
 				}
