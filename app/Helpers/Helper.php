@@ -48,6 +48,7 @@ use App\Plans;
 use App\UserPlans;
 use App\Activities;
 use App\Leads;
+use App\BankDetails;
 use App\Guests;
 use \Swift_Mailer;
 use \Swift_SmtpTransport;
@@ -5024,6 +5025,70 @@ function createSocial($data)
 	   			    if(!is_null($l))
 	   			    {
 	   				  $l->delete();
+	   			      $ret = "ok";
+	   			    }
+           
+	              }
+				  
+		   function createBankDetails($data)
+	        {
+	   			   #dd($data);
+	   			 $ret = null;
+			     $ret = BankDetails::create(['user_id' => $data['user_id'], 
+	                                   'bname' => $data['bname'], 
+	                                   'acname' => $data['acname'], 
+	                                   'acnum' => $data['acnum']	                               
+	                                  ]);
+	   			 return $ret;
+	         }
+			 
+		  function getBankDetails($user)
+	      {
+	   	   $ret = [];
+	       $banks = BankDetails::where('id','>',"0")->get();
+	   	     if(!is_null($banks))
+	   	     {
+			   $banks = $banks->sortByDesc('created_at');	
+	   		   foreach($banks as $b)
+	   		   {
+	   		     $temp = $this->getBankDetail($b->id);
+	   		     array_push($ret,$temp);
+	   	       }
+			 }
+	   
+	   	   return $ret;
+	      }
+		  
+		  
+	 	 function getBankDetail($id)
+	            {
+	            	$ret = [];
+	                $b = BankDetails::where('id',$id)->first();
+ 
+	               if($b != null)
+	                {
+                            $temp['id'] = $b->id; 
+	                    	$temp['bname'] = $b->bname; 
+	                        $temp['acname'] = $b->acname; 
+	                        $temp['acnum'] = $b->acnum; 
+							$temp['date'] = $b->created_at->format("jS F, Y h:i A"); 
+	                        $temp['updated'] = $b->updated_at->format("jS F, Y h:i A"); 
+							$ret = $temp; 
+	                }                          
+                                                      
+	                 return $ret;
+	            }
+				
+		 function removeBankDetails($xf)
+	              {
+	   			    #dd($data);
+	   			    $ret = "error";
+	   			     $b = BankDetails::where('id',$xf)->first();
+			 
+			 
+	   			    if(!is_null($b))
+	   			    {
+	   				  $b->delete();
 	   			      $ret = "ok";
 	   			    }
            
