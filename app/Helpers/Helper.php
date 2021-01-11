@@ -5071,6 +5071,7 @@ function createSocial($data)
 	               if($b != null)
 	                {
                             $temp['id'] = $b->id; 
+	                    	$temp['user_id'] = $b->user_id; 
 	                    	$temp['bname'] = $b->bname; 
 	                        $temp['acname'] = $b->acname; 
 	                        $temp['acnum'] = $b->acnum; 
