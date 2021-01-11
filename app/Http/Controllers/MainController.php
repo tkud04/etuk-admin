@@ -1827,6 +1827,7 @@ class MainController extends Controller {
 		                    'city' => 'required',
 		                    'lga' => 'required',
 		                    'state' => 'required',
+							'country' => 'required',
 		                    'facilities' => 'required',
 		                    'img_count' => 'required|numeric',
 		                    'cover' => 'required',
