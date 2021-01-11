@@ -79,7 +79,8 @@ $subtitle = "View all apartments";
                                             <tr>
                                                <td>
 												  <img class="img-fluid" onclick="window.location='{{$uu}}'" src="{{$imgs[0]}}" alt="{{$name}}" style="cursor: pointer; width: 100px; height: 100px;"/>
-												  <a href="{{$uu}}"><h4>{{ucwords($name)}}</h4></a><br>							  
+												  <a href="{{$uu}}"><h4>{{ucwords($name)}}</h4></a>					  
+												  <a href="{{$uu}}"><h4>{{$a['apartment_id']}}</h4></a><br>							  
 												</td>
 												<td>
 												  <h3>
@@ -95,7 +96,7 @@ $subtitle = "View all apartments";
 												</td>
                                                 <td>None</td>
                                                 <td>{{$a['date']}}</td>
-                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($sss)}}</td>
+                                                <td><span class="label label-{{$statusClass}}">{{strtoupper($sss)}}</span></td>
                                                 <td>
 												 <a class="btn btn-{{$arrClass}} btn-sm" href="{{$arr}}">{{$arrText}}</a>
 												 <a class="btn btn-danger btn-sm" href="{{$dr}}">Remove</a>
