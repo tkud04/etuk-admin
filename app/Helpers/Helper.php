@@ -1014,6 +1014,7 @@ function isDuplicateUser($data)
                                                       'apartment_id' => $apartment_id, 
                                                       'user_id' => $data['user_id'],                                                       
                                                       'avb' => $data['avb'],                                                       
+                                                      'bank_id' => $data['bank_id'],                                                       
                                                       'url' => $data['url'],                                                       
                                                       'in_catalog' => "no", 
                                                       'status' => $data['status'] 
@@ -1352,6 +1353,7 @@ function isDuplicateUser($data)
 				  if($host) $temp['host'] = $this->getUser($apartment->user_id);
 				  $temp['name'] = $apartment->name;
 				  $temp['avb'] = $apartment->avb;
+				  $temp['bank'] = $this->getBankDetail($apartment->bank_id);
 				  $temp['url'] = $apartment->url;
 				  $temp['in_catalog'] = $apartment->in_catalog;
 				  $temp['status'] = $apartment->status;
@@ -1632,6 +1634,7 @@ function updateApartment($data)
                   'apartment_id' => $apartment_id, 
                   'user_id' => $data['user_id'],                                                       
                   'avb' => $data['avb'],                                                       
+                  'bank_id' => $data['bank_id'],                                                       
                   'url' => $data['url'],   
 			  ]);			  
 			}
