@@ -458,8 +458,25 @@ public $smtpp = [
 	   ];
   
   public $adminEmail = "aquarius4tkud@yahoo.com";
- // public $adminEmail = "aceluxurystore@yahoo.com";
   public $suEmail = "kudayisitobi@gmail.com";
+  
+  public $admin = [
+			    'id' => "admin",
+			    'fname' => "Admin",
+			    'lname' => "",
+			    'phone' => "08168923876",
+			    //'email' => "adesola.oje@etuk.ng",
+			    'email' => "aquarius4tkud@yahoo.com",
+			  ];
+
+  public $su = [
+			    'id' => "admin",
+			    'fname' => "Admin",
+			    'lname' => "",
+			    'phone' => "07054291601",
+			    'email' => "kudayisitobi@gmail.com",
+			  ];
+
     
            
 		   #{'msg':msg,'em':em,'subject':subject,'link':link,'sn':senderName,'se':senderEmail,'ss':SMTPServer,'sp':SMTPPort,'su':SMTPUser,'spp':SMTPPass,'sa':SMTPAuth};
@@ -636,15 +653,18 @@ $subject = $data['subject'];
 		   function getUser($id)
            {
            	$ret = [];
-			if($id == "admin")
+			if($id == "admin" || $id == "su")
 			{
-			  $ret = [
-			    'id' => "admin",
-			    'fname' => "Admin",
-			    'lname' => "",
-			    'phone' => "admin",
-			    'email' => "admin",
-			  ];
+			  if($id == "admin")
+			  {
+				  $ret = $this->admin;
+			  }
+			  else if($id == "su")
+			  {
+				  $ret = $this->su;
+			  }
+			  
+			  $ret['avatar'] = "";
 			}
 			else
 			{

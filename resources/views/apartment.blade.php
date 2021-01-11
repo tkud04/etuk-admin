@@ -18,7 +18,7 @@
 														 $location = $address['city'].", ".$address['state'];
 														 $facilities = $apartment['facilities'];
 														 
-$title = $name;
+$title = ucwords($name);
 $subtitle = "View information about this apartment.";
 														 
 ?>
