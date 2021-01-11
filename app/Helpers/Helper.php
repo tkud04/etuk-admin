@@ -1666,6 +1666,19 @@ function updateApartment($data)
                 
            }
 		   
+		   function updateApartmentStatus($data)
+           {
+			   $apartment_id = $data['apartment_id'];
+           	   $apartment = Apartments::where('apartment_id',$apartment_id)->first();
+			
+			 if($apartment != null)
+			 {
+			   $apartment->update([
+			      'status' => $data['status'],   
+			   ]);			  
+			 }
+           }
+		   
           function updateApartmentAddress($data)
            {
 			   $apartment_id = $data['apartment_id'];

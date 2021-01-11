@@ -2043,6 +2043,158 @@ class MainController extends Controller {
 		return view($v,compact($cpt));
     }
 	
+	 /**
+	 * Handle Remove Apartment.
+	 *
+	 * @return Response
+	 */
+	 	public function getRemoveApartment(Request $request)
+	     {
+	 		$user = null;
+	 		$nope = false;
+	 		$v = "";
+		
+	 		$signals = $this->helpers->signals;
+	 		$plugins = $this->helpers->getPlugins();
+	 		$cpt = ['user','signals','plugins'];
+       
+	   
+	 		if(Auth::check())
+	 		{
+			
+	 			$user = Auth::user();
+			
+	 			if($this->helpers->isAdmin($user))
+	 			{
+	 				$hasPermission = $this->helpers->hasPermission($user->id,['view_apartments','edit_apartments']);
+	 				#dd($hasPermission);
+	 				
+	 				if($hasPermission)
+	 				{
+						$req = $request->all();
+						#dd($req);
+				        $validator = Validator::make($req, [                          
+				                             'axf' => 'required'
+				         ]);
+         
+				         if($validator->fails())
+				         {
+				         	return redirect()->intended('apartments');
+				         }
+						else
+						{
+						   $this->helpers->deleteApartment($req['axf']);
+   	 					   $ss = "delete-apartment-status";
+   	 					   session()->flash($ss,"ok");
+   	 			           return redirect()->intended("apartments");
+					    }
+	 				}
+	 				else
+	 				{
+	 					session()->flash("permissions-status-error","ok");
+	 					return redirect()->intended('/');
+	 				}				
+	 			}
+	 			else
+	 			{
+	 				Auth::logout();
+	 				$u = url('/');
+	 				return redirect()->intended($u);
+	 			}
+	 		}
+	 		else
+	 		{
+	 			$v = "login";
+	 		}
+	 		return view($v,compact($cpt));
+		
+	     }
+
+    /**
+	 * Handle Update Apartment Status.
+	 *
+	 * @return Response
+	 */
+	 	public function getUpdateApartmentStatus(Request $request)
+	     {
+	 		$user = null;
+	 		$nope = false;
+	 		$v = "";
+		
+	 		$signals = $this->helpers->signals;
+	 		$plugins = $this->helpers->getPlugins();
+	 		$cpt = ['user','signals','plugins'];
+       
+	   
+	 		if(Auth::check())
+	 		{
+			
+	 			$user = Auth::user();
+			
+	 			if($this->helpers->isAdmin($user))
+	 			{
+	 				$hasPermission = $this->helpers->hasPermission($user->id,['view_apartments','edit_apartments']);
+	 				#dd($hasPermission);
+	 				
+	 				if($hasPermission)
+	 				{
+						$req = $request->all();
+						#dd($req);
+				        $validator = Validator::make($req, [                          
+				                             'axf' => 'required'
+				         ]);
+         
+				         if($validator->fails())
+				         {
+				         	return redirect()->intended('apartments');
+				         }
+						else
+						{
+							$ss = "pending";
+							
+							switch($req['type'])
+							{
+								case "approve":
+								  $ss = "approved";
+								break;
+								
+								case "reject":
+								  $ss = "rejected";
+								break;
+							}
+							
+							$dd = [
+							  'apartment_id' => $req['axf'],
+							  'status' => $ss
+							];
+							
+						   $this->helpers->updateApartmentStatus($dd);
+   	 					   $ss = "update-apartment-status";
+   	 					   session()->flash($ss,"ok");
+   	 			           return redirect()->intended("apartments");
+					    }
+	 				}
+	 				else
+	 				{
+	 					session()->flash("permissions-status-error","ok");
+	 					return redirect()->intended('/');
+	 				}				
+	 			}
+	 			else
+	 			{
+	 				Auth::logout();
+	 				$u = url('/');
+	 				return redirect()->intended($u);
+	 			}
+	 		}
+	 		else
+	 		{
+	 			$v = "login";
+	 		}
+	 		return view($v,compact($cpt));
+		
+	     }
+	
 	
 	/**
 	 * Show list of transactions on the platform.
