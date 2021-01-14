@@ -123,7 +123,7 @@ $subtitle = "Admin dashboard";
                             <div class="row">
 							<div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
                                 <div class="card">
-                                    <h5 class="card-header">Recent Orders</h5>
+                                    <h5 class="card-header">Recent Bookings</h5>
                                     <div class="card-body p-0">
                                         <div class="table-responsive">
                                             <table class="table">
@@ -131,13 +131,19 @@ $subtitle = "Admin dashboard";
                                                     <tr class="border-0">
                                                         <th class="border-0">#</th>
                                                         <th class="border-0">Guest</th>
-                                                        <th class="border-0">Details</th>
+                                                        <th class="border-0">Apartment</th>
                                                         <th class="border-0">Status</th>
                                                         
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 												<?php
+												$opts5 = [
+								'unfurnished' => "Unfurnished apartment",
+												    'Furnished' => "Furnished apartment",
+												    'serviced' => "Serviced apartment",
+					  ];
+												
 									   if(count($orders) > 0)
 									   {
 										   $ordersLength = count($orders) > 5 ? 5 : count($orders);
@@ -153,28 +159,13 @@ $subtitle = "Admin dashboard";
 										  $ru = url('receipt')."?xf=".$ref;
 										  $cu = "javascript:void(0)";
 										  $s = ""; $liClass = ""; $ps = "";
-										  
-										  if($o['status'] == "paid")
-										  {
-											  $liClass = "approved-booking";
-											  $s = "Active";									
-										  }
-										  else if($o['status'] == "expired")
-										  {
-											  $liClass = "pending-booking";
-											  $s = "Expired";
-											  $ps = " pending";
-										  }
-										  else if($o['status'] == "cancelled")
-										  {
-											  $liClass = "canceled-booking";
-											  $s = "Cancelled";
-										  }
-										  
+
 										  $items = $o['items'];
 										  $ii = $items['data'];
 										  $subtotal = $items['subtotal'];
 										  $bookingDetails = [];
+										  
+										  
 										  
 										  foreach($ii as $i)
 										  {
@@ -196,6 +187,9 @@ $subtitle = "Admin dashboard";
 														 $temp['guests'] = $i['guests'];
 														 $temp['kids'] = $i['kids'];
 														 array_push($bookingDetails,$temp);
+														 
+														 $ptype = $adata['property_type'];
+														 
 										  }			 
 											  
 									   ?>
@@ -226,17 +220,39 @@ $subtitle = "Admin dashboard";
 											
 											$imgs = $i['imgs'];
 											
+											//status
+											$status = $o['status']; $ss = ""; $ssClass = "";
+											
+											switch($status)
+											{
+												case "paid":
+												  $ss = "Completed"; $ssClass = "success";
+												break;
+												
+												case "unpaid":
+												  $ss = "On hold"; $ssClass = "warning";
+												break;
+												
+												case "cancelled":
+												  $ss = "Cancelled"; $ssClass = "danger";
+												break;
+											}
+											
 									   ?>
                                         <a href="{{$iiu}}" class="list-group-item list-group-item-action flex-column align-items-start{{$ll}}">
                                             <div class="d-flex w-100 justify-content-between">
 											<img class="rounded-circle mr-3 mb-3" src="{{$imgs[0]}}" alt="{{$i['name']}}" style="width: 100px; height: 100px;"/>
+											 
 											  <div>
                                                 <h5 class="mb-1{{$tc}}">{{$i['name']}}</h5>
-                                                <small{{$sm}}>{{$i['checkin']." - ".$i['checkout']}}</small>
-												
-												<p class="mb-1">Adults: {{$i['guests']}} | Children: {{$i['kids']}}</p>
-                                            <small{{$sm}}>Price per night: &#8358;{{number_format($i['amount'])}}</small>
+                                                <h5 class="mb-1{{$tc}}">{{$opts5[$ptype]}}</h5>
+                                                 <!--
+												 <small{{$sm}}>{{$i['checkin']." - ".$i['checkout']}}</small>
+												 <p class="mb-1">Adults: {{$i['guests']}} | Children: {{$i['kids']}}</p>
+                                                 <small{{$sm}}>Price per night: &#8358;{{number_format($i['amount'])}}</small>
+											      -->
 											  </div>
+											 
                                             </div>
                                             
                                         </a>
@@ -247,7 +263,7 @@ $subtitle = "Admin dashboard";
                                 </div>
                             </div>
                                                         </td>
-                                                        <td><span class="badge-dot badge-success mr-1"></span>Active </td>
+                                                        <td><span class="badge-dot badge-{{$ssClass}} mr-1"></span>{{$ss}} </td>
                                                     </tr>
                                         <?php
 										 
