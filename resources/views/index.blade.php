@@ -1,6 +1,9 @@
 <?php
 $title = "Dashboard";
 $subtitle = "Admin dashboard";
+
+$rbrcData = $stats['rbrcData'];
+$trmData = $stats['trmData'];
 ?>
 
 @extends('layout')
@@ -13,7 +16,7 @@ $subtitle = "Admin dashboard";
 <script>
 let rbrcData = [
 <?php
-$rbrcData = $stats['rbrcData'];
+
  $opts4 = [
 								'studio' => "Studio",
 												    '1bed' => "1 bedroom",
@@ -21,6 +24,7 @@ $rbrcData = $stats['rbrcData'];
 												    '3bed' => "3 bedrooms",
 												    'penthouse' => "Penthouse apartment",
 					  ];
+
 foreach($rbrcData as $k => $v)
 {
 ?>
@@ -31,15 +35,29 @@ foreach($rbrcData as $k => $v)
 ];
 
 let trmData = [
+
+<?php
+/**
             { x: '2016 Q1', y: 0, },
             { x: '2016 Q2', y: 7500, },
             { x: '2017 Q3', y: 15000, },
             { x: '2017 Q4', y: 22500, },
             { x: '2018 Q5', y: 30000, },
             { x: '2018 Q6', y: 40000, }
+**/
+$ctr = 0;
+
+foreach($trmData as $k => $v)
+{
+?>
+{x: "{{$k}}", y: {{$v}},}@if($ctr < count($trmData)),@endif
+<?php
+++$ctr;
+}
+?>
         ];
 		
-console.log(rbrcData);
+console.log(trmData);
 </script>
 @stop
 
@@ -390,7 +408,7 @@ console.log(rbrcData);
                                 <div class="card">
                                     <h5 class="card-header"> Total Revenue</h5>
                                     <div class="card-body">
-                                        <div id="morris_totalrevenue"></div>
+                                        <div id="total_revenue_month"></div>
                                     </div>
                                     <div class="card-footer">
                                         <p class="display-7 font-weight-bold"><span class="text-primary d-inline-block">&#8358;26,000</span><span class="text-success float-right">+9.45%</span></p>

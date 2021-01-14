@@ -3277,9 +3277,23 @@ function createSocial($data)
 				  'penthouse' => 0
 			   ];
 			   
+			   $trmData = [
+			      'January' => 0,
+				  'February' => 0,
+				  'March' => 0,
+				  'April' => 0,
+				  'June' => 0,
+				  'July' => 0,
+				  'August' => 0,
+				  'September' => 0,
+				  'October' => 0,
+				  'November' => 0,
+				  'December' => 0
+			   ];
+			   
 			   $orders = $this->getAllOrders();
 			   
-			   
+			   #dd($orders);
 			   foreach($orders as $o)
 			   {
 				    #dd($o);
@@ -3291,16 +3305,19 @@ function createSocial($data)
 					   $c = $adt['category']; $amount = $i['amount'];
 					   $rbrcData[$c] += $amount;
 				   }
+				   
+				   $d = new \DateTime($o['date']); $m = $d->format("F");
+				   $trmData[$m] += $o['amount'];
 			   }
 			   
-			  # dd($rbrcData);
+			   #dd($trmData);
 			   
 			   $ret = [
 			     'total_apartments' => $totalApts,
 			     'total_bookings' => $totalBookings,
 			     'total_hosts' => $totalHosts,
 			     'rbrcData' => $rbrcData,
-			     'former_refunds' => 0,
+			     'trmData' => $trmData,
 			     'avg_revenue' => 0,
 			     'former_avg_revenue' => 0
 			   ];
