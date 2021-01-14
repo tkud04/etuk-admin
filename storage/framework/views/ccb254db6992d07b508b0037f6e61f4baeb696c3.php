@@ -10,6 +10,37 @@ $subtitle = "Admin dashboard";
 <script src="<?php echo e(asset('lib/morris-bundle/raphael.min.js')); ?>"></script>
 <script src="<?php echo e(asset('lib/morris-bundle/morris.js')); ?>"></script>
 <script src="<?php echo e(asset('lib/morris-bundle/morris-init.js')); ?>"></script>
+<script>
+let rbrcData = [
+<?php
+$rbrcData = $stats['rbrcData'];
+ $opts4 = [
+								'studio' => "Studio",
+												    '1bed' => "1 bedroom",
+												    '2bed' => "2 bedrooms",
+												    '3bed' => "3 bedrooms",
+												    'penthouse' => "Penthouse apartment",
+					  ];
+foreach($rbrcData as $k => $v)
+{
+?>
+{value: <?php echo e($v); ?>, label: "<?php echo e($opts4[$k]); ?>"},
+<?php
+}
+?>
+];
+
+let trmData = [
+            { x: '2016 Q1', y: 0, },
+            { x: '2016 Q2', y: 7500, },
+            { x: '2017 Q3', y: 15000, },
+            { x: '2017 Q4', y: 22500, },
+            { x: '2018 Q5', y: 30000, },
+            { x: '2018 Q6', y: 40000, }
+        ];
+		
+console.log(rbrcData);
+</script>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('title',$title); ?>
@@ -345,9 +376,9 @@ $subtitle = "Admin dashboard";
                             <!-- ============================================================== -->
                             <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12">
                                 <div class="card">
-                                    <h5 class="card-header">Revenue by Category</h5>
+                                    <h5 class="card-header">Revenue by Room Category</h5>
                                     <div class="card-body">
-                                        <div id="morris_donut" style="height: 420px;"></div>
+                                        <div id="revenue_by_room_category" style="height: 420px;"></div>
                                     </div>
                                 </div>
                             </div>

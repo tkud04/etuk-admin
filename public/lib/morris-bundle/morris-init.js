@@ -138,6 +138,7 @@
 
 
         if ($('#morris_donut').length) {
+			
             Morris.Donut({
                 element: 'morris_donut',
                 data: [
@@ -153,7 +154,8 @@
                      "#5969ff",
                                 "#ff407b",
                                 "#25d5f2",
-                                "#ffc750"
+                                "#ffc750",
+                                "#0540f2"
                                
                 ],
 

@@ -175,6 +175,45 @@ $(document).ready(function() {
     });
 	
 	
+	//DASHBOARD
+	if ($('#revenue_by_room_category').length) {
+            Morris.Donut({
+                element: 'revenue_by_room_category',
+                data: rbrcData,
+             
+                labelColor: '#2e2f39',
+                   gridTextSize: '14px',
+                colors: [
+                     "#5969ff",
+                                "#ff407b",
+                                "#25d5f2",
+                                "#ffc750",
+                                "#0540f2"
+                               
+                ],
+
+                formatter: function(x) { return "N" + x },
+                  resize: true
+            });
+	}   
+		
+	if($('#total_revenue_month').length){
+			 // ============================================================== 
+    // Total Revenue
+    // ============================================================== 
+    Morris.Area({
+        element: 'total_revenue_month',
+        behaveLikeLine: true,
+        data: trmData,
+        xkey: 'x',
+        ykeys: ['y'],
+        labels: ['Y'],
+        lineColors: ['#5969ff'],
+        resize: true
+
+    });
+		}
+	
 	//EDIT USER
 	$("#user-form-btn").click(e => {
        e.preventDefault();

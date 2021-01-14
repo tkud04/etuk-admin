@@ -3260,11 +3260,46 @@ function createSocial($data)
 			   $totalHosts = User::where('mode_type','host')
 			                      ->orWhere('mode_type','both')->count();
 			   
+			   //revenue by room category
+			    $opts4 = [
+								'studio' => "Studio",
+												    '1bed' => "1 bedroom",
+												    '2bed' => "2 bedrooms",
+												    '3bed' => "3 bedrooms",
+												    'penthouse' => "Penthouse apartment",
+					  ];
+					  
+			   $rbrcData = [
+			      'studio' => 0,
+				  '1bed' => 0,
+				  '2bed' => 0,
+				  '3bed' => 0,
+				  'penthouse' => 0
+			   ];
+			   
+			   $orders = $this->getAllOrders();
+			   
+			   
+			   foreach($orders as $o)
+			   {
+				    #dd($o);
+				   $items = $o['items'];
+				   
+				   foreach($items['data'] as $i)
+				   {
+					   $a = $i['apartment']; $adt = $a['data'];
+					   $c = $adt['category']; $amount = $i['amount'];
+					   $rbrcData[$c] += $amount;
+				   }
+			   }
+			   
+			  # dd($rbrcData);
+			   
 			   $ret = [
 			     'total_apartments' => $totalApts,
 			     'total_bookings' => $totalBookings,
 			     'total_hosts' => $totalHosts,
-			     'refunds' => 0,
+			     'rbrcData' => $rbrcData,
 			     'former_refunds' => 0,
 			     'avg_revenue' => 0,
 			     'former_avg_revenue' => 0
