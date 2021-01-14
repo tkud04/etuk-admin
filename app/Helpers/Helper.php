@@ -3255,9 +3255,15 @@ function createSocial($data)
 		   
 		   function getSiteStats()
 		   {
+			   $totalApts = Apartments::where('id','>','0')->count();
+			   $totalBookings = Orders::where('id','>','0')->count();
+			   $totalHosts = User::where('mode_type','host')
+			                      ->orWhere('mode_type','both')->count();
+			   
 			   $ret = [
-			     'revenue' => 10000,
-			     'former_revenue' => 12000,
+			     'total_apartments' => $totalApts,
+			     'total_bookings' => $totalBookings,
+			     'total_hosts' => $totalHosts,
 			     'refunds' => 0,
 			     'former_refunds' => 0,
 			     'avg_revenue' => 0,

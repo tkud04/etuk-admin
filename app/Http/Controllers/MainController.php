@@ -49,6 +49,7 @@ class MainController extends Controller {
 				$v = "index";
 				$orders = $this->helpers->getAllOrders();
 				$stats = $this->helpers->getSiteStats();
+				#dd($stats);
 				$tph = $this->helpers->getTopPerformingHosts();
 				$req = $request->all();
                 array_push($cpt,'orders');				
@@ -65,6 +66,7 @@ class MainController extends Controller {
 		{
 			$v = "login";
 		}
+		
 		return view($v,compact($cpt));
 		
     }

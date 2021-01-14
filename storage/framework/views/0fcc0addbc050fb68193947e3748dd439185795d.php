@@ -320,7 +320,7 @@ let postApartmentDescriptionEditor = new Simditor({
                     <select class="form-control" id="pa-status">
 					<?php
 					 $ss = [
-					   'aprroved' => "Approved",
+					   'approved' => "Approved",
 					   'pending' => "Pending",
 					   'rejected' => "Rejected",
 					 ];

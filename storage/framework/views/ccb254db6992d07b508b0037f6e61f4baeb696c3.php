@@ -18,69 +18,66 @@ $subtitle = "Admin dashboard";
 
                         <div class="row">
 						<?php
-						 //total revenue
-						 $tr = $stats['revenue'];
-						 $ftr = $stats['former_revenue'];
-						 $trp = ($tr - $ftr) / 100;
-						 $trClass = "text-success";
-						 $trIcon = "<span><i class='fa fa-fw fa-arrow-up'></i></span>";
+						 //total apartments
+						 $ta = $stats['total_apartments'];
+						 $tap = (($ta - 2) / $ta) * 100;
+						 $taClass = "text-success";
+						 $taIcon = "<span><i class='fa fa-fw fa-arrow-up'></i></span>";
 						 
-						 if($trp < 0)
+						 if($tap < 0)
 						 {
-							 $trClass = "text-secondary";
-							 $trIcon = "<span><i class='fa fa-fw fa-arrow-down'></i></span>";
+							 $taClass = "text-secondary";
+							 $taIcon = "<span><i class='fa fa-fw fa-arrow-down'></i></span>";
 						 }
-						 else if($trp == 0)
+						 else if($tap == 0)
 						 {
-							 $trClass = "text-primary";
-							 $trIcon = "";
-						 }
-						 
-						 //total refunds
-						 $trr = $stats['refunds'];
-						 $ftrr = $stats['former_refunds'];
-						 $trrp = ($trr - $ftrr) / 100;
-						 $trrClass = "text-success";
-						 $trrIcon = "<span><i class='fa fa-fw fa-arrow-up'></i></span>";
-						 
-						 if($trrp < 0)
-						 {
-							 $trrClass = "text-secondary";
-							 $trrIcon = "<span><i class='fa fa-fw fa-arrow-down'></i></span>";
-						 }
-						 else if($trrp == 0)
-						 {
-							 $trrClass = "text-primary";
-							 $trrIcon = "";
+							 $taClass = "text-primary";
+							 $taIcon = "";
 						 }
 						 
-						 //average revenue
-						 $tar = $stats['avg_revenue'];
-						 $ftar = $stats['former_avg_revenue'];
-						 $tarp = ($tar - $ftar) / 100;
-						 $tarClass = "text-success";
-						 $tarIcon = "<span><i class='fa fa-fw fa-arrow-up'></i></span>";
+						 //total bookings
+						 $tb = $stats['total_bookings'];
+						 $tbp = 0;
+						 $tbClass = "text-success";
+						 $tbIcon = "<span><i class='fa fa-fw fa-arrow-up'></i></span>";
 						 
-						 if($tarp < 0)
+						 if($tbp < 0)
 						 {
-							 $tarClass = "text-secondary";
-							 $tarIcon = "<span><i class='fa fa-fw fa-arrow-down'></i></span>";
+							 $tbClass = "text-secondary";
+							 $tbIcon = "<span><i class='fa fa-fw fa-arrow-down'></i></span>";
 						 }
-						 else if($tarp == 0)
+						 else if($tbp == 0)
 						 {
-							 $tarClass = "text-primary";
-							 $tarIcon = "";
+							 $tbClass = "text-primary";
+							 $tbIcon = "";
+						 }
+						 
+						 //total hosts
+						 $th = $stats['total_hosts'];
+						 $thp = 0;
+						 $thClass = "text-success";
+						 $thIcon = "<span><i class='fa fa-fw fa-arrow-up'></i></span>";
+						 
+						 if($thp < 0)
+						 {
+							 $thClass = "text-secondary";
+							 $thIcon = "<span><i class='fa fa-fw fa-arrow-down'></i></span>";
+						 }
+						 else if($thp == 0)
+						 {
+							 $thClass = "text-primary";
+							 $thIcon = "";
 						 }
 						?>
                             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h5 class="text-muted">Total Revenue</h5>
+                                        <h5 class="text-muted">Total Apartments</h5>
                                         <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">&#8358;<?php echo e(number_format($tr,2)); ?></h1>
+                                            <h1 class="mb-1"><?php echo e($ta); ?></h1>
                                         </div>
-                                        <div class="metric-label d-inline-block float-right <?php echo e($trClass); ?> font-weight-bold">
-										<?php echo $trIcon; ?><span><?php echo e($trp); ?>%</span>
+                                        <div class="metric-label d-inline-block float-right <?php echo e($taClass); ?> font-weight-bold">
+										<?php echo $taIcon; ?><span><?php echo e($tap); ?>%</span>
                                         </div>
                                     </div>
                                     <div id="sparkline-revenue"></div>
@@ -90,12 +87,12 @@ $subtitle = "Admin dashboard";
                             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h5 class="text-muted">Refunds</h5>
+                                        <h5 class="text-muted">Total Bookings</h5>
                                         <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">&#8358;<?php echo e(number_format($trr,2)); ?></h1>
+                                            <h1 class="mb-1"><?php echo e($tb); ?></h1>
                                         </div>
-                                        <div class="metric-label d-inline-block float-right <?php echo e($trrClass); ?> font-weight-bold">
-                                            <?php echo $trrIcon; ?><span><?php echo e($trrp); ?>%</span>
+                                        <div class="metric-label d-inline-block float-right <?php echo e($tbClass); ?> font-weight-bold">
+                                            <?php echo $tbIcon; ?><span><?php echo e($tbp); ?>%</span>
                                         </div>
                                     </div>
                                     <div id="sparkline-revenue3"></div>
@@ -104,12 +101,12 @@ $subtitle = "Admin dashboard";
                             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h5 class="text-muted">Avg. Revenue Per Apartment</h5>
+                                        <h5 class="text-muted">Total Hosts</h5>
                                         <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">&#8358;<?php echo e(number_format($tar,2)); ?></h1>
+                                            <h1 class="mb-1"><?php echo e($th); ?></h1>
                                         </div>
-                                        <div class="metric-label d-inline-block float-right <?php echo e($tarClass); ?> font-weight-bold">
-                                            <?php echo $tarIcon; ?><span><?php echo e($tarp); ?>%</span>
+                                        <div class="metric-label d-inline-block float-right <?php echo e($thClass); ?> font-weight-bold">
+                                            <?php echo $thIcon; ?><span><?php echo e($thp); ?>%</span>
                                         </div>
                                     </div>
                                     <div id="sparkline-revenue4"></div>
