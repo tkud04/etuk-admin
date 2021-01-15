@@ -2924,7 +2924,7 @@ function createSocial($data)
                   $temp['notes'] = $o->notes;
                   $temp['status'] = $o->status;
                   $temp['items'] = $this->getOrderItems($o->id);
-				  $fmt = isset($optionalParams['numeric_date']) ? "Y-m-d" : "jS F, Y";
+				  $fmt = (isset($optionalParams['numeric_date']) && $optionalParams['numeric_date']) ? "Y-m-d" : "jS F, Y";
                   $temp['date'] = $o->created_at->format($fmt);
                   $ret = $temp; 
                }                                 
