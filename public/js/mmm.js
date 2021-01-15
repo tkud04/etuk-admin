@@ -207,9 +207,17 @@ $(document).ready(function() {
         data: trmData,
         xkey: 'x',
         ykeys: ['y'],
-        labels: ['Y'],
+        labels: ['Total'],
         lineColors: ['#5969ff'],
-        resize: true
+        resize: true,
+		 dateFormat: function(x) { 
+		   let d = new Date(x).toString(), dd = d.split(" "), ret = "";
+           if(dd.length > 4){
+			 ret = `${dd[0]} ${dd[1]} ${dd[2]}, ${dd[3]}`;
+		   }   
+           return ret;		 
+		 },
+		 preUnits: "NGN"
 
     });
 		}

@@ -2862,7 +2862,7 @@ function createSocial($data)
 			  return $ret;
 		   }
 	
-	function getAllOrders()
+	function getAllOrders($optionalParams=[])
            {
            	$ret = [];
 
@@ -2874,7 +2874,7 @@ function createSocial($data)
 				   $orders = $orders->sortByDesc('created_at');
                	  foreach($orders as $o) 
                     {
-                    	$temp = $this->getOrder($o->reference,['guest' => true]);
+                    	$temp = $this->getOrder($o->reference,['guest' => true,'numeric_date' => true]);
                         array_push($ret, $temp); 
                     }
                }                                 
@@ -2910,7 +2910,7 @@ function createSocial($data)
 
 			  $o = Orders::where('id',$ref)
 			                  ->orWhere('reference',$ref)->first();
-			  #dd($o);
+			  #dd($optionalParams);
               if($o != null)
                {
 				    $guest = isset($optionalParams['guest']) ? $optionalParams['guest'] : false;
@@ -2924,7 +2924,8 @@ function createSocial($data)
                   $temp['notes'] = $o->notes;
                   $temp['status'] = $o->status;
                   $temp['items'] = $this->getOrderItems($o->id);
-                  $temp['date'] = $o->created_at->format("jS F, Y");
+				  $fmt = isset($optionalParams['numeric_date']) ? "Y-m-d" : "jS F, Y";
+                  $temp['date'] = $o->created_at->format($fmt);
                   $ret = $temp; 
                }                                 
               			  
@@ -3294,12 +3295,14 @@ function createSocial($data)
 			   $trmData3 = [];
 			   
 			   
-			   $orders = $this->getAllOrders();
+			   $orders = $this->getAllOrders(['numeric_date' => true]);
 			   
 			   #dd($orders);
+			   $c = 0; 
 			   foreach($orders as $o)
 			   {
 				    #dd($o);
+					++$c;
 				   $items = $o['items'];
 				  # $amount = $o['amount'];
 				   
@@ -3310,7 +3313,8 @@ function createSocial($data)
 					   $rbrcData[$c] += $amount;
 				   }
 				   
-				   $d = new \DateTime($o['date']); $m = $d->format("Y-m");
+				   $d = new \DateTime($o['date']); 
+				   $m = $d->format("Y-m-d");
 				  # dd($m);
 				   if(isset($trmData3[$m]))
 				   {
