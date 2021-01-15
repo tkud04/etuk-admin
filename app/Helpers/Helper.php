@@ -3288,8 +3288,11 @@ function createSocial($data)
 				  'September' => 0,
 				  'October' => 0,
 				  'November' => 0,
-				  'December' => 0
+				  'December' => 13000
 			   ];
+			   
+			   $trmData3 = [];
+			   
 			   
 			   $orders = $this->getAllOrders();
 			   
@@ -3298,6 +3301,7 @@ function createSocial($data)
 			   {
 				    #dd($o);
 				   $items = $o['items'];
+				  # $amount = $o['amount'];
 				   
 				   foreach($items['data'] as $i)
 				   {
@@ -3306,18 +3310,42 @@ function createSocial($data)
 					   $rbrcData[$c] += $amount;
 				   }
 				   
-				   $d = new \DateTime($o['date']); $m = $d->format("F");
-				   $trmData[$m] += $o['amount'];
+				   $d = new \DateTime($o['date']); $m = $d->format("Y-m");
+				  # dd($m);
+				   if(isset($trmData3[$m]))
+				   {
+					   $trmData3[$m] += $o['amount'];
+				   }
+				   else{
+					   $trmData3[$m] = $o['amount'];
+				   }
 			   }
 			   
-			   #dd($trmData);
+			   #dd($trmData3);
+			   $trmData2 = [
+			     '2016 Q1' => 0,
+			     '2016 Q2' => 7500,
+			     '2017 Q3' => 15000,
+			     '2017 Q4' => 22500,
+			     '2018 Q5' => 30000,
+			     '2016 Q6' => 40000,
+			   ];
+			   /**
+               { x: '2016 Q1', y: 0, },
+               { x: '2016 Q2', y: 7500, },
+               { x: '2017 Q3', y: 15000, },
+                { x: '2017 Q4', y: 22500, },
+                { x: '2018 Q5', y: 30000, },
+                { x: '2018 Q6', y: 40000, }
+                 **/
 			   
 			   $ret = [
 			     'total_apartments' => $totalApts,
 			     'total_bookings' => $totalBookings,
 			     'total_hosts' => $totalHosts,
 			     'rbrcData' => $rbrcData,
-			     'trmData' => $trmData,
+			     'trmData' => $trmData3,
+			     'trmData2' => $trmData2,
 			     'avg_revenue' => 0,
 			     'former_avg_revenue' => 0
 			   ];

@@ -4,6 +4,7 @@ $subtitle = "Admin dashboard";
 
 $rbrcData = $stats['rbrcData'];
 $trmData = $stats['trmData'];
+$trmData2 = $stats['trmData2'];
 ?>
 
 @extends('layout')
@@ -37,14 +38,7 @@ foreach($rbrcData as $k => $v)
 let trmData = [
 
 <?php
-/**
-            { x: '2016 Q1', y: 0, },
-            { x: '2016 Q2', y: 7500, },
-            { x: '2017 Q3', y: 15000, },
-            { x: '2017 Q4', y: 22500, },
-            { x: '2018 Q5', y: 30000, },
-            { x: '2018 Q6', y: 40000, }
-**/
+
 $ctr = 0;
 
 foreach($trmData as $k => $v)
