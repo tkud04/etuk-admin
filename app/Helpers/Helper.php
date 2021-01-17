@@ -3007,6 +3007,7 @@ function createSocial($data)
 				  $i = $this->getOrderItem($t->item_id);
 				  $o = $this->getOrder($i['order_id']);
 				  $temp['item'] = $i;
+				  $temp['status'] = $o['status'];
 				  if(isset($options['guest']) && $options['guest']) $temp['guest'] = $this->getUser($o['user_id']);
 				  $temp['date'] = $t->created_at->format("m/d/Y h:i A");
      			  $ret = $temp;
@@ -3017,7 +3018,11 @@ function createSocial($data)
 		   
 		   function getAllTransactions()
            {
-           	$ret = [];
+           	$ret = ['guests' => [], 'hosts' => []];
+			
+			//guest transactions
+			$g = [];
+			
 			$transactions = Transactions::where('id',">","0")->get();
 			  
               if($transactions != null)
@@ -3027,11 +3032,16 @@ function createSocial($data)
 				  foreach($transactions as $t)
 				  {
 					  $temp = $this->getTransaction($t->id,['guest' => true]);
-					  array_push($ret,$temp);
+					  array_push($g,$temp);
 				  }
                }                         
-                                  
-                return $ret;
+             
+            //host subscriptions
+            $h = $this->getUserPlans();			
+              $ret['guests'] = $g;
+              $ret['hosts'] = $h;
+			  
+              return $ret;
            }
 		   
 		   function getTransactions($user)
@@ -4995,29 +5005,17 @@ function createSocial($data)
   
 		   
 		   
-	   		  function getUserPlanStats($data)
-	              {
-	   			   dd($data);
-	   			 $ret = "error";
-                 $p = Plans::where('id',$data['xf'])->first();
-			 
-			 
-	   			 if(!is_null($p))
-	   			 {
-					 $fields = [
-					             'name' => $data['name'],
-					             'description' => $data['description'],
-					             'amount' => $data['amount'],
-					             'ps_id' => $data['ps_id'],
-					             'status' => $data['status']
-	                           ];
-					  $p->update($fields);
-	   			   $ret = "ok";
-	   			 }
-           	
-                                                      
-	                   return $ret;
-	              }
+	   		 function getUserPlanStats($data)
+	            {
+	   			   #dd($data);
+				   $u = $data['user'];
+				   $p = $data['plan'];
+	   			   $ret = [];
+                   $ret['aptCount'] = Apartments::where('user_id',$u['id'])->count();
+				   $pc = count($p) == 0 ? 5 : $p['pc'];
+                   $ret['posts_left'] = $pc - $ret['aptCount'];
+			       return $ret;
+	            }
 
 	   		   function removeUserPlan($xf)
 	              {
