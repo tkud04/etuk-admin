@@ -3384,18 +3384,21 @@ function createSocial($data)
 			   if($transactions != null)
 			   {
 				   $temp = [];
+				   $uids = [];
+				   
 				   foreach($transactions as $transaction)
 				   {
 					   
 					 $t = $this->getTransaction($transaction->user_id,['user_id' => true]);
-					 dd($t);
+					 #dd($t);
                      $i = $t['item'];
                      $a = $i['apartment'];
 					 $amount = $i['amount'];
                      $h = $a['host'];
 					 $em = $h['email'];
-					 
-					 if(isset($temp[$em]))
+					 $uids[$em] = $h['id'];
+					
+					if(isset($temp[$em]))
 					 {
 						 $temp[$em] += $amount;
 					 }
@@ -3410,11 +3413,11 @@ function createSocial($data)
 				   
 				   foreach($temp as $h => $r)
 				   {
-					   $uu = User::where('email',$h)->first();
-					   $aptCount = Apartments::where('user_id',$uu->id)->count();
+					   $uu = $this->getUser($uids[$h]);
+					   $aptCount = Apartments::where('user_id',$uids[$h])->count();
 					   array_push($hosts,[
 					                       'email' => $h,
-					                       'name' => ($uu->fname." ".$uu->lname),
+					                       'name' => ($uu['fname']." ".$uu['lname']),
 										   'revenue' => $r,
 										   'apartments' => $aptCount
 										  ]);
