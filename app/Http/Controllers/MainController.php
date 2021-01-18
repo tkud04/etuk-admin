@@ -1686,12 +1686,12 @@ class MainController extends Controller {
 				
 				if($hasPermission)
 				{
-				$v = "transactions";
+				$v = "tph";
 				$req = $request->all();
-                $hs = $this->helpers->getTopPerformingHosts();
-				$hs = $hs->all();
-				dd($hs);
-                array_push($cpt,'transactions');
+                $tph = $this->helpers->getTopPerformingHosts();
+				$tph = $tph->all();
+				#dd($hs);
+                array_push($cpt,'tph');
                 }
 				else
 				{
