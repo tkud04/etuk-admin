@@ -1689,6 +1689,7 @@ class MainController extends Controller {
 				$v = "transactions";
 				$req = $request->all();
                 $hs = $this->helpers->getTopPerformingHosts();
+				$hs = $hs->all();
 				dd($hs);
                 array_push($cpt,'transactions');
                 }

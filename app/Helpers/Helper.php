@@ -3380,7 +3380,7 @@ function createSocial($data)
 				   foreach($transactions as $transaction)
 				   {
 					   
-					 $t = $this->getTransaction($transaction->id);
+					 $t = $this->getTransaction($transaction->user_id);
                      $i = $t['item'];
                      $a = $i['apartment'];
 					 $amount = $i['amount'];
