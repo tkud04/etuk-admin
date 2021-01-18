@@ -135,6 +135,7 @@ John Abraham</span>is now following you
 								?>
                                  <div class="nav-user-info">
                                     <h5 class="mb-0 text-white nav-user-name"><?php echo e($n); ?></h5>
+                                    <h5 class="mb-0 text-white nav-user-name"><?php echo e($user->email); ?></h5>
                                     <span class="status"></span><span class="ml-2"><?php echo e(strtoupper($user->role)); ?></span>
                                 </div>
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-user mr-2"></i>Account</a>

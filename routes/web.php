@@ -43,6 +43,7 @@ Route::get('apartment', 'MainController@getApartment');
 Route::post('apartment', 'MainController@postApartment');
 Route::get('remove-apartment', 'MainController@getRemoveApartment');
 Route::get('uas', 'MainController@getUpdateApartmentStatus');
+Route::get('tph', 'MainController@getTopPerformingHosts');
 
 //Reviews
 Route::get('reviews', 'MainController@getReviews');
