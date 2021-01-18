@@ -2996,7 +2996,8 @@ function createSocial($data)
 		   function getTransaction($id,$options=[])
 		   {
 			   $ret = [];
-			   $t = Transactions::where('id',$id)->first();
+			   $t = Transactions::where('id',$id)
+			                    ->orWhere('user_id',$id)->first();
 			   
 			   if($t != null)
                {
