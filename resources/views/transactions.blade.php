@@ -4,7 +4,7 @@ $subtitle = "View all transactions on the platform";
 
 $gt = $transactions['guests'];
 $hs = $transactions['hosts'];
-$hs = [];
+#$hs = [];
 ?>
 
 @extends('layout')
@@ -123,7 +123,7 @@ $hs = [];
                                                 <h5 class="mb-1{{$tc}}">{{$temp['name']}}</h5>
                                                 <small{{$sm}}>{{$temp['checkin']." - ".$temp['checkout']}}</small>
 												
-												<p class="mb-1">Adults: {{$temp['guests']}} | Children: {{$temp['kids']}}</p>
+												<p class="mb-1">Guests: {{$temp['guests']}}</p>
                                             <small{{$sm}}>Price per night: &#8358;{{number_format($temp['amount'])}}</small>
 											  </div>
                                             </div>
@@ -151,10 +151,8 @@ $hs = [];
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Reference #</th>
-                                                <th>Guest</th>
-                                                <th>Booking Details</th>
-                                                <th>Actions</th>
+                                                <th>Host</th>
+                                                <th>Subscription plan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -164,7 +162,9 @@ $hs = [];
 										for($d = 0; $d < count($hs); $d++)
 										{
 											$t = $hs[$d];
-											$ll = ""; $sm = " class='text-muted'"; $tc = "";
+											$hu = $t['user']; $hp = $t['plan']; $stats = $t['stats']; 
+											
+											$sm = " class='text-muted'"; $tc = "";
 											
 											if($d == 0)
 											{
@@ -172,57 +172,30 @@ $hs = [];
 											    $sm = "";
 											}
 		
-										  $vu = url('transaction')."?xf=".$t['id'];
-										  $guest = $t['guest'];
-										  $avatar = $guest['avatar'];
+										  $avatar = $hu['avatar'];
                                          
 										 if($avatar == "") $avatar = [asset("images/avatar.png")];
-										  $gname = $guest['fname']." ".$guest['lname'];
-										
-										  $i = $t['item'];
-										  $ref = $i['order_id'];
-											            $temp = [];
-														 $apartment = $i['apartment'];
-														 $temp['au'] = $apartment['url'];
-														 $temp['name'] = $apartment['name'];
-														 $cmedia = $apartment['cmedia'];
-														 $temp['imgs'] = $cmedia['images'];
-														 $adata = $apartment['data'];
-														 $temp['terms'] = $apartment['terms'];
-														 $host = $apartment['host'];
-														 $temp['hostName'] = $host['fname']." ".substr($host['lname'],0,1).".";
-														 $temp['amount'] = $adata['amount'];
-														 $address = $apartment['address'];
-														 $temp['location'] = $address['city'].", ".$address['state'];
-														 $temp['checkin'] = $i['checkin'];
-														 $temp['checkout'] = $i['checkout'];
-														 $temp['guests'] = $i['guests'];
-														 $temp['kids'] = $i['kids'];
-														
+										  $hname = $hu['fname']." ".$hu['lname'];
+													
 									   ?>
                                             <tr>
-                                                <td>{{$ref}}</td>
                                                 <td>
 												<center>
-												   <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$gname}}" style="width: 100px; height: 100px;"/><br>
-														  {{$gname}} 
+												   <img class="rounded-circle mr-3 mb-3" src="{{$avatar[0]}}" alt="{{$hname}}" style="width: 100px; height: 100px;"/><br>
+														  {{$hname}} 
 												</center>
 												</td>
                                                 <td>
 												  <div class="d-flex w-100 ">
-											<img class="rounded-circle mr-3 mb-3" src="{{$temp['imgs'][0]}}" alt="{{$temp['name']}}" style="width: 100px; height: 100px;"/>
 											  <div>
-                                                <h5 class="mb-1{{$tc}}">{{$temp['name']}}</h5>
-                                                <small{{$sm}}>{{$temp['checkin']." - ".$temp['checkout']}}</small>
-												
-												<p class="mb-1">Adults: {{$temp['guests']}} | Children: {{$temp['kids']}}</p>
-                                            <small{{$sm}}>Price per night: &#8358;{{number_format($temp['amount'])}}</small>
+                                                <h5 class="mb-1{{$tc}}">{{$hp['name']}}</h5> 
+												<small{{$sm}}>&#8358;{{number_format($hp['amount'])}} per {{$hp['frequency']}}</small>
+                                              
+												<p class="mb-1">{{$stats['posts_left']}} out of {{$hp['pc']}} postings remaining</p>
+                                           
 											  </div>
                                             </div>
 												</td>
-                                                <td>
-												 <a class="btn btn-primary btn-sm" href="{{$vu}}">View</a>
-												 </td>
                                             </tr>
 									     <?php
 											   }

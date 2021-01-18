@@ -40,6 +40,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url('finance')}}"><i class="fas fa-fw fa-credit-card"></i>Finance</a>
                             </li>
+							<li class="nav-item">
+                               <a class="nav-link" href="{{url('communication')}}"><i class="fas fa-fw fa-rocket"></i>Communication</a></a>
+                            </li>
                             <li class="nav-item ">
                                 <a class="nav-link" href="javascript:void(0)" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fas fa-fw fa-bed"></i>Reviews</a>
                                 <div id="submenu-4" class="collapse submenu" style="">
@@ -112,9 +115,7 @@
                                     </ul>
                                 </div>
                             </li>
-			                <li class="nav-item">
-                               <a class="nav-link" href="{{url('senders')}}"><i class="fas fa-fw fa-inbox"></i>Senders</a></a>
-                            </li>
+			                
                             
                         </ul>
                     </div>
