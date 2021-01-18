@@ -2996,9 +2996,15 @@ function createSocial($data)
 		   function getTransaction($id,$options=[])
 		   {
 			   $ret = [];
-			   $t = Transactions::where('id',$id)
-			                    ->orWhere('user_id',$id)->first();
-			   
+			   if(isset($options['user_id']))
+			   {
+				   $t = Transactions::where('user_id',$id)->first();
+			   }
+			   else
+			   {
+				   $t = Transactions::where('id',$id)->first();
+			   }
+			   #dd($t);
 			   if($t != null)
                {
 				  $temp = [];
