@@ -51,10 +51,12 @@ class MainController extends Controller {
 				$stats = $this->helpers->getSiteStats();
 				#dd($stats);
 				$tph = $this->helpers->getTopPerformingHosts();
+				$plans = $this->helpers->getPlans();
 				$req = $request->all();
                 array_push($cpt,'orders');				
                 array_push($cpt,'stats');				
                 array_push($cpt,'tph');				
+                array_push($cpt,'plans');				
 			}
 			else
 			{

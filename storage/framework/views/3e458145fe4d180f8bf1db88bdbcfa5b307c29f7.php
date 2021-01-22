@@ -48,6 +48,12 @@ let addPlanDescriptionEditor = new Simditor({
 										</div>
 										<div class="col-md-12">
 										<div class="form-group">
+                                            <label for="asp-tc">Post Count</label>
+                                             <input id="asp-tc" type="number" placeholder="Posting count" name="pc"  class="form-control">
+                                        </div>
+										</div>
+										<div class="col-md-12">
+										<div class="form-group">
                                             <label for="asp-ps-id">Paystack ID (type <em>free</em> for free plans)</label>
                                              <input id="asp-ps-id" type="text" placeholder="Unique ID generated on Paystack" name="ps_id" class="form-control">
                                         </div>

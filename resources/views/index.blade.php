@@ -373,6 +373,52 @@ console.log(trmData);
                                 <!-- ============================================================== -->
                                 <!-- end top perfomimg  -->
                                 <!-- ============================================================== -->
+								
+								<!-- ============================================================== -->
+                                <!-- subscription plans  -->
+                                <!-- ============================================================== -->
+                                <div class="card">
+                                    <h5 class="card-header">Subscription Plans</h5>
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table no-wrap p-table">
+                                                <thead class="bg-light">
+                                                    <tr class="border-0">
+                                                        <th class="border-0">Name</th>
+                                                        <th class="border-0">Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+												<?php
+												if(count($plans) > 0)
+												{
+													$pLength = count($plans) > 5 ? 5 : count($plans);
+													for($i = 0; $i < $pLength; $i++)
+													{
+														$p = $plans[$i];
+													
+												?>
+                                                    <tr>
+                                                        <td>{{$p['name']}}</td>
+                                                        <td>&#8358;{{number_format($p['amount'],2)}} per {{$p['frequency']}}</td>
+                                                    </tr>
+												<?php
+													}
+												}
+												?>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <a href="{{url('plans')}}" class="btn btn-outline-light float-right">View more</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ============================================================== -->
+                                <!-- end subscription plans  -->
+                                <!-- ============================================================== -->
 							</div>
 							</div>
 							
