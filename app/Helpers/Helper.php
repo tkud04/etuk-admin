@@ -605,6 +605,7 @@ $subject = $data['subject'];
                                                       'avatar' => $avatar, 
                                                       'avatar_type' => $avatarType, 
                                                       'currency' => $data['currency'], 
+													  'host_upgraded' => "no", 
                                                       'status' => $data['status'], 
                                                       'verified' => $data['verified'], 
                                                       'password' => $pass, 
@@ -685,6 +686,8 @@ $subject = $data['subject'];
                        $temp['mode_type'] = $u->mode_type; 
 					   $temp['avatar'] = $this->getCloudinaryMedia([[ 'url' => $u->avatar,'src_type' => $u->avatar_type ]]);
                        $temp['verified'] = $u->verified; 
+					   $temp['currency'] = $u->currency; 
+                       $temp['host_upgraded'] = $u->host_upgraded; 
                        $temp['id'] = $u->id; 
                        $temp['date'] = $u->created_at->format("jS F, Y"); 
                        $temp['updated'] = $u->updated_at->format("jS F, Y h:i A"); 
