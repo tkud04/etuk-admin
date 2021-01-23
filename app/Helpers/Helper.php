@@ -2954,7 +2954,7 @@ function createSocial($data)
                 return $ret;
            }
 		   
-		   function getOrderItem($id)
+		  function getOrderItem($id)
 		   {
 			   $temp = [];
 			    $i = OrderItems::where('id',$id)->first();
@@ -2966,17 +2966,14 @@ function createSocial($data)
                      $temp['order_id'] = $o->reference;
                	     $temp['apartment_id'] = $i->apartment_id; 
                         $apt = $this->getApartment($i->apartment_id,['host' => true]); 
-			#dd($apt);
                         $temp['apartment'] = $apt;
                         $adata = $apt['data'];	
                         $checkin = Carbon::parse($i->checkin);
 						$checkout = Carbon::parse($i->checkout);
                         $temp['checkin'] = $checkin->format("jS F, Y");
                         $temp['checkout'] = $checkout->format("jS F, Y");
-                        $c1 = new \DateTime($temp['checkin']);
-						$c2 = new \DateTime($temp['checkout']);
-						$cdiff = $c1->diff($c2);
-						$duration = $cdiff->format("%r%a");						
+                        $duration = $checkin->diffInDays($checkout);						
+                        $temp['booking-end'] = $checkin->addWeeks(2);						
                         $temp['amount'] = $adata['amount'] * $duration;
 						$temp['guests'] = $i->guests; 
                         $temp['kids'] = $i->kids;
