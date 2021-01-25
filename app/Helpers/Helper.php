@@ -2977,6 +2977,7 @@ function createSocial($data)
                         $temp['amount'] = $adata['amount'] * $duration;
 						$temp['guests'] = $i->guests; 
                         $temp['kids'] = $i->kids;
+                        $temp['status'] = $i->status;
 				}
 			    
 				return $temp;
