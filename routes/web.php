@@ -60,6 +60,9 @@ Route::get('finance', 'MainController@getFinance');
 Route::get('transactions', 'MainController@getTransactions');
 Route::get('transaction', 'MainController@getTransaction');
 
+//Communication
+Route::get('communication', 'MainController@getCommunication');
+
 //Plugins
 Route::get('plugins', 'MainController@getPlugins');
 Route::get('add-plugin', 'MainController@getAddPlugin');

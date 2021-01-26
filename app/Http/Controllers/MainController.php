@@ -1660,6 +1660,61 @@ class MainController extends Controller {
     }
 	
 	/**
+	 * Show the Communications view.
+	 *
+	 * @return Response
+	 */
+	public function getCommunication(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				$v = "communication";
+				$req = $request->all();
+                $dt = $this->helpers->getCommunicationData();
+				dd($dt);
+                array_push($cpt,'dt');
+                }
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
 	 * Show list of top performing hosts on the platform.
 	 *
 	 * @return Response

@@ -5197,6 +5197,44 @@ function createSocial($data)
 	   			    }
            
 	              }
+				  
+	     function getCommunicationData()
+		 {
+			 $ret = ['guests' => [], 'hosts' => []];
+			 
+			 $guests = User::where('mode',"guest")->get();
+			 $hosts = User::where('mode',"host")->get();
+			 
+			 if($guests != null)
+			 {
+				foreach($guests as $g)
+				{
+					$temp = [
+					  'fname' => $g['fname'],
+					  'lname' => $g['lname'],
+					  'phone' => $g['phone'],
+					  'email' => $g['email'],
+					];
+					array_push($ret['guests'],$temp);
+				} 
+			 }
+			 
+			 if($hosts != null)
+			 {
+				foreach($hosts as $h)
+				{
+					$temp = [
+					  'fname' => $h['fname'],
+					  'lname' => $h['lname'],
+					  'phone' => $h['phone'],
+					  'email' => $h['email'],
+					];
+					array_push($ret['hosts'],$temp);
+				} 
+			 }
+			 
+			 return $ret;
+		 }
    
 }
 ?>
