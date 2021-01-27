@@ -52,11 +52,13 @@ class MainController extends Controller {
 				#dd($stats);
 				$tph = $this->helpers->getTopPerformingHosts();
 				$plans = $this->helpers->getPlans();
+				$tips = $this->helpers->getApartmentTips();
 				$req = $request->all();
                 array_push($cpt,'orders');				
                 array_push($cpt,'stats');				
                 array_push($cpt,'tph');				
                 array_push($cpt,'plans');				
+                array_push($cpt,'tips');				
 			}
 			else
 			{
@@ -3241,9 +3243,7 @@ class MainController extends Controller {
 				
 				if($hasPermission)
 				{
-					$v = "add-faq";
-					$tags = $this->helpers->getFAQTags();
-					array_push($cpt,'tags');
+					$v = "add-apartment-tip";
 				}
 				else
 				{
@@ -3290,9 +3290,8 @@ class MainController extends Controller {
 				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                     'tag' => 'required',
-                             'question' => 'required',
-							 'answer' => "required"
+		                     'title' => 'required',
+                             'message' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -3311,11 +3310,11 @@ class MainController extends Controller {
 					}
 					else
 					{
-						$ret = $this->helpers->createFAQ($req);
-			            $ss = "add-faq-status";
+						$ret = $this->helpers->createApartmentTip($req);
+			            $ss = "add-apartment-tip-status";
 					    if($ret == "error") $ss .= "-error";
 					    session()->flash($ss,"ok");
-			            return redirect()->intended("faqs");
+			            return redirect()->intended("apartment-tips");
 					}
 					
 				}
@@ -3355,7 +3354,7 @@ class MainController extends Controller {
 			{
 				$req = $request->all();
 			   	    #dd($req);
-				$hasPermission = $this->helpers->hasPermission($user->id,['view_banners','edit_banners']);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
 				#dd($hasPermission);
 				
 				if($hasPermission)
@@ -3373,10 +3372,10 @@ class MainController extends Controller {
 				    else
 				    {   
 					  $ret = $this->helpers->removeBanner($req['xf']);
-					  $ss = "remove-banner-status";
+					  $ss = "remove-apartment-tip-status";
 					  if($ret == "error") $ss .= "-error";
 					  session()->flash($ss,"ok");
-			          return redirect()->intended("banners");
+			          return redirect()->intended("apartment-tips");
 				    }
 				}
 				else

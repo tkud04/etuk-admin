@@ -40,30 +40,24 @@ $subtitle = "View all tips that display on the Apartments page";
                                     <table class="table table-striped table-bordered first etuk-table">
                                         <thead>
                                             <tr>
-                                                <th>Tag</th>
-                                                <th>Question</th>
-                                                <th>Answer</th>
-                                                <th>Date Added</th>
-                                                <th>Actions</th>
+                                                <th>Title</th>
+                                                <th>Message</th>
+                                                <th>Date added</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 										  <?php
 										   if(count($tips) > 0)
 										   {
-											  foreach($faqs as $f)
+											  foreach($tips as $t)
 											   {
-												   
-											   $uu = "javascript:void(0)";
-											   $du = url('remove-faq')."?xf=".$f['id'];
+											   $du = url('remove-apartment-tip')."?xf=".$t['id'];
 									        ?>
                                             <tr>
-                                               <td>{{$f['tag']}}</td>
-												<td>{{$f['question']}}</td>
-                                                <td><em>{{$f['answer']}}</em></td>
-                                                <td>{{$f['date']}}</td>
+                                               <td>{{$t['title']}}</td>
+												<td>{{$t['msg']}}</td>
+                                                <td>{{$t['date']}}</td>
                                                 <td>
-												 <a class="btn btn-outline-primary" href="{{$uu}}">Edit</a>
 												 <a class="btn btn-outline-danger" href="{{$du}}">Remove</a>
 												 </td>
                                             </tr>

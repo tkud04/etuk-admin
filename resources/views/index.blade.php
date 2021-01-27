@@ -419,6 +419,26 @@ console.log(trmData);
                                 <!-- ============================================================== -->
                                 <!-- end subscription plans  -->
                                 <!-- ============================================================== -->
+								
+								<!-- ============================================================== -->
+                                <!-- apartment tips -->
+                                <!-- ============================================================== -->
+                                <div class="card">
+                                    <h5 class="card-header">Apartment Tips</h5>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-md-12">
+											 <center>
+											  <h4>{{count($tips)}} apartment tip(s) added.</h4>
+											   <a href="{{url('apartment-tips')}}" class="btn btn-outline-light float-right">View more</a>
+											 </center>
+											</div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ============================================================== -->
+                                <!-- end apartment tips  -->
+                                <!-- ============================================================== -->
 							</div>
 							</div>
 							

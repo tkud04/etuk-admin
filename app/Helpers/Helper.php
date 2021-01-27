@@ -2564,6 +2564,18 @@ function createSocial($data)
                 return $ret;
            }
 		   
+		   function removeApartmentTip($xf)
+           {
+			   $tip = ApartmentTips::where(['id' => $xf])->first();
+			
+			if(!is_null($tip))
+			{
+			  $tip->delete(); 
+            }
+			                                          
+            return "ok";
+           }
+		   
 		   function populateTips()
 		   {
 			     $tips = [

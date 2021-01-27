@@ -419,6 +419,24 @@ console.log(trmData);
                                 <!-- ============================================================== -->
                                 <!-- end subscription plans  -->
                                 <!-- ============================================================== -->
+								
+								<!-- ============================================================== -->
+                                <!-- apartment tips -->
+                                <!-- ============================================================== -->
+                                <div class="card">
+                                    <h5 class="card-header">Apartment Tips</h5>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-md-12">
+											  <h4><?php echo e(count($tips)); ?> apartment tip(s) added.</h4>
+											   <a href="<?php echo e(url('apartment-tips')); ?>" class="btn btn-outline-light float-right">View more</a>
+											</div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ============================================================== -->
+                                <!-- end apartment tips  -->
+                                <!-- ============================================================== -->
 							</div>
 							</div>
 							
