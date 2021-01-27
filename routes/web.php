@@ -45,6 +45,11 @@ Route::get('remove-apartment', 'MainController@getRemoveApartment');
 Route::get('uas', 'MainController@getUpdateApartmentStatus');
 Route::get('tph', 'MainController@getTopPerformingHosts');
 
+Route::get('apartment-tips', 'MainController@getApartmentTips');
+Route::get('add-apartment-tip', 'MainController@getAddApartmentTip');
+Route::post('add-apartment-tip', 'MainController@postAddApartmentTip');
+Route::get('remove-apartment-tip', 'MainController@getRemoveApartmentTip');
+
 //Reviews
 Route::get('reviews', 'MainController@getReviews');
 Route::get('arr', 'MainController@getApproveRejectReview');

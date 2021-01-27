@@ -3164,6 +3164,246 @@ class MainController extends Controller {
 	 *
 	 * @return Response
 	 */
+	public function getApartmentTips(Request $request)
+    {
+		$user = null;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_apartments','edit_apartments']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				 $v = "apartment-tips";
+				 $tips = $this->helpers->getApartmentTips();
+				 dd($tips);
+				 array_push($cpt,'tips');
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	
+	/**
+	 * Show the Add FAQ view.
+	 *
+	 * @return Response
+	 */
+	public function getAddApartmentTip(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		$cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+					$v = "add-faq";
+					$tags = $this->helpers->getFAQTags();
+					array_push($cpt,'tags');
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}
+								
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Handle add FAQ.
+	 *
+	 * @return Response
+	 */
+	public function postAddApartmentTip(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users','edit_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				
+				#dd($req);
+				
+				$validator = Validator::make($req,[
+		                     'tag' => 'required',
+                             'question' => 'required',
+							 'answer' => "required"
+		                   ]);
+						
+				if($validator->fails())
+                {
+                  session()->flash("validation-status-error","ok");
+			      return redirect()->back()->withInput();
+                }
+				else
+				{
+					$networkError = false;
+				
+					if($networkError)
+					{
+						session()->flash("network-status-error","ok");
+			            return redirect()->back()->withInput();
+					}
+					else
+					{
+						$ret = $this->helpers->createFAQ($req);
+			            $ss = "add-faq-status";
+					    if($ret == "error") $ss .= "-error";
+					    session()->flash($ss,"ok");
+			            return redirect()->intended("faqs");
+					}
+					
+				}
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	/**
+	 * Handle remove banner.
+	 *
+	 * @return Response
+	 */
+	public function getRemoveApartmentTip(Request $request)
+    {
+		$user = null;
+		if(Auth::check())
+		{
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$req = $request->all();
+			   	    #dd($req);
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_banners','edit_banners']);
+				#dd($hasPermission);
+				
+				if($hasPermission)
+				{
+				
+				    $validator = Validator::make($req,[
+		                    'xf' => 'required|numeric'
+		                   ]);
+						
+				    if($validator->fails())
+                    {
+                      session()->flash("validation-status-error","ok");
+			          return redirect()->back()->withInput();
+                    }
+				    else
+				    {   
+					  $ret = $this->helpers->removeBanner($req['xf']);
+					  $ss = "remove-banner-status";
+					  if($ret == "error") $ss .= "-error";
+					  session()->flash($ss,"ok");
+			          return redirect()->intended("banners");
+				    }
+				}
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+			        return redirect()->intended("/");
+				}
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			return redirect()->intended('/');
+		}
+    }
+	
+	
+	/**
+	 * Show list of FAQs.
+	 *
+	 * @return Response
+	 */
 	public function getFAQs(Request $request)
     {
 		$user = null;
