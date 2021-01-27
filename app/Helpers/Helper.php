@@ -114,6 +114,7 @@ class Helper implements HelperContract
 					 "add-plan-status" => "Subscription plan added.",
 					 "update-plan-status" => "Subscription plan updated.",
 					 "remove-plan-status" => "Subscription plan removed.",
+					 "send-message-status" => "Message sent!",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -157,6 +158,7 @@ class Helper implements HelperContract
 					 "add-plan-status-error" => "Subscription plan could not be added, please try again.",
 					 "update-plan-status-error" => "Subscription plan could not be updated, please try again.",
 					 "remove-plan-status-error" => "Subscription plan could not be removed, please try again.",
+					 "send-message-status-error" => "An error occured while sending your message.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -5210,6 +5212,7 @@ function createSocial($data)
 				foreach($guests as $g)
 				{
 					$temp = [
+					  'id' => $g['id'],
 					  'fname' => $g['fname'],
 					  'lname' => $g['lname'],
 					  'phone' => $g['phone'],
@@ -5224,6 +5227,7 @@ function createSocial($data)
 				foreach($hosts as $h)
 				{
 					$temp = [
+					  'id' => $h['id'],
 					  'fname' => $h['fname'],
 					  'lname' => $h['lname'],
 					  'phone' => $h['phone'],
@@ -5235,6 +5239,58 @@ function createSocial($data)
 			 
 			 return $ret;
 		 }
+		 
+		 
+		  function sendMessage($user, $dt)
+           { 
+              #dd($dt);
+              $r = "error";
+			  
+			  if(isset($dt['xf']))
+			  {
+			     $dtt = [];
+				 
+					 //guest
+					 $u = $this->getUser($dt['xf']);
+					 
+					 $dtt = [
+					   'debug' => true,
+					   'email' => $u['email'],
+					   'subject' => "New message from admin (ref: ".rand(9,999).")",
+					   'subject_2' => $dt['subject'],
+					   'name' => $u['fname']." ".strtoupper(substr($u['lname'],0,1)),
+					   'message' => $dt['message']
+					 ];
+				 
+				 
+				 if($dt['type'] == "email")
+				 {
+					$ret = $this->getCurrentSender();
+		            $ret['data'] = $dtt;
+    		        $ret['subject'] = $dtt['name'].": ".$dtt['subject'];	
+		       
+			        try
+		            {
+			          $ret['em'] = $dtt['email'];
+		              $this->sendEmailSMTP($ret,"emails.message");
+			          $s = "ok";
+		            }
+		
+		            catch(Throwable $e)
+		            {
+			          #dd($e);
+			          $s = "error";
+		            }
+				 }
+				 else if($dt['type'] == "sms")
+				 {
+					 
+				 }
+				 
+                 $r = "ok";				 
+			  }
+                return $r;
+           }
    
 }
 ?>

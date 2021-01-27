@@ -1498,3 +1498,8 @@ const searchToCart = (s) => {
 	   //console.log("qty: ",qty);
 	   addToCart({sku: s,qty: qty});
 }
+
+const addXF = dt => {
+	$(`#${dt.type}-xf`).val(dt.xf);
+	$(`#${dt.type}-name`).html(`to ${dt.name}`);
+}

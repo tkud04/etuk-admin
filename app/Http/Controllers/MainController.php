@@ -1691,8 +1691,89 @@ class MainController extends Controller {
 				$v = "communication";
 				$req = $request->all();
                 $dt = $this->helpers->getCommunicationData();
-				dd($dt);
+				#dd($dt);
                 array_push($cpt,'dt');
+                }
+				else
+				{
+					session()->flash("permissions-status-error","ok");
+					return redirect()->intended('/');
+				}				
+			}
+			else
+			{
+				Auth::logout();
+				$u = url('/');
+				return redirect()->intended($u);
+			}
+		}
+		else
+		{
+			$v = "login";
+		}
+		return view($v,compact($cpt));
+    }
+	
+	/**
+	 * Redirect
+	 *
+	 * @return Response
+	 */
+	public function getSendMessage(Request $request)
+    {
+		return redirect()->intended('communication');
+    }
+	
+	/**
+	 * Redirect
+	 *
+	 * @return Response
+	 */
+	public function postSendMessage(Request $request)
+    {
+		$user = null;
+		$nope = false;
+		$v = "";
+		
+		$signals = $this->helpers->signals;
+		$plugins = $this->helpers->getPlugins();
+		#$this->helpers->populateTips();
+        $cpt = ['user','signals','plugins'];
+				
+		if(Auth::check())
+		{
+			
+			$user = Auth::user();
+			
+			if($this->helpers->isAdmin($user))
+			{
+				$hasPermission = $this->helpers->hasPermission($user->id,['view_users']);
+				#dd($hasPermission);
+				$req = $request->all();
+				
+				if($hasPermission)
+				{
+				    $req = $request->all();
+						#dd($req);
+				        $validator = Validator::make($req, [                          
+				                             'xf' => 'required',
+				                             'type' => 'required',
+				                             'subject' => 'required',
+				                             'message' => 'required'
+				         ]);
+         
+				         if($validator->fails())
+				         {
+				         	return redirect()->intended('senders');
+				         }
+						else
+						{
+						    $r = $this->helpers->sendMessage($user,$req);
+			                $ret = "send-message-status";
+			                if($r == "error") $ret .= "-error";
+			                session()->flash($ret,"ok");
+			                return redirect()->intended('communication');
+					    }
                 }
 				else
 				{

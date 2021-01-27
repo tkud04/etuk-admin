@@ -13,6 +13,8 @@ $(document).ready(function() {
                           "#as-other"
 			  ]);
 	
+	hideElem(['#send-message-type-error','#send-message-subject-error','#send-message-msg-error', '#send-message-email-div']);
+	
 	hideElem(["#sps-row","#pa-side-2","#pa-side-3","#pa-loading"]);
 	
 	/**
@@ -675,6 +677,36 @@ $(document).ready(function() {
 	   }
     });
 	
+	
+	//SEND MESSAGE
+	$('#send-message-type').change(e => {
+		e.preventDefault();
+		let mt = $('#send-message-type').val();
+		
+		if(mt == "email"){
+			showElem('#send-message-email-div');
+		}
+		else{
+			hideElem('#send-message-email-div');
+		}
+	});
+	
+	$('#send-message-submit').click(e => {
+		e.preventDefault();
+		hideElem(['#send-message-type-error','#send-message-subject-error','#send-message-msg-error']);
+		
+		let mt = $('#send-message-type').val(), ms = $('#send-message-subject').val(), mm = $('#send-message-msg').val();
+		let v = (mt == "none" || (ms == "" && mt == "email") || mm == "");
+		
+		if(v){
+			if(mt == "none") showElem('#send-message-type-error');
+			if(ms == "" && mt == "email") showElem('#send-message-subject-error');
+			if(mm == "") showElem('#send-message-msg-error');
+		}
+		else{
+			 $('#send-message-form').submit();
+		}
+	});
     
 	
 });

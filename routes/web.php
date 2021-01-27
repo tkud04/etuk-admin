@@ -62,6 +62,8 @@ Route::get('transaction', 'MainController@getTransaction');
 
 //Communication
 Route::get('communication', 'MainController@getCommunication');
+Route::get('send-message', 'MainController@getSendMessage');
+Route::post('send-message', 'MainController@postSendMessage');
 
 //Plugins
 Route::get('plugins', 'MainController@getPlugins');
