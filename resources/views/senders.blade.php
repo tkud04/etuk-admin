@@ -66,7 +66,7 @@ $subtitle = "View all registered plugins";
 					  					  <td>{!! $su !!}</td>
 					  					  <td>
 					  					   @if($s['current'] == "yes")
-					  					    <h3 class="label label-info">CURRENT</h3>
+					  					    <h3 class="badge badge-info">CURRENT</h3>
 					  					   @else
 					  						 <a class="btn btn-outline-secondary" href="{{$mu}}">Set as current</a>
 					  				       @endif

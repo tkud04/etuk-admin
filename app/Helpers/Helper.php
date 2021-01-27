@@ -560,12 +560,14 @@ $subject = $data['subject'];
 					}
 					else
 					{
+					  $dt['multipart'] = [];
 					  foreach($data['data'] as $k => $v)
 				      {
 					    $temp = [
 					      'name' => $k,
 						  'contents' => $v
 					     ];
+						 
 					     array_push($dt['multipart'],$temp);
 				      }
 					}
@@ -588,6 +590,69 @@ $subject = $data['subject'];
 				 }
 			     $rett = json_decode($ret);
            return $ret; 
+           }
+		   
+		   
+		   function text($data) 
+           {
+           	//form query string
+              // $qs = "sn=".$data['sn']."&sa=".$data['sa']."&subject=".$data['subject'];
+
+               $lead = $data['to'];
+			   
+			   if($lead == null || $lead == "")
+			   {
+				    $ret = json_encode(["status" => "error","message" => "Invalid number"]);
+			   }
+			   else
+			    { 
+                  
+			       $url = "https://smartsmssolutions.com/api/?";
+			       $url .= "message=".urlencode($data['msg'])."&to=".$data['to'];
+			       $url .= "&sender=Etuk+NG&type=0&routing=3&token=".env('SMARTSMS_API_X_KEY', '');
+			      #dd($url);
+				  
+                  $dt = [
+				       'headers' => [
+					     'Content-Type' => "text/html"
+					   ],
+                       'method' => "get",
+                       'url' => $url
+                  ];
+				
+				 $ret = $this->bomb($dt);
+				 #dd($ret);
+				 $smsData = explode("||",$ret);
+				 if(count($smsData) == 2)
+				 {
+					 $status = $smsData[0];
+					 $dt = $smsData[1];
+					 
+					 if($status == "1000")
+					 {
+						$rett = json_decode($dt);
+			            if($rett->code == "1000")
+			            {
+					      $ret = json_encode(["status" => "ok","message" => "Message sent!"]); 			
+			             }
+				         else
+			             {
+			         	   $ret = json_encode(["status" => "error","message" => "Error sending message."]); 
+			             } 
+					 }
+					 else
+					 {
+						 $ret = json_encode(["status" => "error","message" => "Error sending message."]); 
+					 }
+				 }
+				 else
+				 {
+					$ret = json_encode(["status" => "error","message" => "Malformed response from SMS API"]); 
+				 }
+			     
+			    }
+				
+              return $ret; 
            }
 		   
 		   
@@ -5241,7 +5306,7 @@ function createSocial($data)
 		 }
 		 
 		 
-		  function sendMessage($user, $dt)
+		  function sendMessage($dt)
            { 
               #dd($dt);
               $r = "error";
@@ -5252,12 +5317,13 @@ function createSocial($data)
 				 
 					 //guest
 					 $u = $this->getUser($dt['xf']);
-					 
+					 $subject = isset($dt['subject']) ? $dt['subject'] : "";
 					 $dtt = [
 					   'debug' => true,
 					   'email' => $u['email'],
+					   'phone' => $u['phone'],
 					   'subject' => "New message from admin (ref: ".rand(9,999).")",
-					   'subject_2' => $dt['subject'],
+					   'subject_2' => $subject,
 					   'name' => $u['fname']." ".strtoupper(substr($u['lname'],0,1)),
 					   'message' => $dt['message']
 					 ];
@@ -5284,6 +5350,19 @@ function createSocial($data)
 				 }
 				 else if($dt['type'] == "sms")
 				 {
+					 $smsData = [
+					   'to' => $dtt['phone'],
+					   'msg' => $dtt['message'],
+					 ];
+					 
+					 try
+					 {
+						 $this->text($smsData);
+					 }
+					 catch(Throwable $e)
+					 {
+						  $s = "error";
+					 }
 					 
 				 }
 				 
@@ -5291,6 +5370,8 @@ function createSocial($data)
 			  }
                 return $r;
            }
+		   
+		   
    
 }
 ?>

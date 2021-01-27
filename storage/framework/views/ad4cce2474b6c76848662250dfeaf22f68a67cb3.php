@@ -37,7 +37,11 @@ $hc = $dt['hosts'];
 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
-                            <h5 class="card-header">Guests</h5>
+                            <h5 class="card-header">
+							Guests 
+							<a href="javascript:void(0)" onclick="copyData({type:'ge'})"  data-toggle="modal" data-target="#copyDataModal" class="btn btn-outline-secondary">Copy all email addresses</a>
+							<a href="javascript:void(0)" onclick="copyData({type: 'gp'})" data-toggle="modal" data-target="#copyDataModal" class="btn btn-outline-secondary">Copy all phone numbers</a>
+							</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
@@ -76,8 +80,8 @@ $hc = $dt['hosts'];
                                                 <td>
 												 <div class="d-flex w-100 ">
 											       <div>
-                                                    <h5 class="mb-1 success">Phone number: <?php echo e($g['phone']); ?></h5>
-                                                    <h5 class="mb-1 info">Email address: <?php echo e($g['email']); ?></h5>
+                                                    <h5 class="mb-1 success">Phone number: <span class="gp"><?php echo e($g['phone']); ?></span></h5>
+                                                    <h5 class="mb-1 info">Email address: <span class="ge"><?php echo e($g['email']); ?></span></h5>
                                                    </div>
                                                  </div>
 												</td>
@@ -98,7 +102,11 @@ $hc = $dt['hosts'];
 					
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
-                            <h5 class="card-header">Hosts</h5>
+                            <h5 class="card-header">
+							Guests 
+							<a href="javascript:void(0)" onclick="copyData({type:'he'})"  data-toggle="modal" data-target="#copyDataModal" class="btn btn-outline-secondary">Copy all email addresses</a>
+							<a href="javascript:void(0)" onclick="copyData({type: 'hp'})" data-toggle="modal" data-target="#copyDataModal" class="btn btn-outline-secondary">Copy all phone numbers</a>
+							</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered first etuk-table">
@@ -137,8 +145,8 @@ $hc = $dt['hosts'];
                                                 <td>
 												 <div class="d-flex w-100 ">
 											       <div>
-                                                    <h5 class="mb-1 success">Phone number: <?php echo e($h['phone']); ?></h5>
-                                                    <h5 class="mb-1 info">Email address: <?php echo e($h['email']); ?></h5>
+                                                    <h5 class="mb-1 success">Phone number: <span class="hp"><?php echo e($h['phone']); ?></span></h5>
+                                                    <h5 class="mb-1 info">Email address: <span class="he"><?php echo e($h['email']); ?></span></h5>
                                                    </div>
                                                  </div>
 												</td>
@@ -159,7 +167,6 @@ $hc = $dt['hosts'];
 					
 					 <!-- Button trigger modal -->
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                <h4>Live Demo</h4>
                                                 <div class="modal fade" id="sendMessageModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModalLabel" aria-hidden="true" style="display: none;">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
@@ -206,6 +213,33 @@ $hc = $dt['hosts'];
                                                         </div>
                                                     </div>
                                                 </div>
+				</div>
+				<!-- Modal -->	
+				<!-- Button trigger modal -->
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="modal fade" id="copyDataModal" tabindex="-1" role="dialog" aria-labelledby="copyDataModalLabel" aria-hidden="true" style="display: none;">
+                                                         <div class="modal-dialog" role="document">
+                                                           <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="copyDataModalLabel">Copy <span id="copy-data-name"></span></h5>
+                                                                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">×</span>
+                                                                        </a>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                               <form>
+																	  <div class="form-group">
+																	    <label>Message</label>
+																		<textarea rows="10" class="form-control" name="message" id="copy-data-msg" readonly></textarea>	
+																	   </div>
+                                                                </form>
+															</div>
+															<div class="modal-footer">
+                                                                <a href="javascript:void(0)" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+                                                            </div>  
+                                                            </div>
+                                                          </div>
+                                                        </div>
 				</div>
 				<!-- Modal -->	
 					

@@ -1758,17 +1758,17 @@ class MainController extends Controller {
 				        $validator = Validator::make($req, [                          
 				                             'xf' => 'required',
 				                             'type' => 'required',
-				                             'subject' => 'required',
 				                             'message' => 'required'
 				         ]);
          
 				         if($validator->fails())
 				         {
+							  session()->flash("validation-status-error","ok");
 				         	return redirect()->intended('senders');
 				         }
 						else
 						{
-						    $r = $this->helpers->sendMessage($user,$req);
+						    $r = $this->helpers->sendMessage($req);
 			                $ret = "send-message-status";
 			                if($r == "error") $ret .= "-error";
 			                session()->flash($ret,"ok");

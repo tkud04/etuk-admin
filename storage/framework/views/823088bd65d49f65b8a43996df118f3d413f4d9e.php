@@ -66,7 +66,7 @@ $subtitle = "View all registered plugins";
 					  					  <td><?php echo $su; ?></td>
 					  					  <td>
 					  					   <?php if($s['current'] == "yes"): ?>
-					  					    <h3 class="label label-info">CURRENT</h3>
+					  					    <h3 class="badge badge-info">CURRENT</h3>
 					  					   <?php else: ?>
 					  						 <a class="btn btn-outline-secondary" href="<?php echo e($mu); ?>">Set as current</a>
 					  				       <?php endif; ?>

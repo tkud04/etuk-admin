@@ -1503,3 +1503,36 @@ const addXF = dt => {
 	$(`#${dt.type}-xf`).val(dt.xf);
 	$(`#${dt.type}-name`).html(`to ${dt.name}`);
 }
+
+const copyData = dt => {
+	let ret = ``, title = ""; 
+	if(dt.type){
+		let elems = $(`.${dt.type}`);
+		
+		if(elems.length > 0){
+			for(let i = 0; i < elems.length; i++){
+				let ei = $(elems[i]).html();
+			  ret += `${ei}
+`;
+			}
+		}
+		
+		switch(dt.type){
+			case "ge":
+			  title = "guest email addresses";
+			break;
+			case "gp":
+			  title = "guest phone numbers";
+			break;
+			case "he":
+			  title = "host email addresses";
+			break;
+			case "hp":
+			  title = "host phone numbers";
+			break;
+		}
+	}
+	console.log(ret);
+	$(`#copy-data-name`).html(title);
+	$(`#copy-data-msg`).val(ret);
+}
