@@ -428,8 +428,10 @@ console.log(trmData);
                                     <div class="card-body p-0">
                                         <div class="row">
                                             <div class="col-md-12">
+											 <center>
 											  <h4><?php echo e(count($tips)); ?> apartment tip(s) added.</h4>
 											   <a href="<?php echo e(url('apartment-tips')); ?>" class="btn btn-outline-light float-right">View more</a>
+											 </center>
 											</div> 
                                         </div>
                                     </div>

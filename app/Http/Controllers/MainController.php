@@ -3192,7 +3192,7 @@ class MainController extends Controller {
 				{
 				 $v = "apartment-tips";
 				 $tips = $this->helpers->getApartmentTips();
-				 dd($tips);
+				 #dd($tips);
 				 array_push($cpt,'tips');
 				}
 				else
@@ -3290,8 +3290,7 @@ class MainController extends Controller {
 				#dd($req);
 				
 				$validator = Validator::make($req,[
-		                     'title' => 'required',
-                             'message' => 'required'
+		                     'message' => 'required'
 		                   ]);
 						
 				if($validator->fails())
@@ -3371,7 +3370,7 @@ class MainController extends Controller {
                     }
 				    else
 				    {   
-					  $ret = $this->helpers->removeBanner($req['xf']);
+					  $ret = $this->helpers->removeApartmentTip($req['xf']);
 					  $ss = "remove-apartment-tip-status";
 					  if($ret == "error") $ss .= "-error";
 					  session()->flash($ss,"ok");

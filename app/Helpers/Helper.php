@@ -115,6 +115,8 @@ class Helper implements HelperContract
 					 "update-plan-status" => "Subscription plan updated.",
 					 "remove-plan-status" => "Subscription plan removed.",
 					 "send-message-status" => "Message sent!",
+					 "add-apartment-tip-status" => "Tip added!",
+					 "remove-apartment-tip-status" => "Tip removed!",
 					 
 					 //ERROR NOTIFICATIONS
 					 "invalid-user-status-error" => "User not found.",
@@ -159,6 +161,8 @@ class Helper implements HelperContract
 					 "update-plan-status-error" => "Subscription plan could not be updated, please try again.",
 					 "remove-plan-status-error" => "Subscription plan could not be removed, please try again.",
 					 "send-message-status-error" => "An error occured while sending your message.",
+					 "add-apartment-tip-status-error" => "An error occured while adding tip.",
+					 "remove-apartment-tip-status-error" => "An error occured while removing tip.",
                      ],
                      'errors'=> ["login-status-error" => "Wrong username or password, please try again.",
 					 "signup-status-error" => "There was a problem creating your account, please try again.",
@@ -2519,8 +2523,10 @@ function createSocial($data)
 
            function createApartmentTip($dt)
 		   {
-			   $ret = ApartmentTips::create(['title' => $dt['title'], 
-                                                      'msg' => $dt['msg'] 
+			   $t = isset($dt['title']) ? $dt['title'] : "";
+			   
+			   $ret = ApartmentTips::create(['title' => $t, 
+                                                      'msg' => $dt['message'] 
                                                       ]);
                                                       
                 return $ret;

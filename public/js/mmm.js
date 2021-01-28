@@ -709,4 +709,24 @@ $(document).ready(function() {
 	});
     
 	
+	//ADD APARTMENT TIP
+	$("#aat-form-btn").click(e => {
+       e.preventDefault();
+	   
+	   //validation
+	   let title = $('#aat-title').val(), message = $('#aat-message').val(), validation = (message == "");
+	        
+	        
+	   if(validation){
+		   Swal.fire({
+			 icon: 'error',
+             title: "Please fill all required fields."
+           })
+	   }
+	   
+	   else{	 
+		 $('#aat-form').submit();
+	   }   
+    });
+	
 });
