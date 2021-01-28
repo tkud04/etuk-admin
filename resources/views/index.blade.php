@@ -400,7 +400,7 @@ console.log(trmData);
 												?>
                                                     <tr>
                                                         <td>{{$p['name']}}</td>
-                                                        <td>&#8358;{{number_format($p['amount'],2)}} per {{$p['frequency']}}</td>
+                                                        <td>&#8358;{{number_format($p['amount'],2)}}/{{$p['frequency']}}</td>
                                                     </tr>
 												<?php
 													}
